@@ -10,7 +10,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 OBJ_DIR = objs
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-LIBFT_DIR = ../libft
+LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_H = $(LIBFT_DIR)/include
 
