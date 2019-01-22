@@ -1,0 +1,5 @@
+**/a.out
+**/*.swp
+**/libft.a
+**/*.o
+ft_ssl
