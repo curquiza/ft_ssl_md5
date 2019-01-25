@@ -11,6 +11,7 @@
 
 # define MD5_DIGEST_BITS		128
 # define MD5_DIGEST_BYTES		MD5_DIGEST_BITS / 8
+
 /*
 ** FUNCTIONS PROTOTYPES ********************************************************
 */
