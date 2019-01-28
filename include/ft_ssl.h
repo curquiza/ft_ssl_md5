@@ -37,6 +37,12 @@ typedef struct		s_md5
 	t_md5_algo	var[MD5_CHUNK_BYTES];
 }					t_md5;
 
+/* typedef struct		s_md5_input_const */
+/* { */
+/* 	int			shift[4]; */
+/* 	uint32_t	(*func)(uint32_t b, uint32_t c, uint32_t d); */
+/* }					t_md5_input_const; */
+
 /*
 ** FUNCTIONS PROTOTYPES ********************************************************
 */

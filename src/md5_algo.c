@@ -96,100 +96,50 @@ uint32_t		get_sin_const(int i)
 	return ((uint32_t)floor(abs_double(sin(i + 1)) * POW_2_32)); // /!\ FLOOR & SIN;
 }
 
-void		fill_0_15_constants(t_md5 *data)
+void		fill_constants(int start, int end, t_md5 *data, uint32_t (*func)(uint32_t b, uint32_t c, uint32_t d))
 {
-	int			i;
+	int				i;
 	uint32_t		shift[4];
 
-	shift[0] = 7;
-	shift[1] = 12;
-	shift[2] = 17;
-	shift[3] = 22;
-	i = 0;
-	while (i < 16)
+	shift[0] = data->var[start].shift;
+	shift[1] = data->var[start + 1].shift;
+	shift[2] = data->var[start + 2].shift;
+	shift[3] = data->var[start + 3].shift;
+	i = start;
+	while (i <= end)
 	{
 		ft_printf("i = %d\n", i); //DEBUG
 		data->var[i].shift = shift[i % 4];
 		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
 		data->var[i].sin_const = get_sin_const(i);
 		ft_printf("sin_const = 0x%x\n", data->var[i].sin_const); //DEBUG
-		data->var[i].func = &f_function;
-		i++;
-	}
-}
-
-void		fill_16_31_constants(t_md5 *data)
-{
-	int			i;
-	uint32_t		shift[4];
-
-	shift[0] = 5;
-	shift[1] = 9;
-	shift[2] = 14;
-	shift[3] = 20;
-	i = 16;
-	while (i < 32)
-	{
-		ft_printf("i = %d\n", i); //DEBUG
-		data->var[i].shift = shift[i % 4];
-		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
-		data->var[i].sin_const = get_sin_const(i);
-		ft_printf("sin_const = 0x%x\n", data->var[i].sin_const); //DEBUG
-		data->var[i].func = &g_function;
-		i++;
-	}
-}
-
-void		fill_32_47_constants(t_md5 *data)
-{
-	int			i;
-	uint32_t		shift[4];
-
-	shift[0] = 4;
-	shift[1] = 11;
-	shift[2] = 16;
-	shift[3] = 23;
-	i = 32;
-	while (i < 48)
-	{
-		ft_printf("i = %d\n", i); //DEBUG
-		data->var[i].shift = shift[i % 4];
-		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
-		data->var[i].sin_const = get_sin_const(i);
-		ft_printf("sin_const = 0x%x\n", data->var[i].sin_const); //DEBUG
-		data->var[i].func = &h_function;
-		i++;
-	}
-}
-
-void		fill_48_63_constants(t_md5 *data)
-{
-	int			i;
-	uint32_t		shift[4];
-
-	shift[0] = 6;
-	shift[1] = 10;
-	shift[2] = 15;
-	shift[3] = 21;
-	i = 48;
-	while (i < 64)
-	{
-		ft_printf("i = %d\n", i); //DEBUG
-		data->var[i].shift = shift[i % 4];
-		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
-		data->var[i].sin_const = get_sin_const(i);
-		ft_printf("sin_const = 0x%x\n", data->var[i].sin_const); //DEBUG
-		data->var[i].func = &i_function;
+		data->var[i].func = func;
 		i++;
 	}
 }
 
 void		fill_algo_constants(t_md5 *data)
 {
-	fill_0_15_constants(data);
-	fill_16_31_constants(data);
-	fill_32_47_constants(data);
-	fill_48_63_constants(data);
+	data->var[0].shift = 7;
+	data->var[1].shift = 12;
+	data->var[2].shift = 17;
+	data->var[3].shift = 22;
+	fill_constants(0, 15, data, &f_function);
+	data->var[16].shift = 5;
+	data->var[17].shift = 9;
+	data->var[18].shift = 14;
+	data->var[19].shift = 20;
+	fill_constants(16, 31, data, &g_function);
+	data->var[32].shift = 4;
+	data->var[33].shift = 11;
+	data->var[34].shift = 16;
+	data->var[35].shift = 23;
+	fill_constants(32, 47, data, &h_function);
+	data->var[48].shift = 6;
+	data->var[49].shift = 10;
+	data->var[50].shift = 15;
+	data->var[51].shift = 21;
+	fill_constants(48, 63, data, &i_function);
 }
 
 t_ex_ret	fill_md5_digest(t_md5 *data)
