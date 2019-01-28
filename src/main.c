@@ -2,10 +2,15 @@
 
 static t_ex_ret	apply_md5(char *message)
 {
-	t_byte	md5_digest[MD5_DIGEST_BYTES];
+	/* t_byte	md5_digest[MD5_DIGEST_BYTES]; */
+	t_md5	data;
 
-	ft_bzero(md5_digest, MD5_DIGEST_BYTES);
-	if (fill_md5_digest(message, md5_digest) == FAILURE)
+	if (!message)
+		return (FAILURE);
+	ft_bzero(&data, sizeof(data));
+	data.msg = message;
+	data.msg_len = ft_strlen(message);
+	if (fill_md5_digest(&data) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
 }

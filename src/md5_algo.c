@@ -71,53 +71,51 @@ void		hex_display(t_byte *s, size_t len)
 /* 		return (8); */
 /* } */
 
-static void	set_msg_size(t_byte *s, uint64_t *n)
+static void	padd_with_msg_size(t_md5 *data, uint64_t *n)
 {
 	int		i;
+	int		addr;
 
 	i = 0;
+	addr = data->padded_msg_len - MSG_LEN_BYTES;
 	while (i < (MSG_LEN_BYTES))
 	{
 		/* ft_printf("---------\ni = %d\n", i); //DEBUG */
 		/* ft_printf("n_nb_bytes - 1 - i = %d\n", n_nb_bytes - 1 - i); //DEBUG */
-		s[i] = ((t_byte *)n)[i];
+		data->padded_msg[addr] = ((t_byte *)n)[i];
 		i++;
+		addr++;
 	}
 }
 
-static t_byte	*message_padding(char *message)
+static t_ex_ret	message_padding(t_md5 *data)
 {
 	size_t		tmp_len;
-	size_t		final_len;
 	uint64_t	msg_len_bits;
-	t_byte		*padded_msg;
 
-	tmp_len = (ft_strlen(message) + 1 + MSG_LEN_BYTES);
+	tmp_len = (data->msg_len + 1 + MSG_LEN_BYTES);
 	if (tmp_len % (MD5_DIGEST_CHUNK_BYTES) == 0)
-		final_len = tmp_len;
+		data->padded_msg_len = tmp_len;
 	else
-		final_len = (tmp_len / (MD5_DIGEST_CHUNK_BYTES) + 1)
+		data->padded_msg_len = (tmp_len / (MD5_DIGEST_CHUNK_BYTES) + 1)
 					* (MD5_DIGEST_CHUNK_BYTES);
-	if (!(padded_msg = (t_byte *)ft_memalloc(final_len)))
-		return (NULL);
-	ft_printf("padded_msg len = %d = 0x%x\n", final_len, final_len); //DEBUG
-	ft_memcpy(padded_msg, message, ft_strlen(message));
-	padded_msg[ft_strlen(message)] = (t_byte)(1 << 7);
-	msg_len_bits = 8 * ft_strlen(message);
-	set_msg_size(padded_msg + final_len - MSG_LEN_BYTES, &msg_len_bits);
-	/* hex_display_details(padded_msg, final_len); //DEBUG */
-	hex_display(padded_msg, final_len); //DEBUG
-	return (padded_msg);
+	if (!(data->padded_msg = (t_byte *)ft_memalloc(data->padded_msg_len)))
+		return (FAILURE);
+	ft_printf("padded_msg len = %d = 0x%x\n", data->padded_msg_len, data->padded_msg_len); //DEBUG
+	ft_memcpy(data->padded_msg, data->msg, data->msg_len);
+	data->padded_msg[data->msg_len] = (t_byte)(1 << 7);
+	msg_len_bits = 8 * data->msg_len;
+	padd_with_msg_size(data, &msg_len_bits);
+	hex_display(data->padded_msg, data->padded_msg_len); //DEBUG
+	return (SUCCESS);
 }
 
-t_ex_ret	fill_md5_digest(char *message, t_byte *digest)
+t_ex_ret	fill_md5_digest(t_md5 *data)
 {
-	t_byte	*padded_message;
-
-	(void)digest; //DEBUG
-	ft_printf("message = \"%s\"\n", message); // DEBUG
-	ft_printf("message bits = %d = 0x%x\n", ft_strlen(message) * 8, 8 * ft_strlen(message)); // DEBUG
-	if (!(padded_message = message_padding(message)))
+	ft_printf("message = \"%s\"\n", data->msg); // DEBUG
+	ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG
+	/* if (!(padded_message = message_padding(data))) */
+	if (message_padding(data) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
 }
