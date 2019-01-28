@@ -1,8 +1,12 @@
 #include "ft_ssl.h"
 
+static void		clean_md5_data(t_md5 *data)
+{
+	free(data->padded_msg);
+}
+
 static t_ex_ret	apply_md5(char *message)
 {
-	/* t_byte	md5_digest[MD5_DIGEST_BYTES]; */
 	t_md5	data;
 
 	if (!message)
@@ -12,6 +16,7 @@ static t_ex_ret	apply_md5(char *message)
 	data.msg_len = ft_strlen(message);
 	if (fill_md5_digest(&data) == FAILURE)
 		return (FAILURE);
+	clean_md5_data(&data);
 	return (SUCCESS);
 }
 

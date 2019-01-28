@@ -114,7 +114,6 @@ t_ex_ret	fill_md5_digest(t_md5 *data)
 {
 	ft_printf("message = \"%s\"\n", data->msg); // DEBUG
 	ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG
-	/* if (!(padded_message = message_padding(data))) */
 	if (message_padding(data) == FAILURE)
 		return (FAILURE);
 	return (SUCCESS);
