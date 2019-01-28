@@ -17,6 +17,7 @@ static t_ex_ret	apply_md5(char *message)
 	if (fill_md5_digest(&data) == FAILURE)
 		return (FAILURE);
 	clean_md5_data(&data);
+	/* ft_printf("yo\n"); */
 	return (SUCCESS);
 }
 
@@ -25,9 +26,10 @@ int				main(int argc, char **argv) {
 	if (argc != 2)
 	{
 		ft_dprintf(2, "1 arg needed\n");
-		exit(1);
+		return (FAILURE);
 	}
 	if (apply_md5(argv[1]) == FAILURE)
 		return (FAILURE);
+	/* ft_printf("yo\n"); */
 	return (SUCCESS);
 }

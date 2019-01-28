@@ -32,45 +32,6 @@ void		hex_display(t_byte *s, size_t len)
 	write(1, "\n", 1);
 }
 
-/* static void	set_msg_size(t_byte *s, int64_t n) */
-/* { */
-/* 	int		i; */
-/*  */
-/* 	i = 0; */
-/* 	while (i < MSG_LEN_BYTES) */
-/* 	{ */
-/* 		s[i] = (t_byte)(n >> ((MSG_LEN_BYTES - 1 - i) * 8)); */
-/* 		i++; */
-/* 	} */
-/* } */
-
-/* static uint64_t	pow(uint32_t v, uint32_t n) */
-/* { */
-/* 	if (n == 0) */
-/* 		return 1; */
-/* 	return (v * pow(v, n - 1)); */
-/* } */
-
-/* static int	get_size_in_bytes(uint64_t n) */
-/* { */
-/* 	if (n < pow(2, 8)) */
-/* 		return (1); */
-/* 	else if (n < pow(2, 16)) */
-/* 		return (2); */
-/* 	else if (n < pow(2, 24)) */
-/* 		return (3); */
-/* 	else if (n < pow(2, 32)) */
-/* 		return (4); */
-/* 	else if (n < pow(2, 40)) */
-/* 		return (5); */
-/* 	else if (n < pow(2, 48)) */
-/* 		return (6); */
-/* 	else if (n < pow(2, 56)) */
-/* 		return (7); */
-/* 	else */
-/* 		return (8); */
-/* } */
-
 static void	padd_with_msg_size(t_md5 *data, uint64_t *n)
 {
 	int		i;
@@ -94,11 +55,11 @@ static t_ex_ret	message_padding(t_md5 *data)
 	uint64_t	msg_len_bits;
 
 	tmp_len = (data->msg_len + 1 + MSG_LEN_BYTES);
-	if (tmp_len % (MD5_DIGEST_CHUNK_BYTES) == 0)
+	if (tmp_len % (MD5_CHUNK_BYTES) == 0)
 		data->padded_msg_len = tmp_len;
 	else
-		data->padded_msg_len = (tmp_len / (MD5_DIGEST_CHUNK_BYTES) + 1)
-					* (MD5_DIGEST_CHUNK_BYTES);
+		data->padded_msg_len = (tmp_len / (MD5_CHUNK_BYTES) + 1)
+					* (MD5_CHUNK_BYTES);
 	if (!(data->padded_msg = (t_byte *)ft_memalloc(data->padded_msg_len)))
 		return (FAILURE);
 	ft_printf("padded_msg len = %d = 0x%x\n", data->padded_msg_len, data->padded_msg_len); //DEBUG
@@ -110,11 +71,133 @@ static t_ex_ret	message_padding(t_md5 *data)
 	return (SUCCESS);
 }
 
+uint32_t	f_function(uint32_t b, uint32_t c, uint32_t d)
+{
+	return ((b & c) | ((~b) & d));
+}
+
+uint32_t	g_function(uint32_t b, uint32_t c, uint32_t d)
+{
+	return ((b & c) | (c & (~d)));
+}
+
+uint32_t	h_function(uint32_t b, uint32_t c, uint32_t d)
+{
+	return (b ^ c ^ d);
+}
+
+uint32_t	i_function(uint32_t b, uint32_t c, uint32_t d)
+{
+	return (b ^ (c | (~d)));
+}
+
+uint32_t		get_sin_const(int i)
+{
+	return ((uint32_t)floor(abs_double(sin(i + 1)) * POW_2_32)); // /!\ FLOOR & SIN;
+}
+
+void		fill_0_15_constants(t_md5 *data)
+{
+	int			i;
+	uint32_t		shift[4];
+
+	shift[0] = 7;
+	shift[1] = 12;
+	shift[2] = 17;
+	shift[3] = 22;
+	i = 0;
+	while (i < 16)
+	{
+		ft_printf("i = %d\n", i); //DEBUG
+		data->var[i].shift = shift[i % 4];
+		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
+		data->var[i].sin_const = get_sin_const(i);
+		ft_printf("sin_const = 0x%x\n", data->var[i].sin_const); //DEBUG
+		data->var[i].func = &f_function;
+		i++;
+	}
+}
+
+void		fill_16_31_constants(t_md5 *data)
+{
+	int			i;
+	uint32_t		shift[4];
+
+	shift[0] = 5;
+	shift[1] = 9;
+	shift[2] = 14;
+	shift[3] = 20;
+	i = 16;
+	while (i < 32)
+	{
+		ft_printf("i = %d\n", i); //DEBUG
+		data->var[i].shift = shift[i % 4];
+		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
+		data->var[i].sin_const = get_sin_const(i);
+		ft_printf("sin_const = 0x%x\n", data->var[i].sin_const); //DEBUG
+		data->var[i].func = &g_function;
+		i++;
+	}
+}
+
+void		fill_32_47_constants(t_md5 *data)
+{
+	int			i;
+	uint32_t		shift[4];
+
+	shift[0] = 4;
+	shift[1] = 11;
+	shift[2] = 16;
+	shift[3] = 23;
+	i = 32;
+	while (i < 48)
+	{
+		ft_printf("i = %d\n", i); //DEBUG
+		data->var[i].shift = shift[i % 4];
+		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
+		data->var[i].sin_const = get_sin_const(i);
+		ft_printf("sin_const = 0x%x\n", data->var[i].sin_const); //DEBUG
+		data->var[i].func = &h_function;
+		i++;
+	}
+}
+
+void		fill_48_63_constants(t_md5 *data)
+{
+	int			i;
+	uint32_t		shift[4];
+
+	shift[0] = 6;
+	shift[1] = 10;
+	shift[2] = 15;
+	shift[3] = 21;
+	i = 48;
+	while (i < 64)
+	{
+		ft_printf("i = %d\n", i); //DEBUG
+		data->var[i].shift = shift[i % 4];
+		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
+		data->var[i].sin_const = get_sin_const(i);
+		ft_printf("sin_const = 0x%x\n", data->var[i].sin_const); //DEBUG
+		data->var[i].func = &i_function;
+		i++;
+	}
+}
+
+void		fill_algo_constants(t_md5 *data)
+{
+	fill_0_15_constants(data);
+	fill_16_31_constants(data);
+	fill_32_47_constants(data);
+	fill_48_63_constants(data);
+}
+
 t_ex_ret	fill_md5_digest(t_md5 *data)
 {
 	ft_printf("message = \"%s\"\n", data->msg); // DEBUG
 	ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG
 	if (message_padding(data) == FAILURE)
 		return (FAILURE);
+	fill_algo_constants(data);
 	return (SUCCESS);
 }
