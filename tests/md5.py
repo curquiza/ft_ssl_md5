@@ -58,26 +58,26 @@ class MD5(object):
 
         # For the remainder of the MD5 algorithm, all values are in
         # little endian, so transform the bit array to little endian.
-        print("step 1")
-        print (binascii.hexlify(bitarray(bit_array, endian="little").tobytes()))
+        # print("step 1")
+        # print (binascii.hexlify(bitarray(bit_array, endian="little").tobytes()))
         return bitarray(bit_array, endian="little")
 
     @classmethod
     def _step_2(cls, step_1_result):
-        print("step 2")
+        # print("step 2")
         # Extend the result from step 1 with a 64-bit little endian
         # representation of the original message length (modulo 2^64).
         length = (len(cls._string) * 8) % pow(2, 64)
-        print("length in bits =", hex(length));
+        # print("length in bits =", hex(length));
         length_bit_array = bitarray(endian="little")
         length_bit_array.frombytes(struct.pack("<Q", length))
-        print("length bitarray =", binascii.hexlify(length_bit_array.tobytes()));
+        # print("length bitarray =", binascii.hexlify(length_bit_array.tobytes()));
 
         result = step_1_result.copy()
         result.extend(length_bit_array)
         # print (result)
         # print (result.tobytes())
-        print (binascii.hexlify(result.tobytes()))
+        # print (binascii.hexlify(result.tobytes()))
         return result
 
     @classmethod
@@ -89,13 +89,24 @@ class MD5(object):
     @classmethod
     def _step_4(cls, step_2_result):
         # Define the four auxiliary functions that produce one 32-bit word.
-        F = lambda x, y, z: (x & y) | (~x & z)
+        def F(x, y, z):
+            # print("x =", x)
+            # print("y =", y)
+            # print("z =", z)
+            # print("(x & y) | (~x & z)  = ", (x & y) | (~x & z))
+            return (x & y) | (~x & z)
+        # F = lambda x, y, z: (x & y) | (~x & z)
+
         G = lambda x, y, z: (x & z) | (y & ~z)
         H = lambda x, y, z: x ^ y ^ z
         I = lambda x, y, z: y ^ (x | ~z)
 
         # Define the left rotation function, which rotates `x` left `n` bits.
-        rotate_left = lambda x, n: (x << n) | (x >> (32 - n))
+        # rotate_left = lambda x, n: (x << n) | (x >> (32 - n))
+        def rotate_left(x, n):
+            # print("x = %u, n = %u, left_rotate = %u\n" % (x, n, (x << n) | (x >> (32 - n))))
+            return (x << n) | (x >> (32 - n))
+
 
         # Define a function for modular addition.
         modular_add = lambda a, b: (a + b) % pow(2, 32)
@@ -125,6 +136,7 @@ class MD5(object):
 
             # Execute the four rounds with 16 operations each.
             for i in range(4 * 16):
+                # print("START i =", i, "\t", "A =", A, "B =", B, "C =", C, "D =", D)
                 if 0 <= i <= 15:
                     k = i
                     s = [7, 12, 17, 22]
@@ -147,17 +159,23 @@ class MD5(object):
                 # the expression `A = D` below would overwrite it. We also cannot
                 # move `A = D` lower because the original `D` would already have
                 # been overwritten by the `D = C` expression.
+                # print("first step tmp =", temp)
                 temp = modular_add(temp, X[k])
                 temp = modular_add(temp, T[i])
                 temp = modular_add(temp, A)
+                # print("X[%u] = %u" % (k, X[k]))
+                # print("T[%d] = %u" % (i, T[i]))
+                # print("second step tmp =", temp)
                 temp = rotate_left(temp, s[i % 4])
                 temp = modular_add(temp, B)
+                # print("third step tmp =", temp)
 
                 # Swap the registers for the next operation.
                 A = D
                 D = C
                 C = B
                 B = temp
+                # print("END i =", i, "\t", "A =", A, "B =", B, "C =", C, "D =", D)
 
             # Update the buffers with the results from this chunk.
             cls._buffers[MD5Buffer.A] = modular_add(cls._buffers[MD5Buffer.A], A)
@@ -180,8 +198,9 @@ class MD5(object):
 import sys
 
 def main():
-    print ("message = " + sys.argv[1])
-    print ("digest = " + MD5.hash(sys.argv[1]))
+    # print ("message = " + sys.argv[1])
+    # print ("digest = " + MD5.hash(sys.argv[1]))
+    print (MD5.hash(sys.argv[1]))
 
 if __name__ == "__main__":
     main()

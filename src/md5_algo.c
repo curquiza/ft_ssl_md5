@@ -1,37 +1,5 @@
 #include "ft_ssl.h"
 
-void		hex_display_details(t_byte *s, size_t len)
-{
-	size_t		i;
-
-	i = 0;
-	while (i < len)
-	{
-		if (i % 4 == 0)
-			ft_printf("%03d - %03d\t", i, i + 3);
-		ft_printf("%02x", (t_byte)s[i]);
-		i++;
-		if (i % 4 == 0)
-			write(1, "\n", 1);
-		else
-			write(1, " ", 1);
-	}
-	write(1, "\n", 1);
-}
-
-void		hex_display(t_byte *s, size_t len)
-{
-	size_t		i;
-
-	i = 0;
-	while (i < len)
-	{
-		ft_printf("%02x", (t_byte)s[i]);
-		i++;
-	}
-	write(1, "\n", 1);
-}
-
 static void	padd_with_msg_size(t_md5 *data, uint64_t *n)
 {
 	int		i;
@@ -62,125 +30,191 @@ static t_ex_ret	message_padding(t_md5 *data)
 					* (MD5_CHUNK_BYTES);
 	if (!(data->padded_msg = (t_byte *)ft_memalloc(data->padded_msg_len)))
 		return (FAILURE);
-	ft_printf("padded_msg len = %d = 0x%x\n", data->padded_msg_len, data->padded_msg_len); //DEBUG
+	/* ft_printf("padded_msg len = %d = 0x%x\n", data->padded_msg_len, data->padded_msg_len); //DEBUG */
 	ft_memmove(data->padded_msg, data->msg, data->msg_len);
 	data->padded_msg[data->msg_len] = (t_byte)(1 << 7);
 	msg_len_bits = 8 * data->msg_len;
 	padd_with_msg_size(data, &msg_len_bits);
-	hex_display(data->padded_msg, data->padded_msg_len); //DEBUG
+	/* hex_display(data->padded_msg, data->padded_msg_len); //DEBUG */
 	return (SUCCESS);
 }
 
-uint32_t	f_function(uint32_t b, uint32_t c, uint32_t d)
+static uint32_t	f_function(uint32_t b, uint32_t c, uint32_t d)
 {
+	/* ft_printf("b = %u\n", b); //DEBUG */
+	/* ft_printf("c = %u\n", c); //DEBUG */
+	/* ft_printf("d = %u\n", d); //DEBUG */
+	/* printf("(b & c) | (~b & d)  = %u\n", (b & c) | (~b & d)); //DEBUG */
 	return ((b & c) | ((~b) & d));
 }
 
-uint32_t	g_function(uint32_t b, uint32_t c, uint32_t d)
+static uint32_t	g_function(uint32_t b, uint32_t c, uint32_t d)
 {
-	return ((b & c) | (c & (~d)));
+	return ((b & d) | (c & ~d));
 }
 
-uint32_t	h_function(uint32_t b, uint32_t c, uint32_t d)
+static uint32_t	h_function(uint32_t b, uint32_t c, uint32_t d)
 {
 	return (b ^ c ^ d);
 }
 
-uint32_t	i_function(uint32_t b, uint32_t c, uint32_t d)
+static uint32_t	i_function(uint32_t b, uint32_t c, uint32_t d)
 {
-	return (b ^ (c | (~d)));
+	return (c ^ (b | ~d));
 }
 
-uint32_t		get_radian_const(int i)
+static uint32_t		get_radian_const(int i)
 {
 	return ((uint32_t)floor(abs_double(sin(i + 1)) * POW_2_32)); // /!\ FLOOR & SIN;
 }
 
-void		fill_constants(int start, int end, t_md5 *data, uint32_t (*func)(uint32_t b, uint32_t c, uint32_t d))
+// faire des fonctions pour chaque
+// passer la fonction en arg
+// pour avoir que 4 params => start seulement et end = start + 16
+static int				get_word_index(int i)
+{
+	if (i < 16)
+		return (i);
+	else if (i < 32)
+		return ((5 * i + 1) % 16);
+	else if (i < 48)
+		return ((3 * i + 5) % 16);
+	else
+		return ((7 * i) % 16);
+}
+
+static void		fill_constants(int start, int end, t_md5 *data, uint32_t (*func)(uint32_t b, uint32_t c, uint32_t d))
 {
 	int				i;
 	uint32_t		shift[4];
 
-	shift[0] = data->var[start].shift;
-	shift[1] = data->var[start + 1].shift;
-	shift[2] = data->var[start + 2].shift;
-	shift[3] = data->var[start + 3].shift;
+	shift[0] = data->cst[start].shift;
+	shift[1] = data->cst[start + 1].shift;
+	shift[2] = data->cst[start + 2].shift;
+	shift[3] = data->cst[start + 3].shift;
 	i = start;
 	while (i <= end)
 	{
-		ft_printf("i = %d\n", i); //DEBUG
-		data->var[i].shift = shift[i % 4];
-		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
-		data->var[i].radian = get_radian_const(i);
-		ft_printf("sin_const = 0x%x\n", data->var[i].radian); //DEBUG
-		data->var[i].func = func;
+		/* ft_printf("i = %d\n", i); //DEBUG */
+		data->cst[i].shift = shift[i % 4];
+		/* ft_printf("cst[%d].shift = %d\n", i, data->cst[i].shift); //DEBUG */
+		data->cst[i].radian = get_radian_const(i);
+		/* ft_printf("cst[%d].sin = %u\n", i, data->cst[i].radian); //DEBUG */
+		data->cst[i].func = func;
+		data->cst[i].word_index = get_word_index(i);
 		i++;
 	}
 }
 
-void		fill_algo_constants(t_md5 *data)
+static void		fill_algo_constants(t_md5 *data)
 {
-	data->var[0].shift = 7;
-	data->var[1].shift = 12;
-	data->var[2].shift = 17;
-	data->var[3].shift = 22;
+	data->cst[0].shift = 7;
+	data->cst[1].shift = 12;
+	data->cst[2].shift = 17;
+	data->cst[3].shift = 22;
 	fill_constants(0, 15, data, &f_function);
-	data->var[16].shift = 5;
-	data->var[17].shift = 9;
-	data->var[18].shift = 14;
-	data->var[19].shift = 20;
+	data->cst[16].shift = 5;
+	data->cst[17].shift = 9;
+	data->cst[18].shift = 14;
+	data->cst[19].shift = 20;
 	fill_constants(16, 31, data, &g_function);
-	data->var[32].shift = 4;
-	data->var[33].shift = 11;
-	data->var[34].shift = 16;
-	data->var[35].shift = 23;
+	data->cst[32].shift = 4;
+	data->cst[33].shift = 11;
+	data->cst[34].shift = 16;
+	data->cst[35].shift = 23;
 	fill_constants(32, 47, data, &h_function);
-	data->var[48].shift = 6;
-	data->var[49].shift = 10;
-	data->var[50].shift = 15;
-	data->var[51].shift = 21;
+	data->cst[48].shift = 6;
+	data->cst[49].shift = 10;
+	data->cst[50].shift = 15;
+	data->cst[51].shift = 21;
 	fill_constants(48, 63, data, &i_function);
 }
 
-t_ex_ret	run_one_chunk(t_md5 *data, t_byte words[MD5_WORD_NB][MD5_WORD_LEN_BYTES])
+static uint32_t	left_rotate(uint32_t x, uint32_t n)
 {
-	t_md5_incr	tmp;
-
-	(void)words;
-	tmp.a = data->rslt.a;
-	tmp.b = data->rslt.b;
-	tmp.c = data->rslt.c;
-	tmp.d = data->rslt.d;
-	ft_printf("run one chunk !\n"); //DEBUG
-	return (SUCCESS);
+	/* ft_printf("x = %u, n = %u, left_rotate = %u\n", x, n, (x << n) | (x >> (32 - n))); //DEBUG */
+	/* (x << n) | (x >> (32 - n)) */
+	return ((x << n) | (x >> (32 - n)));
 }
 
-void		fill_words(t_byte words[MD5_WORD_NB][MD5_WORD_LEN_BYTES], uint32_t i, t_md5 *data)
+static void	run_one_chunk(t_md5 *data, uint32_t words[MD5_WORD_NB])
+{
+	int			i;
+	uint32_t	f;
+	t_md5_incr	var;
+
+	var.a = data->rslt.a;
+	var.b = data->rslt.b;
+	var.c = data->rslt.c;
+	var.d = data->rslt.d;
+	i = 0;
+	while (i < MD5_CHUNK_BYTES)
+	{
+		/* ft_printf("START i = %d \t A = %u, B = %u, C = %u, D = %u\n", i, var.a, var.b, var.c, var.d); //DEBUG */
+		f = data->cst[i].func(var.b, var.c, var.d); 
+		/* ft_printf("first step f = %u\n", f); //DEBUG */
+		f += var.a + data->cst[i].radian + words[data->cst[i].word_index];
+		/* ft_printf("words[%d] = %u\n", data->cst[i].word_index, words[data->cst[i].word_index]); //DEBUG */
+		/* ft_printf("cst[%d].radian = %u\n", i, data->cst[i].radian); //DEBUG */
+		/* ft_printf("second step f = %u\n", f); //DEBUG */
+		var.a = var.d;
+		var.d = var.c;
+		var.c = var.b;
+		var.b += left_rotate(f, data->cst[i].shift);
+		/* ft_printf("third step f = %u\n", var.b); //DEBUG */
+		/* ft_printf("END i = %d \t A = %u, B = %u, C = %u, D = %u\n", i, var.a, var.b, var.c, var.d); //DEBUG */
+		i++;
+	}
+	data->rslt.a += var.a;
+	data->rslt.b += var.b;
+	data->rslt.c += var.c;
+	data->rslt.d += var.d;
+}
+
+static uint32_t	ptr_to_uint32_swap(t_byte *str)
+{
+	uint32_t		rslt;
+
+	rslt = 0;
+	rslt = (rslt | (t_byte)str[3]) << 8;
+	rslt = (rslt | (t_byte)str[2]) << 8;
+	rslt = (rslt | (t_byte)str[1]) << 8;
+	rslt |= (t_byte)str[0];
+	return (rslt);
+}
+
+static void		fill_words(uint32_t words[MD5_WORD_NB], uint32_t i, t_md5 *data)
 {
 	uint32_t	incr_msg;
-	uint32_t	incr_word_nb;
-	uint32_t	incr_word_len;
+	uint32_t	incr_word;
 
-	ft_printf("Fill words ! i = %d\n", i); //DEBUG
 	incr_msg = i * MD5_CHUNK_BYTES;
-	incr_word_nb = 0;
-	while (incr_word_nb < MD5_WORD_NB)
+	incr_word = 0;
+	while (incr_word < MD5_WORD_NB)
 	{
-		incr_word_len = 0;
-		while (incr_word_len < MD5_WORD_LEN_BYTES)
-		{
-			words[incr_word_nb][incr_word_len] = data->padded_msg[incr_msg];
-			incr_word_len++;
-			incr_msg++;
-		}
-		incr_word_nb++;
+		words[incr_word] = ptr_to_uint32_swap(data->padded_msg + incr_msg);
+		incr_msg += 4;
+		/* printf("word_in_loop[%d] = %u = 0x%x\n", incr_word, words[incr_word], words[incr_word]); //DEBUG */
+		incr_word++;
 	}
 }
 
-t_ex_ret	run_md5_algo(t_md5 *data)
+static void	fill_digest(t_md5 *data)
+{
+	size_t	sizeof_uint32;
+
+	sizeof_uint32 = sizeof(uint32_t);
+	ft_memmove(data->digest, &data->rslt.a, sizeof_uint32);
+	ft_memmove(data->digest + sizeof_uint32, &data->rslt.b, sizeof_uint32);
+	ft_memmove(data->digest + 2 * sizeof_uint32, &data->rslt.c, sizeof_uint32);
+	ft_memmove(data->digest + 3 * sizeof_uint32, &data->rslt.d, sizeof_uint32);
+}
+
+static void	run_md5_algo(t_md5 *data)
 {
 	uint32_t	i;
-	t_byte		words[MD5_WORD_NB][MD5_WORD_LEN_BYTES];
+	/* t_byte		words[MD5_WORD_NB][MD5_WORD_LEN_BYTES]; */
+	uint32_t	words[MD5_WORD_NB];
 
 	data->rslt.a = MD5_A0_INIT;
 	data->rslt.b = MD5_B0_INIT;
@@ -189,17 +223,18 @@ t_ex_ret	run_md5_algo(t_md5 *data)
 	i = 0;
 	while (i < (data->padded_msg_len / (MD5_CHUNK_BYTES)))
 	{
+		/* ft_printf("run one chunk !\n"); //DEBUG */
 		fill_words(words, i, data);
 		run_one_chunk(data, words);
 		i++;
 	}
-	return (SUCCESS);
+	fill_digest(data);
 }
 
 t_ex_ret	fill_md5_digest(t_md5 *data)
 {
-	ft_printf("message = \"%s\"\n", data->msg); // DEBUG
-	ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG
+	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
+	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
 	if (message_padding(data) == FAILURE)
 		return (FAILURE);
 	fill_algo_constants(data);
