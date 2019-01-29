@@ -63,7 +63,7 @@ static t_ex_ret	message_padding(t_md5 *data)
 	if (!(data->padded_msg = (t_byte *)ft_memalloc(data->padded_msg_len)))
 		return (FAILURE);
 	ft_printf("padded_msg len = %d = 0x%x\n", data->padded_msg_len, data->padded_msg_len); //DEBUG
-	ft_memcpy(data->padded_msg, data->msg, data->msg_len);
+	ft_memmove(data->padded_msg, data->msg, data->msg_len);
 	data->padded_msg[data->msg_len] = (t_byte)(1 << 7);
 	msg_len_bits = 8 * data->msg_len;
 	padd_with_msg_size(data, &msg_len_bits);
@@ -91,7 +91,7 @@ uint32_t	i_function(uint32_t b, uint32_t c, uint32_t d)
 	return (b ^ (c | (~d)));
 }
 
-uint32_t		get_sin_const(int i)
+uint32_t		get_radian_const(int i)
 {
 	return ((uint32_t)floor(abs_double(sin(i + 1)) * POW_2_32)); // /!\ FLOOR & SIN;
 }
@@ -111,8 +111,8 @@ void		fill_constants(int start, int end, t_md5 *data, uint32_t (*func)(uint32_t 
 		ft_printf("i = %d\n", i); //DEBUG
 		data->var[i].shift = shift[i % 4];
 		ft_printf("shift = %d\n", data->var[i].shift); //DEBUG
-		data->var[i].sin_const = get_sin_const(i);
-		ft_printf("sin_const = 0x%x\n", data->var[i].sin_const); //DEBUG
+		data->var[i].radian = get_radian_const(i);
+		ft_printf("sin_const = 0x%x\n", data->var[i].radian); //DEBUG
 		data->var[i].func = func;
 		i++;
 	}
@@ -142,6 +142,60 @@ void		fill_algo_constants(t_md5 *data)
 	fill_constants(48, 63, data, &i_function);
 }
 
+t_ex_ret	run_one_chunk(t_md5 *data, t_byte words[MD5_WORD_NB][MD5_WORD_LEN_BYTES])
+{
+	t_md5_incr	tmp;
+
+	(void)words;
+	tmp.a = data->rslt.a;
+	tmp.b = data->rslt.b;
+	tmp.c = data->rslt.c;
+	tmp.d = data->rslt.d;
+	ft_printf("run one chunk !\n"); //DEBUG
+	return (SUCCESS);
+}
+
+void		fill_words(t_byte words[MD5_WORD_NB][MD5_WORD_LEN_BYTES], uint32_t i, t_md5 *data)
+{
+	uint32_t	incr_msg;
+	uint32_t	incr_word_nb;
+	uint32_t	incr_word_len;
+
+	ft_printf("Fill words ! i = %d\n", i); //DEBUG
+	incr_msg = i * MD5_CHUNK_BYTES;
+	incr_word_nb = 0;
+	while (incr_word_nb < MD5_WORD_NB)
+	{
+		incr_word_len = 0;
+		while (incr_word_len < MD5_WORD_LEN_BYTES)
+		{
+			words[incr_word_nb][incr_word_len] = data->padded_msg[incr_msg];
+			incr_word_len++;
+			incr_msg++;
+		}
+		incr_word_nb++;
+	}
+}
+
+t_ex_ret	run_md5_algo(t_md5 *data)
+{
+	uint32_t	i;
+	t_byte		words[MD5_WORD_NB][MD5_WORD_LEN_BYTES];
+
+	data->rslt.a = MD5_A0_INIT;
+	data->rslt.b = MD5_B0_INIT;
+	data->rslt.c = MD5_C0_INIT;
+	data->rslt.d = MD5_D0_INIT;
+	i = 0;
+	while (i < (data->padded_msg_len / (MD5_CHUNK_BYTES)))
+	{
+		fill_words(words, i, data);
+		run_one_chunk(data, words);
+		i++;
+	}
+	return (SUCCESS);
+}
+
 t_ex_ret	fill_md5_digest(t_md5 *data)
 {
 	ft_printf("message = \"%s\"\n", data->msg); // DEBUG
@@ -149,5 +203,6 @@ t_ex_ret	fill_md5_digest(t_md5 *data)
 	if (message_padding(data) == FAILURE)
 		return (FAILURE);
 	fill_algo_constants(data);
+	run_md5_algo(data);
 	return (SUCCESS);
 }
