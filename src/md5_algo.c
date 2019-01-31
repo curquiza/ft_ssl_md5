@@ -68,22 +68,29 @@ static uint32_t		get_radian_const(int i)
 	return ((uint32_t)floor(abs_double(sin(i + 1)) * POW_2_32)); // /!\ FLOOR & SIN;
 }
 
-// faire des fonctions pour chaque
-// passer la fonction en arg
-// pour avoir que 4 params => start seulement et end = start + 16
-static int				get_word_index(int i)
+static int		word_index_function_0(int i)
 {
-	if (i < 16)
-		return (i);
-	else if (i < 32)
-		return ((5 * i + 1) % 16);
-	else if (i < 48)
-		return ((3 * i + 5) % 16);
-	else
-		return ((7 * i) % 16);
+	return (i);
 }
 
-static void		fill_constants(int start, int end, t_md5 *data, uint32_t (*func)(uint32_t b, uint32_t c, uint32_t d))
+static int		word_index_function_16(int i)
+{
+	return ((5 * i + 1) % 16);
+}
+
+static int		word_index_function_32(int i)
+{
+	return ((3 * i + 5) % 16);
+}
+
+static int		word_index_function_48(int i)
+{
+	return ((7 * i) % 16);
+}
+
+static void		fill_constants(int start, t_md5 *data,
+						uint32_t (*func)(uint32_t b, uint32_t c, uint32_t d),
+						int (*word_func)(int i))
 {
 	int				i;
 	uint32_t		shift[4];
@@ -93,7 +100,7 @@ static void		fill_constants(int start, int end, t_md5 *data, uint32_t (*func)(ui
 	shift[2] = data->cst[start + 2].shift;
 	shift[3] = data->cst[start + 3].shift;
 	i = start;
-	while (i <= end)
+	while (i <= (start + 15))
 	{
 		/* ft_printf("i = %d\n", i); //DEBUG */
 		data->cst[i].shift = shift[i % 4];
@@ -101,7 +108,8 @@ static void		fill_constants(int start, int end, t_md5 *data, uint32_t (*func)(ui
 		data->cst[i].radian = get_radian_const(i);
 		/* ft_printf("cst[%d].sin = %u\n", i, data->cst[i].radian); //DEBUG */
 		data->cst[i].func = func;
-		data->cst[i].word_index = get_word_index(i);
+		/* data->cst[i].word_index = get_word_index(i); */
+		data->cst[i].word_index = word_func(i);
 		i++;
 	}
 }
@@ -112,22 +120,22 @@ static void		fill_algo_constants(t_md5 *data)
 	data->cst[1].shift = 12;
 	data->cst[2].shift = 17;
 	data->cst[3].shift = 22;
-	fill_constants(0, 15, data, &f_function);
+	fill_constants(0, data, &f_function, &word_index_function_0);
 	data->cst[16].shift = 5;
 	data->cst[17].shift = 9;
 	data->cst[18].shift = 14;
 	data->cst[19].shift = 20;
-	fill_constants(16, 31, data, &g_function);
+	fill_constants(16, data, &g_function, &word_index_function_16);
 	data->cst[32].shift = 4;
 	data->cst[33].shift = 11;
 	data->cst[34].shift = 16;
 	data->cst[35].shift = 23;
-	fill_constants(32, 47, data, &h_function);
+	fill_constants(32, data, &h_function, &word_index_function_32);
 	data->cst[48].shift = 6;
 	data->cst[49].shift = 10;
 	data->cst[50].shift = 15;
 	data->cst[51].shift = 21;
-	fill_constants(48, 63, data, &i_function);
+	fill_constants(48, data, &i_function, &word_index_function_48);
 }
 
 static uint32_t	left_rotate(uint32_t x, uint32_t n)
