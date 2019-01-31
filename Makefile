@@ -5,6 +5,8 @@ CC = gcc $(FLAG)
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
+		md5_algo.c \
+		maths.c \
 		main.c)
 
 OBJ_DIR = objs
