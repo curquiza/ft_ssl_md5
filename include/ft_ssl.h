@@ -20,5 +20,5 @@
 double		abs_double(double x);
 double		floor_double(double x);
 
-void		hex_display(t_byte *s, size_t len); //DEBUG
+/* void		hex_display(t_byte *s, size_t len); //DEBUG */
 #endif

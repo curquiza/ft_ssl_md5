@@ -178,6 +178,7 @@ class SHA256(object):
             self._sha['digest'] = mutate(self._sha['data'], self._sha['digest'])
 
         self._sha['data'][:count] = [ord(c) for c in buff[buffer_idx:buffer_idx + count]]
+        print self._sha #DEBUG
 
     def hexdigest(self):
         """

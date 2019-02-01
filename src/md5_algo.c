@@ -63,7 +63,7 @@ static void		fill_words(uint32_t words[MD5_WORD_NB], uint32_t i, t_md5 *data)
 	while (incr_word < MD5_WORD_NB)
 	{
 		words[incr_word] = ptr_to_uint32_swap(data->padded_msg + incr_msg);
-		incr_msg += 4;
+		incr_msg += sizeof(uint32_t);
 		/* printf("word_in_loop[%d] = %u = 0x%x\n", incr_word, words[incr_word], words[incr_word]); //DEBUG */
 		incr_word++;
 	}
