@@ -65,7 +65,8 @@ static uint32_t	i_function(uint32_t b, uint32_t c, uint32_t d)
 
 static uint32_t		get_radian_const(int i)
 {
-	return ((uint32_t)floor(abs_double(sin(i + 1)) * POW_2_32)); // /!\ FLOOR & SIN;
+	/* return ((uint32_t)floor(abs_double(sin(i + 1)) * POW_2_32)); // /!\ FLOOR & SIN; */
+	return ((uint32_t)floor_double(abs_double(sin(i + 1)) * POW_2_32));
 }
 
 static int		word_index_function_0(int i)

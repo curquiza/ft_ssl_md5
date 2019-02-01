@@ -2,7 +2,7 @@
 # define FT_SSL_H
 
 #include "libft.h"
-#include "math.h" //needed ??
+#include "math.h"
 
 # define MSG_LEN_BITS		64
 # define MSG_LEN_BYTES		MSG_LEN_BITS / 8
@@ -57,8 +57,9 @@ typedef struct		s_md5
 /*
 ** Maths
 */
-double		pow_double(double v, uint32_t n);
+/* double		pow_double(double v, uint32_t n); */
 double		abs_double(double x);
+double		floor_double(double x);
 
 /*
 ** MD5
