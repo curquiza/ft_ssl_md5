@@ -128,6 +128,77 @@ static void	fill_words(uint32_t words[SHA256_WORD_NB], uint32_t i, t_sha256 *dat
 	}
 }
 
+static void	fill_tmp_var(int i, t_sha256_incr *var, uint32_t words[SHA256_WORD_NB])
+{
+	uint32_t		s1;
+	uint32_t		s0;
+	uint32_t		ch;
+	uint32_t		maj;
+	uint32_t		temp1;
+	uint32_t		temp2;
+
+
+	s1 = right_rotate(var->e, 6) ^ right_rotate(var->e, 11) ^ right_rotate(var->e, 25);
+	ch = (var->e & var->f) ^ (~var->e & var->g);
+	temp1 = var->h + s1 + ch + g_k_sha256[i] + words[i];
+	s0 = right_rotate(var->a, 2) ^ right_rotate(var->a, 13) ^ right_rotate(var->a, 22);
+	maj = (var->a & var->b) ^ (var->a & var->c) ^ (var->b & var->c);
+	temp2 = s0 + maj;
+
+	var->h = var->g;
+	var->g = var->f;
+	var->f = var->e;
+	var->e = var->d + temp1;
+	var->d = var->c;
+	var->c = var->b;
+	var->b = var->a;
+	var->a = temp1 + temp2;
+}
+
+static void	run_one_chunk(t_sha256 *data, uint32_t words[SHA256_WORD_NB])
+{
+	int				i;
+	t_sha256_incr	var;
+
+	var.a = data->rslt.a;
+	var.b = data->rslt.b;
+	var.c = data->rslt.c;
+	var.d = data->rslt.d;
+	var.e = data->rslt.e;
+	var.f = data->rslt.f;
+	var.g = data->rslt.g;
+	var.h = data->rslt.h;
+	i = 0;
+	while (i < SHA256_CHUNK_BYTES)
+	{
+		fill_tmp_var(i, &var, words);
+		i++;
+	}
+	data->rslt.a += var.a;
+	data->rslt.b += var.b;
+	data->rslt.c += var.c;
+	data->rslt.d += var.d;
+	data->rslt.e += var.e;
+	data->rslt.f += var.f;
+	data->rslt.g += var.g;
+	data->rslt.h += var.h;
+}
+
+static void	fill_digest(t_sha256 *data)
+{
+	size_t	sizeof_uint32;
+
+	sizeof_uint32 = sizeof(uint32_t);
+	ft_memmove(data->digest, &data->rslt.a, sizeof_uint32);
+	ft_memmove(data->digest + sizeof_uint32, &data->rslt.b, sizeof_uint32);
+	ft_memmove(data->digest + 2 * sizeof_uint32, &data->rslt.c, sizeof_uint32);
+	ft_memmove(data->digest + 3 * sizeof_uint32, &data->rslt.d, sizeof_uint32);
+	ft_memmove(data->digest + 4 * sizeof_uint32, &data->rslt.e, sizeof_uint32);
+	ft_memmove(data->digest + 5 * sizeof_uint32, &data->rslt.f, sizeof_uint32);
+	ft_memmove(data->digest + 6 * sizeof_uint32, &data->rslt.g, sizeof_uint32);
+	ft_memmove(data->digest + 7 * sizeof_uint32, &data->rslt.h, sizeof_uint32);
+}
+
 static void	run_sha256_algo(t_sha256 *data)
 {
 	uint32_t	i;
@@ -139,10 +210,10 @@ static void	run_sha256_algo(t_sha256 *data)
 	{
 		/* ft_printf("run one chunk !\n"); //DEBUG */
 		fill_words(words, i, data);
-		/* run_one_chunk(data, words); */
+		run_one_chunk(data, words);
 		i++;
 	}
-	/* fill_digest(data); */
+	fill_digest(data);
 }
 
 t_ex_ret	fill_sha256_digest(t_sha256 *data)

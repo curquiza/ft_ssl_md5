@@ -39,6 +39,11 @@ static void		clean_md5_data(t_md5 *data)
 	free(data->padded_msg);
 }
 
+static void		clean_sha256_data(t_sha256 *data)
+{
+	free(data->padded_msg);
+}
+
 t_ex_ret	apply_md5(char *message)
 {
 	t_md5	data;
@@ -66,8 +71,8 @@ t_ex_ret	apply_sha256(char *message)
 	data.msg_len = ft_strlen(message);
 	if (fill_sha256_digest(&data) == FAILURE)
 		return (FAILURE);
-	hex_display(data.digest, MD5_DIGEST_BYTES);
-	/* clean_md5_data(&data); */
+	hex_display(data.digest, SHA256_DIGEST_BYTES);
+	clean_sha256_data(&data);
 	return (SUCCESS);
 }
 
