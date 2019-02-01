@@ -15,7 +15,8 @@
 /*
 ** Maths
 */
-double		pow_double(double v, uint32_t n);
+/* double		pow_double(double v, uint32_t n); */
 double		abs_double(double x);
+double		floor_double(double x);
 
 #endif
