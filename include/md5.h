@@ -49,8 +49,8 @@ typedef struct		s_md5
 /*
 ** init
 */
-t_ex_ret	message_padding(t_md5 *data);
-void		fill_algo_constants(t_md5 *data);
+t_ex_ret	message_padding_md5(t_md5 *data);
+void		fill_algo_constants_md5(t_md5 *data);
 
 /*
 ** algo

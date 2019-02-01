@@ -5,6 +5,7 @@
 
 # include "libft.h"
 # include "md5.h"
+# include "sha256.h"
 
 # define POW_2_32			0x100000000
 
@@ -19,4 +20,5 @@
 double		abs_double(double x);
 double		floor_double(double x);
 
+void		hex_display(t_byte *s, size_t len); //DEBUG
 #endif

@@ -17,7 +17,7 @@ static void	padd_with_msg_size(t_md5 *data, uint64_t *n)
 	}
 }
 
-t_ex_ret	message_padding(t_md5 *data)
+t_ex_ret	message_padding_md5(t_md5 *data)
 {
 	size_t		tmp_len;
 	uint64_t	msg_len_bits;
@@ -104,7 +104,7 @@ static void		fill_constants(int start, t_md5 *data,
 	}
 }
 
-void		fill_algo_constants(t_md5 *data)
+void		fill_algo_constants_md5(t_md5 *data)
 {
 	data->cst[0].shift = 7;
 	data->cst[1].shift = 12;
