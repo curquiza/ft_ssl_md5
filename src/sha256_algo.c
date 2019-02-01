@@ -70,15 +70,15 @@ static t_ex_ret	message_padding_sha256(t_sha256 *data)
 	return (SUCCESS);
 }
 
-/* static uint32_t	right_rotate(uint32_t x, uint32_t n) */
-/* { */
-/* 	return ((x >> n) | (x << (32 - n))); */
-/* } */
-/*  */
-/* static uint32_t	right_shift(uint32_t x, uint32_t n) */
-/* { */
-/* 	return (x >> n); */
-/* } */
+static uint32_t	right_rotate(uint32_t x, uint32_t n)
+{
+	return ((x >> n) | (x << (32 - n)));
+}
+
+static uint32_t	right_shift(uint32_t x, uint32_t n)
+{
+	return (x >> n);
+}
 
 static void	rslt_init(t_sha256 *data)
 {
@@ -92,10 +92,41 @@ static void	rslt_init(t_sha256 *data)
 	data->rslt.h = SHA256_H0_INIT;
 }
 
-/* static void	fill_words(uint32_t words[SHA256_WORD_NB], uint32_t i, t_sha256 *data) */
-/* { */
-/* 	 */
-/* } */
+static uint32_t	get_word(uint32_t words[SHA256_WORD_NB], uint32_t incr_word)
+{
+	uint32_t	s0;
+	uint32_t	s1;
+
+	s0 = (right_rotate(words[incr_word - 15], 7))
+		^ (right_rotate(words[incr_word - 15], 18))
+		^ (right_shift(words[incr_word - 15], 3));
+	s1 = (right_rotate(words[incr_word - 2], 17))
+		^ (right_rotate(words[incr_word - 2], 19))
+		^ (right_shift(words[incr_word - 2], 10));
+	return (words[incr_word - 16] + s0 + words[incr_word - 7] + s1);
+}
+
+static void	fill_words(uint32_t words[SHA256_WORD_NB], uint32_t i, t_sha256 *data)
+{
+	uint32_t	incr_msg;
+	uint32_t	incr_word;
+
+	incr_msg = i * SHA256_CHUNK_BYTES;
+	incr_word = 0;
+	while (incr_word < SHA256_WORD_NB_FROM_CHUNK)
+	{
+		words[incr_word] = ptr_to_uint32_swap(data->padded_msg + incr_msg);
+		incr_msg += sizeof(uint32_t);
+		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
+		incr_word++;
+	}
+	while (incr_word < SHA256_WORD_NB)
+	{
+		words[incr_word] = get_word(words, incr_word);
+		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
+		incr_word++;
+	}
+}
 
 static void	run_sha256_algo(t_sha256 *data)
 {
@@ -106,9 +137,8 @@ static void	run_sha256_algo(t_sha256 *data)
 	i = 0;
 	while (i < (data->padded_msg_len / (SHA256_CHUNK_BYTES)))
 	{
-		ft_printf("run one chunk !\n"); //DEBUG
-		(void)words; //DEBUG
-		/* fill_words(words, i, data); */
+		/* ft_printf("run one chunk !\n"); //DEBUG */
+		fill_words(words, i, data);
 		/* run_one_chunk(data, words); */
 		i++;
 	}

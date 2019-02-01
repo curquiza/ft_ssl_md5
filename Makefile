@@ -8,6 +8,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		md5_init.c \
 		md5_algo.c \
 		sha256_algo.c \
+		conversion.c \
 		maths.c \
 		main.c)
 

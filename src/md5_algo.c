@@ -41,18 +41,6 @@ static void	run_one_chunk(t_md5 *data, uint32_t words[MD5_WORD_NB])
 	data->rslt.d += var.d;
 }
 
-static uint32_t	ptr_to_uint32_swap(t_byte *str)
-{
-	uint32_t		rslt;
-
-	rslt = 0;
-	rslt = (rslt | (t_byte)str[3]) << 8;
-	rslt = (rslt | (t_byte)str[2]) << 8;
-	rslt = (rslt | (t_byte)str[1]) << 8;
-	rslt |= (t_byte)str[0];
-	return (rslt);
-}
-
 static void		fill_words(uint32_t words[MD5_WORD_NB], uint32_t i, t_md5 *data)
 {
 	uint32_t	incr_msg;
