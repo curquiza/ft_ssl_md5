@@ -7,8 +7,6 @@
 # include "md5.h"
 # include "sha256.h"
 
-# define POW_2_32			0x100000000
-
 /*
 ** FUNCTIONS PROTOTYPES ********************************************************
 */
