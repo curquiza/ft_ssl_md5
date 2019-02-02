@@ -51,7 +51,7 @@ uint32_t	g_k_sha256[SHA256_CHUNK_BYTES];
 /*
 ** init
 */
-/* t_ex_ret	message_padding_sha256(t_sha256 *data); */
+t_ex_ret	message_padding_sha256(t_sha256 *data);
 
 /*
 ** algo
