@@ -41,18 +41,6 @@ static void	run_one_chunk(t_md5 *data, uint32_t words[MD5_WORD_NB])
 	data->rslt.d += var.d;
 }
 
-static uint32_t	ptr_to_uint32_swap(t_byte *str)
-{
-	uint32_t		rslt;
-
-	rslt = 0;
-	rslt = (rslt | (t_byte)str[3]) << 8;
-	rslt = (rslt | (t_byte)str[2]) << 8;
-	rslt = (rslt | (t_byte)str[1]) << 8;
-	rslt |= (t_byte)str[0];
-	return (rslt);
-}
-
 static void		fill_words(uint32_t words[MD5_WORD_NB], uint32_t i, t_md5 *data)
 {
 	uint32_t	incr_msg;
@@ -63,7 +51,7 @@ static void		fill_words(uint32_t words[MD5_WORD_NB], uint32_t i, t_md5 *data)
 	while (incr_word < MD5_WORD_NB)
 	{
 		words[incr_word] = ptr_to_uint32_swap(data->padded_msg + incr_msg);
-		incr_msg += 4;
+		incr_msg += sizeof(uint32_t);
 		/* printf("word_in_loop[%d] = %u = 0x%x\n", incr_word, words[incr_word], words[incr_word]); //DEBUG */
 		incr_word++;
 	}
@@ -83,7 +71,6 @@ static void	fill_digest(t_md5 *data)
 static void	run_md5_algo(t_md5 *data)
 {
 	uint32_t	i;
-	/* t_byte		words[MD5_WORD_NB][MD5_WORD_LEN_BYTES]; */
 	uint32_t	words[MD5_WORD_NB];
 
 	data->rslt.a = MD5_A0_INIT;
@@ -105,9 +92,9 @@ t_ex_ret	fill_md5_digest(t_md5 *data)
 {
 	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
 	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
-	if (message_padding(data) == FAILURE)
+	if (message_padding_md5(data) == FAILURE)
 		return (FAILURE);
-	fill_algo_constants(data);
+	fill_algo_constants_md5(data);
 	run_md5_algo(data);
 	return (SUCCESS);
 }

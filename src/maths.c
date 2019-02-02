@@ -11,3 +11,7 @@ double	abs_double(double x)
 {
 	return (x < 0 ? -x: x);
 }
+
+double	floor_double(double x) {
+  return ((double) (uint32_t) x);
+}

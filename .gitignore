@@ -3,3 +3,4 @@
 **/libft.a
 **/*.o
 ft_ssl
+tests/trace.txt

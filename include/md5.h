@@ -19,6 +19,8 @@
 # define MD5_C0_INIT		0x98badcfe
 # define MD5_D0_INIT		0x10325476
 
+# define POW_2_32			0x100000000
+
 typedef struct		s_md5_const
 {
 	uint32_t	shift;
@@ -49,8 +51,8 @@ typedef struct		s_md5
 /*
 ** init
 */
-t_ex_ret	message_padding(t_md5 *data);
-void		fill_algo_constants(t_md5 *data);
+t_ex_ret	message_padding_md5(t_md5 *data);
+void		fill_algo_constants_md5(t_md5 *data);
 
 /*
 ** algo
