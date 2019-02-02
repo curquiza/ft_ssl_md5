@@ -129,7 +129,7 @@ def mutate(data, digest):
         d_position = positions[3]
         h_position = positions[-1]
         a, b, c, d, e, f, g, h = [digest_copy[pos] for pos in positions]
-        print "idx =", idx
+        # print "idx =", idx
         # print "h =", h
         # print "s0 =", sigma0(a)
         # print "s1 =", sigma1(a)
@@ -142,9 +142,9 @@ def mutate(data, digest):
         digest_copy[d_position] = (d + t1) & 0xffffffff
         digest_copy[h_position] = (t1 + t2) & 0xffffffff
         # print "d + t1 =", (d + t1) & 0xffffffff, ", t1 + t2 =", (t1 + t2) & 0xffffffff
-        print digest_copy
+        # print digest_copy
         # print "a =" digest_copy[a_position]
-        print "-----------"
+        # print "-----------"
 
     return [(x + digest_copy[idx]) & 0xffffffff for idx, x in enumerate(digest)]
 
@@ -190,7 +190,7 @@ class SHA256(object):
             self._sha['digest'] = mutate(self._sha['data'], self._sha['digest'])
 
         self._sha['data'][:count] = [ord(c) for c in buff[buffer_idx:buffer_idx + count]]
-        print self._sha #DEBUG
+        # print self._sha #DEBUG
 
     def hexdigest(self):
         """
@@ -216,7 +216,7 @@ class SHA256(object):
 
         hash['digest'] = mutate(hash['data'], hash['digest'])
 
-        print hash
+        # print hash
         digest = []
         for i in hash['digest']:
             for shift in xrange(24, -1, -8):
