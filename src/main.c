@@ -83,9 +83,9 @@ int				main(int argc, char **argv) {
 		ft_dprintf(2, "1 arg needed\n");
 		return (FAILURE);
 	}
-	if (apply_sha256(argv[1]) == FAILURE)
-		return (FAILURE);
 	/* if (apply_md5(argv[1]) == FAILURE) */
 	/* 	return (FAILURE); */
+	if (apply_sha256(argv[1]) == FAILURE)
+		return (FAILURE);
 	return (SUCCESS);
 }

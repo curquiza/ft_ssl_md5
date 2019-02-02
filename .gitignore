@@ -3,4 +3,4 @@
 **/libft.a
 **/*.o
 ft_ssl
-tests/md5_trace.txt
+tests/trace.txt
