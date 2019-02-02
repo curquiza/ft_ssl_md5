@@ -18,32 +18,31 @@ uint32_t g_k_sha256[SHA256_CHUNK_BYTES] = {
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-void		uint32_display(t_byte *s, size_t len)
-{
-	size_t		i;
-
-	i = 0;
-	while (i < len)
-	{
-		ft_printf("%u ", (t_byte)s[i]);
-		i++;
-	}
-	write(1, "\n", 1);
-}
+// DEBUG
+/* void		uint32_display(t_byte *s, size_t len) */
+/* { */
+/* 	size_t		i; */
+/*  */
+/* 	i = 0; */
+/* 	while (i < len) */
+/* 	{ */
+/* 		ft_printf("%u ", (t_byte)s[i]); */
+/* 		i++; */
+/* 	} */
+/* 	write(1, "\n", 1); */
+/* } */
 
 static void	padd_with_msg_size(t_sha256 *data, uint64_t *n)
 {
 	int		i;
 	int		addr;
 
-	i = 0;
-	addr = data->padded_msg_len - MD5_MSG_LEN_BYTES;
-	while (i < (MD5_MSG_LEN_BYTES))
+	i = SHA256_MSG_LEN_BYTES - 1;
+	addr = data->padded_msg_len - SHA256_MSG_LEN_BYTES;
+	while (i >= 0)
 	{
-		/* ft_printf("---------\ni = %d\n", i); //DEBUG */
-		/* ft_printf("n_nb_bytes - 1 - i = %d\n", n_nb_bytes - 1 - i); //DEBUG */
 		data->padded_msg[addr] = ((t_byte *)n)[i];
-		i++;
+		i--;
 		addr++;
 	}
 }
@@ -66,7 +65,7 @@ static t_ex_ret	message_padding_sha256(t_sha256 *data)
 	data->padded_msg[data->msg_len] = (t_byte)(1 << 7);
 	msg_len_bits = 8 * data->msg_len;
 	padd_with_msg_size(data, &msg_len_bits);
-	uint32_display(data->padded_msg, data->padded_msg_len); //DEBUG
+	/* uint32_display(data->padded_msg, data->padded_msg_len); //DEBUG */
 	return (SUCCESS);
 }
 
@@ -115,7 +114,7 @@ static void	fill_words(uint32_t words[SHA256_WORD_NB], uint32_t i, t_sha256 *dat
 	incr_word = 0;
 	while (incr_word < SHA256_WORD_NB_FROM_CHUNK)
 	{
-		words[incr_word] = ptr_to_uint32_swap(data->padded_msg + incr_msg);
+		words[incr_word] = ptr_to_uint32(data->padded_msg + incr_msg);
 		incr_msg += sizeof(uint32_t);
 		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
 		incr_word++;
@@ -144,7 +143,6 @@ static void	fill_tmp_var(int i, t_sha256_incr *var, uint32_t words[SHA256_WORD_N
 	s0 = right_rotate(var->a, 2) ^ right_rotate(var->a, 13) ^ right_rotate(var->a, 22);
 	maj = (var->a & var->b) ^ (var->a & var->c) ^ (var->b & var->c);
 	temp2 = s0 + maj;
-
 	var->h = var->g;
 	var->g = var->f;
 	var->f = var->e;
@@ -184,19 +182,35 @@ static void	run_one_chunk(t_sha256 *data, uint32_t words[SHA256_WORD_NB])
 	data->rslt.h += var.h;
 }
 
+static void	*ft_memcpy_back(t_byte *dst, const void *src, size_t n)
+{
+	int				i;
+	size_t			j;
+
+	i = n - 1;
+	j = 0;
+	while (i >= 0)
+	{
+		dst[j] = ((t_byte *)src)[i];
+		i--;
+		j++;
+	}
+	return (dst);
+}
+
 static void	fill_digest(t_sha256 *data)
 {
 	size_t	sizeof_uint32;
 
 	sizeof_uint32 = sizeof(uint32_t);
-	ft_memmove(data->digest, &data->rslt.a, sizeof_uint32);
-	ft_memmove(data->digest + sizeof_uint32, &data->rslt.b, sizeof_uint32);
-	ft_memmove(data->digest + 2 * sizeof_uint32, &data->rslt.c, sizeof_uint32);
-	ft_memmove(data->digest + 3 * sizeof_uint32, &data->rslt.d, sizeof_uint32);
-	ft_memmove(data->digest + 4 * sizeof_uint32, &data->rslt.e, sizeof_uint32);
-	ft_memmove(data->digest + 5 * sizeof_uint32, &data->rslt.f, sizeof_uint32);
-	ft_memmove(data->digest + 6 * sizeof_uint32, &data->rslt.g, sizeof_uint32);
-	ft_memmove(data->digest + 7 * sizeof_uint32, &data->rslt.h, sizeof_uint32);
+	ft_memcpy_back(data->digest, &data->rslt.a, sizeof_uint32);
+	ft_memcpy_back(data->digest + sizeof_uint32, &data->rslt.b, sizeof_uint32);
+	ft_memcpy_back(data->digest + 2 * sizeof_uint32, &data->rslt.c, sizeof_uint32);
+	ft_memcpy_back(data->digest + 3 * sizeof_uint32, &data->rslt.d, sizeof_uint32);
+	ft_memcpy_back(data->digest + 4 * sizeof_uint32, &data->rslt.e, sizeof_uint32);
+	ft_memcpy_back(data->digest + 5 * sizeof_uint32, &data->rslt.f, sizeof_uint32);
+	ft_memcpy_back(data->digest + 6 * sizeof_uint32, &data->rslt.g, sizeof_uint32);
+	ft_memcpy_back(data->digest + 7 * sizeof_uint32, &data->rslt.h, sizeof_uint32);
 }
 
 static void	run_sha256_algo(t_sha256 *data)

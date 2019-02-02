@@ -114,10 +114,11 @@ def mutate(data, digest):
             data[4 * i + 2] << 8,
             data[4 * i + 3] << 0,
         ]))
-
+ 
     for i in range(16, 64):
         sum_ = gamma1(w[i - 2]) + w[i - 7] + gamma0(w[i - 15]) + w[i - 16]
         w.append(sum_ & 0xffffffff)
+    # print "w =", w
 
     for idx in xrange(0, -64, -1):
         i = abs(idx % 8)
@@ -128,11 +129,22 @@ def mutate(data, digest):
         d_position = positions[3]
         h_position = positions[-1]
         a, b, c, d, e, f, g, h = [digest_copy[pos] for pos in positions]
-
+        print "idx =", idx
+        # print "h =", h
+        # print "s0 =", sigma0(a)
+        # print "s1 =", sigma1(a)
+        # print "ch =", choose(e, f, g)
+        # print "maj =", majority(a, b, c)
+        # print "K =", K256[abs(idx)]
+        # print "w =", w[abs(idx)]
         t1 = h + sigma1(e) + choose(e, f, g) + K256[abs(idx)] + w[abs(idx)]
         t2 = sigma0(a) + majority(a, b, c)
         digest_copy[d_position] = (d + t1) & 0xffffffff
         digest_copy[h_position] = (t1 + t2) & 0xffffffff
+        # print "d + t1 =", (d + t1) & 0xffffffff, ", t1 + t2 =", (t1 + t2) & 0xffffffff
+        print digest_copy
+        # print "a =" digest_copy[a_position]
+        print "-----------"
 
     return [(x + digest_copy[idx]) & 0xffffffff for idx, x in enumerate(digest)]
 
@@ -204,6 +216,7 @@ class SHA256(object):
 
         hash['digest'] = mutate(hash['data'], hash['digest'])
 
+        print hash
         digest = []
         for i in hash['digest']:
             for shift in xrange(24, -1, -8):
