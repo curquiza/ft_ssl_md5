@@ -15,6 +15,8 @@
 # define SHA256_WORD_NB_FROM_CHUNK	16
 # define SHA256_WORD_NB				64
 
+# define SHA256_ROUNDS				64
+
 # define SHA256_A0_INIT				0x6a09e667
 # define SHA256_B0_INIT				0xbb67ae85
 # define SHA256_C0_INIT				0x3c6ef372
