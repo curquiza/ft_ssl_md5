@@ -44,6 +44,11 @@ static void		clean_sha256_data(t_sha256 *data)
 	free(data->padded_msg);
 }
 
+static void		clean_sha512_data(t_sha512 *data)
+{
+	free(data->padded_msg);
+}
+
 t_ex_ret	apply_md5(char *message)
 {
 	t_md5	data;
@@ -76,6 +81,22 @@ t_ex_ret	apply_sha256(char *message)
 	return (SUCCESS);
 }
 
+t_ex_ret	apply_sha512(char *message)
+{
+	t_sha512	data;
+
+	if (!message)
+		return (FAILURE);
+	ft_bzero(&data, sizeof(data));
+	data.msg = message;
+	data.msg_len = ft_strlen(message);
+	if (fill_sha512_digest(&data) == FAILURE)
+		return (FAILURE);
+	hex_display(data.digest, SHA512_DIGEST_BYTES);
+	clean_sha512_data(&data);
+	return (SUCCESS);
+}
+
 int				main(int argc, char **argv) {
 
 	if (argc != 3)
@@ -91,6 +112,11 @@ int				main(int argc, char **argv) {
 	else if (!ft_strcmp(argv[1], "sha256"))
 	{
 		if (apply_sha256(argv[2]) == FAILURE)
+			return (FAILURE);
+	}
+	else if (!ft_strcmp(argv[1], "sha512"))
+	{
+		if (apply_sha512(argv[2]) == FAILURE)
 			return (FAILURE);
 	}
 	return (SUCCESS);
