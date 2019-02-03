@@ -78,14 +78,20 @@ t_ex_ret	apply_sha256(char *message)
 
 int				main(int argc, char **argv) {
 
-	if (argc != 2)
+	if (argc != 3)
 	{
-		ft_dprintf(2, "1 arg needed\n");
+		ft_dprintf(2, "./ft_ssl [algo] [str]\n");
 		return (FAILURE);
 	}
-	/* if (apply_md5(argv[1]) == FAILURE) */
-	/* 	return (FAILURE); */
-	if (apply_sha256(argv[1]) == FAILURE)
-		return (FAILURE);
+	if (!ft_strcmp(argv[1], "md5"))
+	{
+		if (apply_md5(argv[2]) == FAILURE)
+			return (FAILURE);
+	}
+	else if (!ft_strcmp(argv[1], "sha256"))
+	{
+		if (apply_sha256(argv[2]) == FAILURE)
+			return (FAILURE);
+	}
 	return (SUCCESS);
 }
