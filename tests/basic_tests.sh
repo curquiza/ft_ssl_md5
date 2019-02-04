@@ -51,11 +51,24 @@ run_sha256_test() {
     fi
 }
 
+# usage : run_sha256_test "str"
+run_sha512_test() {
+    local real_sha512="$(printf "$1" | openssl sha512)"
+    local my_sh512="$("$ft_ssl_bin" "sha512" "$1")"
+    if [[ "$real_sha512" == "$my_sh512" ]]; then
+        printf "%-15s$GREEN%s$DEF\n" "  > sha512" "OK"
+    else
+        printf "%-15s$RED%s$DEF\n" "  > sha512" "KO"
+        print_in_trace "$1" "my_sha512" "$my_sha512" "real_sha512" "$real_sha512"
+    fi
+}
+
 # usage : run_test "str"
 run_test() {
     print_title "$1"
     run_md5_test "$1"
     run_sha256_test "$1"
+    run_sha512_test "$1"
 }
 
 rm -f $trace
