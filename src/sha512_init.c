@@ -1,6 +1,20 @@
 #include "ft_ssl.h"
 
-static void	padd_with_msg_size(t_sha512 *data, uint64_t *n)
+// DEBUG
+/* void		uint8_display(t_byte *s, size_t len) */
+/* { */
+/* 	size_t		i; */
+/*  */
+/* 	i = 0; */
+/* 	while (i < len) */
+/* 	{ */
+/* 		ft_printf("%u ", (t_byte)s[i]); */
+/* 		i++; */
+/* 	} */
+/* 	write(1, "\n", 1); */
+/* } */
+
+static void	padd_with_msg_size(t_sha512 *data, t_uint128 *n)
 {
 	int		i;
 	int		addr;
@@ -18,14 +32,14 @@ static void	padd_with_msg_size(t_sha512 *data, uint64_t *n)
 t_ex_ret	message_padding_sha512(t_sha512 *data)
 {
 	size_t		tmp_len;
-	uint64_t	msg_len_bits;
+	t_uint128	msg_len_bits;
 
-	tmp_len = (data->msg_len + 1 + MD5_MSG_LEN_BYTES);
-	if (tmp_len % (MD5_CHUNK_BYTES) == 0)
+	tmp_len = (data->msg_len + 1 + SHA512_MSG_LEN_BYTES);
+	if (tmp_len % (SHA512_CHUNK_BYTES) == 0)
 		data->padded_msg_len = tmp_len;
 	else
-		data->padded_msg_len = (tmp_len / (MD5_CHUNK_BYTES) + 1)
-					* (MD5_CHUNK_BYTES);
+		data->padded_msg_len = (tmp_len / (SHA512_CHUNK_BYTES) + 1)
+					* (SHA512_CHUNK_BYTES);
 	if (!(data->padded_msg = (t_byte *)ft_memalloc(data->padded_msg_len)))
 		return (FAILURE);
 	/* ft_printf("padded_msg len = %d = 0x%x\n", data->padded_msg_len, data->padded_msg_len); //DEBUG */
@@ -33,6 +47,6 @@ t_ex_ret	message_padding_sha512(t_sha512 *data)
 	data->padded_msg[data->msg_len] = (t_byte)(1 << 7);
 	msg_len_bits = 8 * data->msg_len;
 	padd_with_msg_size(data, &msg_len_bits);
-	/* uint32_display(data->padded_msg, data->padded_msg_len); //DEBUG */
+	/* uint8_display(data->padded_msg, data->padded_msg_len); //DEBUG */
 	return (SUCCESS);
 }

@@ -23,6 +23,7 @@ double		floor_double(double x);
 ** Conversion
 */
 uint32_t	ptr_to_uint32(t_byte *str);
+uint64_t	ptr_to_uint64(t_byte *str);
 uint32_t	ptr_to_uint32_swap(t_byte *str);
 
 /* void		hex_display(t_byte *s, size_t len); //DEBUG */
