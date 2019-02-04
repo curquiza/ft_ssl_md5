@@ -3,26 +3,28 @@
 
 #include "libft.h"
 
-# define SHA256_MSG_LEN_BITS	64
-# define SHA256_MSG_LEN_BYTES	SHA256_MSG_LEN_BITS / 8
+# define SHA256_MSG_LEN_BITS		64
+# define SHA256_MSG_LEN_BYTES		SHA256_MSG_LEN_BITS / 8
 
-# define SHA256_CHUNK_BITS		512
-# define SHA256_CHUNK_BYTES	SHA256_CHUNK_BITS / 8
+# define SHA256_CHUNK_BITS			512
+# define SHA256_CHUNK_BYTES			SHA256_CHUNK_BITS / 8
 
-# define SHA256_DIGEST_BITS		256
-# define SHA256_DIGEST_BYTES	SHA256_DIGEST_BITS / 8
+# define SHA256_DIGEST_BITS			256
+# define SHA256_DIGEST_BYTES		SHA256_DIGEST_BITS / 8
 
 # define SHA256_WORD_NB_FROM_CHUNK	16
 # define SHA256_WORD_NB				64
 
-# define SHA256_A0_INIT			0x6a09e667
-# define SHA256_B0_INIT			0xbb67ae85
-# define SHA256_C0_INIT			0x3c6ef372
-# define SHA256_D0_INIT			0xa54ff53a
-# define SHA256_E0_INIT			0x510e527f
-# define SHA256_F0_INIT			0x9b05688c
-# define SHA256_G0_INIT			0x1f83d9ab
-# define SHA256_H0_INIT			0x5be0cd19
+# define SHA256_ROUNDS				64
+
+# define SHA256_A0_INIT				0x6a09e667
+# define SHA256_B0_INIT				0xbb67ae85
+# define SHA256_C0_INIT				0x3c6ef372
+# define SHA256_D0_INIT				0xa54ff53a
+# define SHA256_E0_INIT				0x510e527f
+# define SHA256_F0_INIT				0x9b05688c
+# define SHA256_G0_INIT				0x1f83d9ab
+# define SHA256_H0_INIT				0x5be0cd19
 
 typedef struct		s_sha256_incr
 {

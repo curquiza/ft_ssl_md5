@@ -92,20 +92,20 @@ static void	fill_words(uint32_t words[SHA256_WORD_NB], uint32_t i, t_sha256 *dat
 
 static void	fill_tmp_var(int i, t_sha256_incr *var, uint32_t words[SHA256_WORD_NB])
 {
-	uint32_t		s1;
-	uint32_t		s0;
+	uint32_t		big_s1;
+	uint32_t		big_s0;
 	uint32_t		ch;
 	uint32_t		maj;
 	uint32_t		temp1;
 	uint32_t		temp2;
 
 
-	s1 = right_rotate(var->e, 6) ^ right_rotate(var->e, 11) ^ right_rotate(var->e, 25);
+	big_s1 = right_rotate(var->e, 6) ^ right_rotate(var->e, 11) ^ right_rotate(var->e, 25);
 	ch = (var->e & var->f) ^ (~var->e & var->g);
-	temp1 = var->h + s1 + ch + g_k_sha256[i] + words[i];
-	s0 = right_rotate(var->a, 2) ^ right_rotate(var->a, 13) ^ right_rotate(var->a, 22);
+	temp1 = var->h + big_s1 + ch + g_k_sha256[i] + words[i];
+	big_s0 = right_rotate(var->a, 2) ^ right_rotate(var->a, 13) ^ right_rotate(var->a, 22);
 	maj = (var->a & var->b) ^ (var->a & var->c) ^ (var->b & var->c);
-	temp2 = s0 + maj;
+	temp2 = big_s0 + maj;
 	var->h = var->g;
 	var->g = var->f;
 	var->f = var->e;
@@ -130,7 +130,8 @@ static void	run_one_chunk(t_sha256 *data, uint32_t words[SHA256_WORD_NB])
 	var.g = data->rslt.g;
 	var.h = data->rslt.h;
 	i = 0;
-	while (i < SHA256_CHUNK_BYTES)
+	/* while (i < SHA256_CHUNK_BYTES) */
+	while (i < SHA256_ROUNDS)
 	{
 		fill_tmp_var(i, &var, words);
 		i++;
