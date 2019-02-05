@@ -44,16 +44,16 @@ static uint64_t	right_shift(uint64_t x, uint64_t n)
 	return (x >> n);
 }
 
-static void	rslt_init(t_sha512 *data)
+static void	rslt_init(t_sha512_incr *rslt)
 {
-	data->rslt.a = SHA512_A0_INIT;
-	data->rslt.b = SHA512_B0_INIT;
-	data->rslt.c = SHA512_C0_INIT;
-	data->rslt.d = SHA512_D0_INIT;
-	data->rslt.e = SHA512_E0_INIT;
-	data->rslt.f = SHA512_F0_INIT;
-	data->rslt.g = SHA512_G0_INIT;
-	data->rslt.h = SHA512_H0_INIT;
+	rslt->a = SHA512_A0_INIT;
+	rslt->b = SHA512_B0_INIT;
+	rslt->c = SHA512_C0_INIT;
+	rslt->d = SHA512_D0_INIT;
+	rslt->e = SHA512_E0_INIT;
+	rslt->f = SHA512_F0_INIT;
+	rslt->g = SHA512_G0_INIT;
+	rslt->h = SHA512_H0_INIT;
 }
 
 static uint64_t	get_word(uint64_t words[SHA512_WORD_NB], int incr_word)
@@ -70,7 +70,7 @@ static uint64_t	get_word(uint64_t words[SHA512_WORD_NB], int incr_word)
 	return (words[incr_word - 16] + s0 + words[incr_word - 7] + s1);
 }
 
-static void	fill_words(uint64_t words[SHA512_WORD_NB], int i, t_sha512 *data)
+static void	fill_words(uint64_t words[SHA512_WORD_NB], int i, t_hash *data)
 {
 	int	incr_msg;
 	int	incr_word;
@@ -118,19 +118,19 @@ static void	fill_tmp_var(int i, t_sha512_incr *var, uint64_t words[SHA512_WORD_N
 	var->a = temp1 + temp2;
 }
 
-static void	run_one_chunk(t_sha512 *data, uint64_t words[SHA512_WORD_NB])
+static void	run_one_chunk(uint64_t words[SHA512_WORD_NB], t_sha512_incr *rslt)
 {
 	int				i;
 	t_sha512_incr	var;
 
-	var.a = data->rslt.a;
-	var.b = data->rslt.b;
-	var.c = data->rslt.c;
-	var.d = data->rslt.d;
-	var.e = data->rslt.e;
-	var.f = data->rslt.f;
-	var.g = data->rslt.g;
-	var.h = data->rslt.h;
+	var.a = rslt->a;
+	var.b = rslt->b;
+	var.c = rslt->c;
+	var.d = rslt->d;
+	var.e = rslt->e;
+	var.f = rslt->f;
+	var.g = rslt->g;
+	var.h = rslt->h;
 	i = 0;
 	/* while (i < SHA512_CHUNK_BYTES) */
 	while (i < SHA512_ROUNDS)
@@ -138,14 +138,14 @@ static void	run_one_chunk(t_sha512 *data, uint64_t words[SHA512_WORD_NB])
 		fill_tmp_var(i, &var, words);
 		i++;
 	}
-	data->rslt.a += var.a;
-	data->rslt.b += var.b;
-	data->rslt.c += var.c;
-	data->rslt.d += var.d;
-	data->rslt.e += var.e;
-	data->rslt.f += var.f;
-	data->rslt.g += var.g;
-	data->rslt.h += var.h;
+	rslt->a += var.a;
+	rslt->b += var.b;
+	rslt->c += var.c;
+	rslt->d += var.d;
+	rslt->e += var.e;
+	rslt->f += var.f;
+	rslt->g += var.g;
+	rslt->h += var.h;
 }
 
 static void	*ft_memcpy_back(t_byte *dst, const void *src, size_t n)
@@ -164,44 +164,48 @@ static void	*ft_memcpy_back(t_byte *dst, const void *src, size_t n)
 	return (dst);
 }
 
-static void	fill_digest(t_sha512 *data)
+static t_ex_ret	fill_digest(t_hash *data, t_sha512_incr *rslt)
 {
 	size_t	sizeof_uint64;
 
+	if (!(data->digest = ft_memalloc(SHA512_DIGEST_BYTES)))
+		return (FAILURE);
 	sizeof_uint64 = sizeof(uint64_t);
-	ft_memcpy_back(data->digest, &data->rslt.a, sizeof_uint64);
-	ft_memcpy_back(data->digest + sizeof_uint64, &data->rslt.b, sizeof_uint64);
-	ft_memcpy_back(data->digest + 2 * sizeof_uint64, &data->rslt.c, sizeof_uint64);
-	ft_memcpy_back(data->digest + 3 * sizeof_uint64, &data->rslt.d, sizeof_uint64);
-	ft_memcpy_back(data->digest + 4 * sizeof_uint64, &data->rslt.e, sizeof_uint64);
-	ft_memcpy_back(data->digest + 5 * sizeof_uint64, &data->rslt.f, sizeof_uint64);
-	ft_memcpy_back(data->digest + 6 * sizeof_uint64, &data->rslt.g, sizeof_uint64);
-	ft_memcpy_back(data->digest + 7 * sizeof_uint64, &data->rslt.h, sizeof_uint64);
+	ft_memcpy_back(data->digest, &rslt->a, sizeof_uint64);
+	ft_memcpy_back(data->digest + sizeof_uint64, &rslt->b, sizeof_uint64);
+	ft_memcpy_back(data->digest + 2 * sizeof_uint64, &rslt->c, sizeof_uint64);
+	ft_memcpy_back(data->digest + 3 * sizeof_uint64, &rslt->d, sizeof_uint64);
+	ft_memcpy_back(data->digest + 4 * sizeof_uint64, &rslt->e, sizeof_uint64);
+	ft_memcpy_back(data->digest + 5 * sizeof_uint64, &rslt->f, sizeof_uint64);
+	ft_memcpy_back(data->digest + 6 * sizeof_uint64, &rslt->g, sizeof_uint64);
+	ft_memcpy_back(data->digest + 7 * sizeof_uint64, &rslt->h, sizeof_uint64);
+	return (SUCCESS);
 }
 
-static void	run_sha512_algo(t_sha512 *data)
+static t_ex_ret	run_sha512_algo(t_hash *data)
 {
 	int			i;
 	uint64_t	words[SHA512_WORD_NB];
+	t_sha512_incr	rslt;
 
-	rslt_init(data);
+	rslt_init(&rslt);
 	i = 0;
 	while ((uint64_t)i < (data->padded_msg_len / (SHA512_CHUNK_BYTES)))
 	{
 		/* ft_printf("run one chunk !\n"); //DEBUG */
 		fill_words(words, i, data);
-		run_one_chunk(data, words);
+		run_one_chunk(words, &rslt);
 		i++;
 	}
-	fill_digest(data);
+	return (fill_digest(data, &rslt));
 }
 
-t_ex_ret	fill_sha512_digest(t_sha512 *data)
+t_ex_ret	fill_sha512_digest(t_hash *data)
 {
 	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
 	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
+	data->digest_len = SHA512_DIGEST_BYTES;
 	if (message_padding_sha512(data) == FAILURE)
 		return (FAILURE);
-	run_sha512_algo(data);
-	return (SUCCESS);
+	return (run_sha512_algo(data));
 }

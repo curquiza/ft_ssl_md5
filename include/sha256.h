@@ -38,26 +38,16 @@ typedef struct		s_sha256_incr
 	uint32_t	h;
 }					t_sha256_incr;
 
-typedef struct		s_sha256
-{
-	t_byte		digest[SHA256_DIGEST_BYTES];
-	char		*msg;
-	t_byte		*padded_msg;
-	size_t		msg_len;
-	size_t		padded_msg_len;
-	t_sha256_incr	rslt;
-}					t_sha256;
-
 uint32_t	g_k_sha256[SHA256_CHUNK_BYTES];
 
 /*
 ** init
 */
-t_ex_ret	message_padding_sha256(t_sha256 *data);
+t_ex_ret	message_padding_sha256(t_hash *data);
 
 /*
 ** algo
 */
-t_ex_ret	fill_sha256_digest(t_sha256 *data);
+t_ex_ret	fill_sha256_digest(t_hash *data);
 
 #endif
