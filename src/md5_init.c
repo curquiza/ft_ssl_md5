@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static void	padd_with_msg_size(t_md5 *data, uint64_t *n)
+static void	padd_with_msg_size(t_hash *data, uint64_t *n)
 {
 	int		i;
 	int		addr;
@@ -9,15 +9,13 @@ static void	padd_with_msg_size(t_md5 *data, uint64_t *n)
 	addr = data->padded_msg_len - MD5_MSG_LEN_BYTES;
 	while (i < (MD5_MSG_LEN_BYTES))
 	{
-		/* ft_printf("---------\ni = %d\n", i); //DEBUG */
-		/* ft_printf("n_nb_bytes - 1 - i = %d\n", n_nb_bytes - 1 - i); //DEBUG */
 		data->padded_msg[addr] = ((t_byte *)n)[i];
 		i++;
 		addr++;
 	}
 }
 
-t_ex_ret	message_padding_md5(t_md5 *data)
+t_ex_ret	message_padding_md5(t_hash *data)
 {
 	size_t		tmp_len;
 	uint64_t	msg_len_bits;
@@ -80,50 +78,50 @@ static int				get_word_index(int i)
 		return ((7 * i) % 16);
 }
 
-static void		fill_constants(int start, t_md5 *data,
+static void		fill_constants(int start, t_md5_const *cst,
 						uint32_t (*func)(uint32_t b, uint32_t c, uint32_t d))
 {
 	int				i;
 	uint32_t		shift[4];
 
-	shift[0] = data->cst[start].shift;
-	shift[1] = data->cst[start + 1].shift;
-	shift[2] = data->cst[start + 2].shift;
-	shift[3] = data->cst[start + 3].shift;
+	shift[0] = cst[start].shift;
+	shift[1] = cst[start + 1].shift;
+	shift[2] = cst[start + 2].shift;
+	shift[3] = cst[start + 3].shift;
 	i = start;
 	while (i <= (start + 15))
 	{
 		/* ft_printf("i = %d\n", i); //DEBUG */
-		data->cst[i].shift = shift[i % 4];
+		cst[i].shift = shift[i % 4];
 		/* ft_printf("cst[%d].shift = %d\n", i, data->cst[i].shift); //DEBUG */
-		data->cst[i].radian = get_radian_const(i);
+		cst[i].radian = get_radian_const(i);
 		/* ft_printf("cst[%d].sin = %u\n", i, data->cst[i].radian); //DEBUG */
-		data->cst[i].func = func;
-		data->cst[i].word_index = get_word_index(i);
+		cst[i].func = func;
+		cst[i].word_index = get_word_index(i);
 		i++;
 	}
 }
 
-void		fill_algo_constants_md5(t_md5 *data)
+void		fill_algo_constants_md5(t_md5_const *cst)
 {
-	data->cst[0].shift = 7;
-	data->cst[1].shift = 12;
-	data->cst[2].shift = 17;
-	data->cst[3].shift = 22;
-	fill_constants(0, data, &f_function);
-	data->cst[16].shift = 5;
-	data->cst[17].shift = 9;
-	data->cst[18].shift = 14;
-	data->cst[19].shift = 20;
-	fill_constants(16, data, &g_function);
-	data->cst[32].shift = 4;
-	data->cst[33].shift = 11;
-	data->cst[34].shift = 16;
-	data->cst[35].shift = 23;
-	fill_constants(32, data, &h_function);
-	data->cst[48].shift = 6;
-	data->cst[49].shift = 10;
-	data->cst[50].shift = 15;
-	data->cst[51].shift = 21;
-	fill_constants(48, data, &i_function);
+	cst[0].shift = 7;
+	cst[1].shift = 12;
+	cst[2].shift = 17;
+	cst[3].shift = 22;
+	fill_constants(0, cst, &f_function);
+	cst[16].shift = 5;
+	cst[17].shift = 9;
+	cst[18].shift = 14;
+	cst[19].shift = 20;
+	fill_constants(16, cst, &g_function);
+	cst[32].shift = 4;
+	cst[33].shift = 11;
+	cst[34].shift = 16;
+	cst[35].shift = 23;
+	fill_constants(32, cst, &h_function);
+	cst[48].shift = 6;
+	cst[49].shift = 10;
+	cst[50].shift = 15;
+	cst[51].shift = 21;
+	fill_constants(48, cst, &i_function);
 }

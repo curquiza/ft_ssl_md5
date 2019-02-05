@@ -4,6 +4,7 @@
 # include "math.h"
 
 # include "libft.h"
+# include "basics.h"
 # include "md5.h"
 # include "sha256.h"
 # include "sha512.h"

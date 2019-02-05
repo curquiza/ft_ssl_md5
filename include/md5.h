@@ -37,26 +37,15 @@ typedef struct		s_md5_incr
 	uint32_t	d;
 }					t_md5_incr;
 
-typedef struct		s_md5
-{
-	t_byte		digest[MD5_DIGEST_BYTES];
-	char		*msg;
-	t_byte		*padded_msg;
-	size_t		msg_len;
-	size_t		padded_msg_len;
-	t_md5_const	cst[MD5_CHUNK_BYTES];
-	t_md5_incr	rslt;
-}					t_md5;
-
 /*
 ** init
 */
-t_ex_ret	message_padding_md5(t_md5 *data);
-void		fill_algo_constants_md5(t_md5 *data);
+t_ex_ret	message_padding_md5(t_hash *data);
+void		fill_algo_constants_md5(t_md5_const *cst);
 
 /*
 ** algo
 */
-t_ex_ret	fill_md5_digest(t_md5 *data);
+t_ex_ret	fill_md5_digest(t_hash *data);
 
 #endif
