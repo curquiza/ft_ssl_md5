@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static void	padd_with_msg_size(t_sha256 *data, uint64_t *n)
+static void	padd_with_msg_size(t_hash *data, uint64_t *n)
 {
 	int		i;
 	int		addr;
@@ -15,7 +15,7 @@ static void	padd_with_msg_size(t_sha256 *data, uint64_t *n)
 	}
 }
 
-t_ex_ret	message_padding_sha256(t_sha256 *data)
+t_ex_ret	message_padding_sha256(t_hash *data)
 {
 	size_t		tmp_len;
 	uint64_t	msg_len_bits;

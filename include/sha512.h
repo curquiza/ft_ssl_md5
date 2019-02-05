@@ -38,16 +38,6 @@ typedef struct		s_sha512_incr
 	uint64_t	h;
 }					t_sha512_incr;
 
-typedef struct		s_sha512
-{
-	t_byte		digest[SHA512_DIGEST_BYTES];
-	char		*msg;
-	t_byte		*padded_msg;
-	size_t		msg_len;
-	size_t		padded_msg_len;
-	t_sha512_incr	rslt;
-}					t_sha512;
-
 typedef unsigned	__int128 t_uint128;
 
 uint64_t	g_k_sha512[SHA512_CHUNK_BYTES];
@@ -55,11 +45,11 @@ uint64_t	g_k_sha512[SHA512_CHUNK_BYTES];
 /*
 ** init
 */
-t_ex_ret	message_padding_sha512(t_sha512 *data);
+t_ex_ret	message_padding_sha512(t_hash *data);
 
 /*
 ** algo
 */
-t_ex_ret	fill_sha512_digest(t_sha512 *data);
+t_ex_ret	fill_sha512_digest(t_hash *data);
 
 #endif
