@@ -29,7 +29,7 @@ print_in_trace() {
 
 # usage : run_md5_test "str"
 run_md5_test() {
-    local real_md5="$(printf "$1" | md5)"
+    local real_md5="$(md5 "$1" | awk '{print $4}')"
     local my_md5="$("$ft_ssl_bin" "md5" "$1")"
     if [[ "$real_md5" == "$my_md5" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > md5" "OK"
@@ -41,7 +41,7 @@ run_md5_test() {
 
 # usage : run_sha256_test "str"
 run_sha256_test() {
-    local real_sha256="$(printf "$1" | openssl sha256)"
+    local real_sha256="$(openssl sha256 "$1" | awk '{print $2}')"
     local my_sh256="$("$ft_ssl_bin" "sha256" "$1")"
     if [[ "$real_sha256" == "$my_sh256" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > sha256" "OK"
@@ -53,9 +53,11 @@ run_sha256_test() {
 
 # usage : run_sha256_test "str"
 run_sha512_test() {
-    local real_sha512="$(printf "$1" | openssl sha512)"
-    local my_sh512="$("$ft_ssl_bin" "sha512" "$1")"
-    if [[ "$real_sha512" == "$my_sh512" ]]; then
+    local real_sha512="$(openssl sha512 "$1" | awk '{print $2}')"
+    local my_sha512="$("$ft_ssl_bin" "sha512" "$1")"
+    # echo "real_sha512 = $real_sha512"
+    # echo "my_sha512 = $my_sha512"
+    if [[ "$real_sha512" == "$my_sha512" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > sha512" "OK"
     else
         printf "%-15s$RED%s$DEF\n" "  > sha512" "KO"
@@ -73,9 +75,16 @@ run_test() {
 
 rm -f $trace
 
-run_test ""
-run_test "coco"
-run_test "$"
-run_test "There are multiple versions of the echo command, with different behaviors. Apparently the shell used for your script uses a version that doesn't recognize -n"
-run_test 'xargs can also be used to parallelize operations with the -P maxprocs argument to specify how many parallel processes should be used to execute the commands over the input argument lists. However, the output streams may not be synchronized. This can be overcome by using an --output file argument where possible, and then combining the results after processing. The following example queues 24 processes and waits on each to finish before launching another
-xargs often covers the same functionality as the backquote (`) feature of many shells, but is more flexible and often also safer, especially if there are blanks or special characters in the input. It is a good companion for commands that output long lists of files such as find, locate and grep, but only if you use -0, since xargs without -0 deals badly with file names containing simple quote, " and space. GNU Parallel is a similar tool that offers better compatibility with find, locate and grep when file names may contain simple quote, ", and space (newline still requires -0).'
+# run_test ""
+# run_test "coco"
+# run_test "$"
+# run_test "There are multiple versions of the echo command, with different behaviors. Apparently the shell used for your script uses a version that doesn't recognize -n"
+# run_test 'xargs can also be used to parallelize operations with the -P maxprocs argument to specify how many parallel processes should be used to execute the commands over the input argument lists. However, the output streams may not be synchronized. This can be overcome by using an --output file argument where possible, and then combining the results after processing. The following example queues 24 processes and waits on each to finish before launching another
+# xargs often covers the same functionality as the backquote (`) feature of many shells, but is more flexible and often also safer, especially if there are blanks or special characters in the input. It is a good companion for commands that output long lists of files such as find, locate and grep, but only if you use -0, since xargs without -0 deals badly with file names containing simple quote, " and space. GNU Parallel is a similar tool that offers better compatibility with find, locate and grep when file names may contain simple quote, ", and space (newline still requires -0).'
+run_test "Makefile"
+run_test "src/main.c"
+run_test "tests/inputs/erase"
+run_test "tests/inputs/hello"
+run_test "tests/inputs/coco.txt"
+run_test "tests/inputs/empty.txt"
+run_test "ft_ssl"

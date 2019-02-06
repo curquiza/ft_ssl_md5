@@ -154,20 +154,20 @@ t_ex_ret	apply_hash_algo(t_hash *data, char *algo)
 
 int				main(int argc, char **argv) {
 
+	int		ret;
 	t_hash	data;
 
-	ft_bzero(&data, sizeof(data));
 	if (argc != 3)
 	{
 		ft_dprintf(2, "./ft_ssl [algo] [str]\n");
 		return (FAILURE);
 	}
+	ret = SUCCESS;
+	ft_bzero(&data, sizeof(data));
 	if (get_message(&data, argc, argv) == FAILURE)
-	{
-		clean_hash_data(&data);
-		return (FAILURE);
-	}
-	apply_hash_algo(&data, argv[1]);
+		ret = FAILURE;
+	else
+		apply_hash_algo(&data, argv[1]);
 	clean_hash_data(&data);
-	return (SUCCESS);
+	return (ret);
 }
