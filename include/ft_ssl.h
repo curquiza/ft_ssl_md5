@@ -1,13 +1,17 @@
 #ifndef FT_SSL_H
 # define FT_SSL_H
 
-# include "math.h"
+# include <math.h>
+# include <errno.h>
+# include <fcntl.h>
 
 # include "libft.h"
 # include "basics.h"
 # include "md5.h"
 # include "sha256.h"
 # include "sha512.h"
+
+# define READ_BUFF_LEN	10
 
 /*
 ** FUNCTIONS PROTOTYPES ********************************************************
