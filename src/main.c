@@ -33,13 +33,26 @@ void		hex_display(t_byte *s, size_t len)
 	write(1, "\n", 1);
 }
 
+void		char_display(t_byte *s, size_t len)
+{
+	size_t		i;
+
+	i = 0;
+	while (i < len)
+	{
+		ft_printf("%c", (t_byte)s[i]);
+		i++;
+	}
+	write(1, "\n", 1);
+}
 static void		clean_hash_data(t_hash *data)
 {
+	free(data->msg);
 	free(data->digest);
 	free(data->padded_msg);
 }
 
-t_ex_ret	apply_hash_algo(char *algo, t_hash *data)
+t_ex_ret	fill_digest(char *algo, t_hash *data)
 {
 	if (!ft_strcmp(algo, "md5"))
 	{
@@ -59,28 +72,102 @@ t_ex_ret	apply_hash_algo(char *algo, t_hash *data)
 	return (SUCCESS);
 }
 
-t_ex_ret	run_ft_ssl(char *algo, char *message)
-{
-	t_hash	data;
+/* t_ex_ret	open_file(char *filename, int args, int perm) */
+/* { */
+/* 	int		fd; */
+/* 	char	*err_str; */
+/*  */
+/* 	if ((fd = open(filename, args, perm)) <= 0) */
+/* 	{ */
+/* 		ft_dprintf(2, "Open error: %s: %s\n", filename, strerror(errno)); */
+/* 		return (FAILURE); */
+/* 	} */
+/* 	return (fd); */
+/* } */
 
-	if (!message)
+t_ex_ret	close_fd(int fd)
+{
+	if (close(fd) == -1)
+	{
+		ft_dprintf(2, "Close error: %d: %s\n", fd, strerror(errno));
 		return (FAILURE);
-	ft_bzero(&data, sizeof(data));
-	data.msg = message;
-	data.msg_len = ft_strlen(message);
-	apply_hash_algo(algo, &data);
-	hex_display(data.digest, data.digest_len);
-	clean_hash_data(&data);
+	}
+	return (SUCCESS);
+}
+
+static t_ex_ret	read_message_from_file(int fd, t_hash *data)
+{
+	int		i;
+	int		read_ret;
+	t_byte	*tmp;
+	char	buff[READ_BUFF_LEN];
+
+	i = 0;
+	while ((read_ret = read(fd, buff, READ_BUFF_LEN)) != 0)
+	{
+		if (read_ret == -1)
+			return (FAILURE);
+		tmp = data->msg;
+		if (!(data->msg = (t_byte *)ft_memalloc(data->msg_len + read_ret)))
+		{
+			free(tmp);
+			return (FAILURE);
+		}
+		if (tmp)
+			ft_memmove(data->msg, tmp, i);
+		ft_memmove(data->msg + i, buff, read_ret);
+		i += read_ret;
+		free(tmp);
+		data->msg_len += read_ret;
+	}
+	return (SUCCESS);
+}
+
+t_ex_ret	get_message(t_hash *data, int argc, char **argv)
+{
+	int		fd;
+
+	(void)argc; //DEBUG
+	if ((fd = open(argv[2], O_RDONLY, 0)) == -1)
+	{
+		data->msg_len = ft_strlen(argv[2]);
+		data->msg = (t_byte *)ft_memalloc(data->msg_len);
+		ft_memmove(data->msg, argv[2], data->msg_len);
+		return (SUCCESS);
+	}
+	if (read_message_from_file(fd, data) == FAILURE)
+	{
+		close_fd(fd);
+		return (FAILURE);
+	}
+	return (close_fd(fd));
+}
+
+t_ex_ret	apply_hash_algo(t_hash *data, char *algo)
+{
+
+	if (fill_digest(algo, data) == FAILURE)
+		return (FAILURE);
+	hex_display(data->digest, data->digest_len);
 	return (SUCCESS);
 }
 
 int				main(int argc, char **argv) {
 
+	t_hash	data;
+
+	ft_bzero(&data, sizeof(data));
 	if (argc != 3)
 	{
 		ft_dprintf(2, "./ft_ssl [algo] [str]\n");
 		return (FAILURE);
 	}
-	run_ft_ssl(argv[1], argv[2]);
+	if (get_message(&data, argc, argv) == FAILURE)
+	{
+		clean_hash_data(&data);
+		return (FAILURE);
+	}
+	apply_hash_algo(&data, argv[1]);
+	clean_hash_data(&data);
 	return (SUCCESS);
 }

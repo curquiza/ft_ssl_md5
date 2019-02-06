@@ -5,7 +5,7 @@
 
 typedef struct		s_hash
 {
-	char		*msg;
+	t_byte		*msg;
 	t_byte		*padded_msg;
 	t_byte		*digest;
 	size_t		msg_len;
