@@ -10,6 +10,7 @@
 # include "md5.h"
 # include "sha256.h"
 # include "sha512.h"
+# include "sha1.h"
 
 # define READ_BUFF_LEN	10
 

@@ -69,6 +69,11 @@ t_ex_ret	fill_digest(char *algo, t_hash *data)
 		if (fill_sha512_digest(data) == FAILURE)
 			return (FAILURE);
 	}
+	else if (!ft_strcmp(algo, "sha1"))
+	{
+		if (fill_sha1_digest(data) == FAILURE)
+			return (FAILURE);
+	}
 	return (SUCCESS);
 }
 
