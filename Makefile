@@ -11,6 +11,8 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		sha256_algo.c \
 		sha512_init.c \
 		sha512_algo.c \
+		sha1_init.c \
+		sha1_algo.c \
 		conversion.c \
 		maths.c \
 		main.c)
