@@ -49,13 +49,13 @@ static void	fill_words(uint32_t words[SHA1_WORD_NB], uint32_t i, t_hash *data)
 	{
 		words[incr_word] = ptr_to_uint32(data->padded_msg + incr_msg);
 		incr_msg += sizeof(uint32_t);
-		printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG
+		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
 		incr_word++;
 	}
 	while (incr_word < SHA1_WORD_NB)
 	{
 		words[incr_word] = get_word(words, incr_word);
-		printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG
+		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
 		incr_word++;
 	}
 }
