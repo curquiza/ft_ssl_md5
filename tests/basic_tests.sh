@@ -76,6 +76,18 @@ run_sha512_test() {
 }
 
 # usage : run_sha256_test "str"
+run_sha384_test() {
+    local real_sha384="$(openssl sha384 "$1" | awk '{print $2}')"
+    local my_sha384="$("$ft_ssl_bin" "sha384" "$1")"
+    if [[ "$real_sha384" == "$my_sha384" ]]; then
+        printf "%-15s$GREEN%s$DEF\n" "  > sha384" "OK"
+    else
+        printf "%-15s$RED%s$DEF\n" "  > sha384" "KO"
+        print_in_trace "$1" "my_sha384" "$my_sha384" "real_sha384" "$real_sha384"
+    fi
+}
+
+# usage : run_sha256_test "str"
 run_sha1_test() {
     local real_sha1="$(openssl sha1 "$1" | awk '{print $2}')"
     local my_sha1="$("$ft_ssl_bin" "sha1" "$1")"
@@ -94,6 +106,7 @@ run_test() {
     run_sha256_test "$1"
     run_sha224_test "$1"
     run_sha512_test "$1"
+    run_sha384_test "$1"
     run_sha1_test "$1"
 }
 
