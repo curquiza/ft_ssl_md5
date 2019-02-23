@@ -26,6 +26,18 @@
 # define SHA256_G0_INIT				0x1f83d9ab
 # define SHA256_H0_INIT				0x5be0cd19
 
+# define SHA224_A0_INIT				0xc1059ed8
+# define SHA224_B0_INIT				0x367cd507
+# define SHA224_C0_INIT				0x3070dd17
+# define SHA224_D0_INIT				0xf70e5939
+# define SHA224_E0_INIT				0xffc00b31
+# define SHA224_F0_INIT				0x68581511
+# define SHA224_G0_INIT				0x64f98fa7
+# define SHA224_H0_INIT				0xbefa4fa4
+
+# define SHA224_DIGEST_BITS			224
+# define SHA224_DIGEST_BYTES		SHA224_DIGEST_BITS / 8
+
 typedef struct		s_sha256_incr
 {
 	uint32_t	a;
@@ -48,6 +60,6 @@ t_ex_ret	message_padding_sha256(t_hash *data);
 /*
 ** algo
 */
-t_ex_ret	fill_sha256_digest(t_hash *data);
+t_ex_ret	fill_sha256_digest(t_hash *data, int alt);
 
 #endif

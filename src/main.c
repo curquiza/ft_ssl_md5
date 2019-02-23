@@ -61,7 +61,12 @@ t_ex_ret	fill_digest(char *algo, t_hash *data)
 	}
 	else if (!ft_strcmp(algo, "sha256"))
 	{
-		if (fill_sha256_digest(data) == FAILURE)
+		if (fill_sha256_digest(data, 0) == FAILURE)
+			return (FAILURE);
+	}
+	else if (!ft_strcmp(algo, "sha224"))
+	{
+		if (fill_sha256_digest(data, 1) == FAILURE)
 			return (FAILURE);
 	}
 	else if (!ft_strcmp(algo, "sha512"))

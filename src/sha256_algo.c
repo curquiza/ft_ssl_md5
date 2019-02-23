@@ -42,16 +42,30 @@ static uint32_t	right_shift(uint32_t x, uint32_t n)
 	return (x >> n);
 }
 
-static void	rslt_init(t_sha256_incr *rslt)
+static void	rslt_init(t_sha256_incr *rslt, int alt)
 {
-	rslt->a = SHA256_A0_INIT;
-	rslt->b = SHA256_B0_INIT;
-	rslt->c = SHA256_C0_INIT;
-	rslt->d = SHA256_D0_INIT;
-	rslt->e = SHA256_E0_INIT;
-	rslt->f = SHA256_F0_INIT;
-	rslt->g = SHA256_G0_INIT;
-	rslt->h = SHA256_H0_INIT;
+	if (alt == 0)
+	{
+		rslt->a = SHA256_A0_INIT;
+		rslt->b = SHA256_B0_INIT;
+		rslt->c = SHA256_C0_INIT;
+		rslt->d = SHA256_D0_INIT;
+		rslt->e = SHA256_E0_INIT;
+		rslt->f = SHA256_F0_INIT;
+		rslt->g = SHA256_G0_INIT;
+		rslt->h = SHA256_H0_INIT;
+	}
+	else
+	{
+		rslt->a = SHA224_A0_INIT;
+		rslt->b = SHA224_B0_INIT;
+		rslt->c = SHA224_C0_INIT;
+		rslt->d = SHA224_D0_INIT;
+		rslt->e = SHA224_E0_INIT;
+		rslt->f = SHA224_F0_INIT;
+		rslt->g = SHA224_G0_INIT;
+		rslt->h = SHA224_H0_INIT;
+	}
 }
 
 static uint32_t	get_word(uint32_t words[SHA256_WORD_NB], uint32_t incr_word)
@@ -162,11 +176,11 @@ static void	*ft_memcpy_back(t_byte *dst, const void *src, size_t n)
 	return (dst);
 }
 
-static t_ex_ret	fill_digest(t_hash *data, t_sha256_incr *rslt)
+static t_ex_ret	fill_digest(t_hash *data, t_sha256_incr *rslt, int alt)
 {
 	size_t	sizeof_uint32;
 
-	if (!(data->digest = ft_memalloc(SHA256_DIGEST_BYTES)))
+	if (!(data->digest = ft_memalloc(data->digest_len)))
 		return (FAILURE);
 	sizeof_uint32 = sizeof(uint32_t);
 	ft_memcpy_back(data->digest, &rslt->a, sizeof_uint32);
@@ -176,17 +190,19 @@ static t_ex_ret	fill_digest(t_hash *data, t_sha256_incr *rslt)
 	ft_memcpy_back(data->digest + 4 * sizeof_uint32, &rslt->e, sizeof_uint32);
 	ft_memcpy_back(data->digest + 5 * sizeof_uint32, &rslt->f, sizeof_uint32);
 	ft_memcpy_back(data->digest + 6 * sizeof_uint32, &rslt->g, sizeof_uint32);
-	ft_memcpy_back(data->digest + 7 * sizeof_uint32, &rslt->h, sizeof_uint32);
+	if (alt == 0)
+		ft_memcpy_back(data->digest + 7 * sizeof_uint32, &rslt->h,
+			sizeof_uint32);
 	return (SUCCESS);
 }
 
-static t_ex_ret	run_sha256_algo(t_hash *data)
+static t_ex_ret	run_sha256_algo(t_hash *data, int alt)
 {
-	uint32_t	i;
-	uint32_t	words[SHA256_WORD_NB];
+	uint32_t		i;
+	uint32_t		words[SHA256_WORD_NB];
 	t_sha256_incr	rslt;
 
-	rslt_init(&rslt);
+	rslt_init(&rslt, alt);
 	i = 0;
 	while (i < (data->padded_msg_len / (SHA256_CHUNK_BYTES)))
 	{
@@ -195,15 +211,18 @@ static t_ex_ret	run_sha256_algo(t_hash *data)
 		run_one_chunk(words, &rslt);
 		i++;
 	}
-	return (fill_digest(data, &rslt));
+	return (fill_digest(data, &rslt, alt));
 }
 
-t_ex_ret	fill_sha256_digest(t_hash *data)
+t_ex_ret	fill_sha256_digest(t_hash *data, int alt)
 {
 	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
 	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
-	data->digest_len = SHA256_DIGEST_BYTES;
+	if (alt == 0)
+		data->digest_len = SHA256_DIGEST_BYTES;
+	else
+		data->digest_len = SHA224_DIGEST_BYTES;
 	if (message_padding_sha256(data) == FAILURE)
 		return (FAILURE);
-	return (run_sha256_algo(data));
+	return (run_sha256_algo(data, alt));
 }
