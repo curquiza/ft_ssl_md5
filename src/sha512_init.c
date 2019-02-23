@@ -1,19 +1,5 @@
 #include "ft_ssl.h"
 
-// DEBUG
-/* void		uint8_display(t_byte *s, size_t len) */
-/* { */
-/* 	size_t		i; */
-/*  */
-/* 	i = 0; */
-/* 	while (i < len) */
-/* 	{ */
-/* 		ft_printf("%u ", (t_byte)s[i]); */
-/* 		i++; */
-/* 	} */
-/* 	write(1, "\n", 1); */
-/* } */
-
 static void	padd_with_msg_size(t_hash *data, t_uint128 *n)
 {
 	int		i;

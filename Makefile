@@ -56,6 +56,9 @@ fclean : clean
 fclean_lib :
 	@make fclean -C $(LIBFT_DIR)
 
+run_tests:
+	@sh tests/basic_tests.sh
+
 fclean_all : fclean_lib fclean
 
 re : fclean all

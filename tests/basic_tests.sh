@@ -42,8 +42,8 @@ run_md5_test() {
 # usage : run_sha256_test "str"
 run_sha256_test() {
     local real_sha256="$(openssl sha256 "$1" | awk '{print $2}')"
-    local my_sh256="$("$ft_ssl_bin" "sha256" "$1")"
-    if [[ "$real_sha256" == "$my_sh256" ]]; then
+    local my_sha256="$("$ft_ssl_bin" "sha256" "$1")"
+    if [[ "$real_sha256" == "$my_sha256" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > sha256" "OK"
     else
         printf "%-15s$RED%s$DEF\n" "  > sha256" "KO"
@@ -51,17 +51,39 @@ run_sha256_test() {
     fi
 }
 
+# usage : run_sha224_test "str"
+run_sha224_test() {
+    local real_sha224="$(openssl sha224 "$1" | awk '{print $2}')"
+    local my_sha224="$("$ft_ssl_bin" "sha224" "$1")"
+    if [[ "$real_sha224" == "$my_sha224" ]]; then
+        printf "%-15s$GREEN%s$DEF\n" "  > sha224" "OK"
+    else
+        printf "%-15s$RED%s$DEF\n" "  > sha224" "KO"
+        print_in_trace "$1" "my_sha224" "$my_sha224" "real_sha224" "$real_sha224"
+    fi
+}
+
 # usage : run_sha256_test "str"
 run_sha512_test() {
     local real_sha512="$(openssl sha512 "$1" | awk '{print $2}')"
     local my_sha512="$("$ft_ssl_bin" "sha512" "$1")"
-    # echo "real_sha512 = $real_sha512"
-    # echo "my_sha512 = $my_sha512"
     if [[ "$real_sha512" == "$my_sha512" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > sha512" "OK"
     else
         printf "%-15s$RED%s$DEF\n" "  > sha512" "KO"
         print_in_trace "$1" "my_sha512" "$my_sha512" "real_sha512" "$real_sha512"
+    fi
+}
+
+# usage : run_sha256_test "str"
+run_sha384_test() {
+    local real_sha384="$(openssl sha384 "$1" | awk '{print $2}')"
+    local my_sha384="$("$ft_ssl_bin" "sha384" "$1")"
+    if [[ "$real_sha384" == "$my_sha384" ]]; then
+        printf "%-15s$GREEN%s$DEF\n" "  > sha384" "OK"
+    else
+        printf "%-15s$RED%s$DEF\n" "  > sha384" "KO"
+        print_in_trace "$1" "my_sha384" "$my_sha384" "real_sha384" "$real_sha384"
     fi
 }
 
@@ -82,7 +104,9 @@ run_test() {
     print_title "$1"
     run_md5_test "$1"
     run_sha256_test "$1"
+    run_sha224_test "$1"
     run_sha512_test "$1"
+    run_sha384_test "$1"
     run_sha1_test "$1"
 }
 

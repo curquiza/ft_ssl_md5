@@ -26,6 +26,18 @@
 # define SHA512_G0_INIT				0x1f83d9abfb41bd6b
 # define SHA512_H0_INIT				0x5be0cd19137e2179
 
+# define SHA384_A0_INIT				0xcbbb9d5dc1059ed8
+# define SHA384_B0_INIT				0x629a292a367cd507
+# define SHA384_C0_INIT				0x9159015a3070dd17
+# define SHA384_D0_INIT				0x152fecd8f70e5939
+# define SHA384_E0_INIT				0x67332667ffc00b31
+# define SHA384_F0_INIT				0x8eb44a8768581511
+# define SHA384_G0_INIT				0xdb0c2e0d64f98fa7
+# define SHA384_H0_INIT				0x47b5481dbefa4fa4
+
+# define SHA384_DIGEST_BITS			384
+# define SHA384_DIGEST_BYTES		SHA384_DIGEST_BITS / 8
+
 typedef struct		s_sha512_incr
 {
 	uint64_t	a;
@@ -50,6 +62,6 @@ t_ex_ret	message_padding_sha512(t_hash *data);
 /*
 ** algo
 */
-t_ex_ret	fill_sha512_digest(t_hash *data);
+t_ex_ret	fill_sha512_digest(t_hash *data, int alt);
 
 #endif

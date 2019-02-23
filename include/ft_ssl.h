@@ -12,7 +12,7 @@
 # include "sha512.h"
 # include "sha1.h"
 
-# define READ_BUFF_LEN	10
+# define READ_BUFF_LEN	1000
 
 /*
 ** FUNCTIONS PROTOTYPES ********************************************************
