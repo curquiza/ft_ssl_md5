@@ -144,7 +144,6 @@ static void	run_one_chunk(uint32_t words[SHA256_WORD_NB], t_sha256_incr *rslt)
 	var.g = rslt->g;
 	var.h = rslt->h;
 	i = 0;
-	/* while (i < SHA256_CHUNK_BYTES) */
 	while (i < SHA256_ROUNDS)
 	{
 		fill_tmp_var(i, &var, words);
