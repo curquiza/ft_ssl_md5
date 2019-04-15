@@ -15,6 +15,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		sha1_algo.c \
 		conversion.c \
 		maths.c \
+		clean.c \
 		main.c)
 
 OBJ_DIR = objs

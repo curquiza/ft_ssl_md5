@@ -13,7 +13,14 @@
 # include "sha1.h"
 
 # define READ_BUFF_LEN	1000
+# define HASH_FUNC_TAB_SIZE 6
 
+typedef struct	s_hash_tab
+{
+	char		name[10];
+	t_ex_ret	(*f)(t_hash *data, int alt);
+	int			alt_param;
+}				t_hash_tab;
 // # define OPTION_P		1 << 0
 // # define OPTION_Q		1 << 1
 // # define OPTION_R		1 << 2
@@ -30,6 +37,7 @@
 ** FUNCTIONS PROTOTYPES ********************************************************
 */
 
+void		clean_hash_data(t_hash *data);
 
 /* void		hex_display(t_byte *s, size_t len); //DEBUG */
 #endif

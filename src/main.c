@@ -45,18 +45,12 @@ void		char_display(t_byte *s, size_t len)
 	}
 	write(1, "\n", 1);
 }
-static void		clean_hash_data(t_hash *data)
-{
-	free(data->msg);
-	free(data->digest);
-	free(data->padded_msg);
-}
 
 t_ex_ret	fill_digest(char *algo, t_hash *data)
 {
 	if (!ft_strcmp(algo, "md5"))
 	{
-		if (fill_md5_digest(data) == FAILURE)
+		if (fill_md5_digest(data, 0) == FAILURE)
 			return (FAILURE);
 	}
 	else if (!ft_strcmp(algo, "sha256"))
@@ -81,24 +75,50 @@ t_ex_ret	fill_digest(char *algo, t_hash *data)
 	}
 	else if (!ft_strcmp(algo, "sha1"))
 	{
-		if (fill_sha1_digest(data) == FAILURE)
+		if (fill_sha1_digest(data, 0) == FAILURE)
 			return (FAILURE);
 	}
 	return (SUCCESS);
 }
 
-/* t_ex_ret	open_file(char *filename, int args, int perm) */
-/* { */
-/* 	int		fd; */
-/* 	char	*err_str; */
-/*  */
-/* 	if ((fd = open(filename, args, perm)) <= 0) */
-/* 	{ */
-/* 		ft_dprintf(2, "Open error: %s: %s\n", filename, strerror(errno)); */
-/* 		return (FAILURE); */
-/* 	} */
-/* 	return (fd); */
-/* } */
+void		init_one_func(t_hash_tab *tab, char *name, t_ex_ret	(*f)(t_hash *data, int alt), int alt_param)
+{
+	ft_strcpy(tab->name, name);
+	tab->f = f;
+	tab->alt_param = alt_param;
+}
+
+void		init_hash_func_tab(t_hash_tab *tab)
+{
+	init_one_func(&tab[0], "md5", &fill_md5_digest, 0);
+	init_one_func(&tab[1], "sha256", &fill_sha256_digest, 0);
+	init_one_func(&tab[2], "sha224", &fill_sha256_digest, 1);
+	init_one_func(&tab[3], "sha512", &fill_sha512_digest, 0);
+	init_one_func(&tab[4], "sha384", &fill_sha512_digest, 1);
+	init_one_func(&tab[5], "sha1", &fill_sha1_digest, 0);
+}
+
+t_ex_ret	apply_hash_algo(t_hash *data, char *algo)
+{
+	t_hash_tab		tab[HASH_FUNC_TAB_SIZE];
+	int 			i;
+
+	init_hash_func_tab(tab);
+	i = 0;
+	while (i < HASH_FUNC_TAB_SIZE)
+	{
+		if (ft_strcmp(tab[i].name, algo) == 0)
+		{
+			if (tab[i].f(data, tab[i].alt_param) == FAILURE)
+				return FAILURE;
+			else
+				break ;
+		}
+		i++;
+	}
+	hex_display(data->digest, data->digest_len);
+	return (SUCCESS);
+}
 
 t_ex_ret	close_fd(int fd)
 {
@@ -158,13 +178,9 @@ t_ex_ret	get_message(t_hash *data, int argc, char **argv)
 	return (close_fd(fd));
 }
 
-t_ex_ret	apply_hash_algo(t_hash *data, char *algo)
+t_ex_ret	get_options()
 {
-
-	if (fill_digest(algo, data) == FAILURE)
-		return (FAILURE);
-	hex_display(data->digest, data->digest_len);
-	return (SUCCESS);
+	return SUCCESS;
 }
 
 int				main(int argc, char **argv) {
@@ -179,7 +195,7 @@ int				main(int argc, char **argv) {
 	}
 	ret = SUCCESS;
 	ft_bzero(&data, sizeof(data));
-	if (get_message(&data, argc, argv) == FAILURE)
+	if (get_options() == FAILURE || get_message(&data, argc, argv) == FAILURE)
 		ret = FAILURE;
 	else
 		apply_hash_algo(&data, argv[1]);
