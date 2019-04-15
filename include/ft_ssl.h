@@ -6,7 +6,7 @@
 # include <fcntl.h>
 
 # include "libft.h"
-# include "basics.h"
+# include "basics_algo.h"
 # include "md5.h"
 # include "sha256.h"
 # include "sha512.h"
@@ -14,23 +14,22 @@
 
 # define READ_BUFF_LEN	1000
 
+// # define OPTION_P		1 << 0
+// # define OPTION_Q		1 << 1
+// # define OPTION_R		1 << 2
+
+// typedef struct		s_input
+// {
+// 	uint32_t	options;
+// 	char		*stdin_input;
+// 	char		**opt_s_arg;
+// 	char		**files_name;
+// }					t_input;
+
 /*
 ** FUNCTIONS PROTOTYPES ********************************************************
 */
 
-/*
-** Maths
-*/
-/* double		pow_double(double v, uint32_t n); */
-double		abs_double(double x);
-double		floor_double(double x);
-
-/*
-** Conversion
-*/
-uint32_t	ptr_to_uint32(t_byte *str);
-uint64_t	ptr_to_uint64(t_byte *str);
-uint32_t	ptr_to_uint32_swap(t_byte *str);
 
 /* void		hex_display(t_byte *s, size_t len); //DEBUG */
 #endif
