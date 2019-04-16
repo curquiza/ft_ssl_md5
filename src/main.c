@@ -46,40 +46,7 @@ void		char_display(t_byte *s, size_t len)
 	write(1, "\n", 1);
 }
 
-t_ex_ret	fill_digest(char *algo, t_hash *data)
-{
-	if (!ft_strcmp(algo, "md5"))
-	{
-		if (fill_md5_digest(data, 0) == FAILURE)
-			return (FAILURE);
-	}
-	else if (!ft_strcmp(algo, "sha256"))
-	{
-		if (fill_sha256_digest(data, 0) == FAILURE)
-			return (FAILURE);
-	}
-	else if (!ft_strcmp(algo, "sha224"))
-	{
-		if (fill_sha256_digest(data, 1) == FAILURE)
-			return (FAILURE);
-	}
-	else if (!ft_strcmp(algo, "sha512"))
-	{
-		if (fill_sha512_digest(data, 0) == FAILURE)
-			return (FAILURE);
-	}
-	else if (!ft_strcmp(algo, "sha384"))
-	{
-		if (fill_sha512_digest(data, 1) == FAILURE)
-			return (FAILURE);
-	}
-	else if (!ft_strcmp(algo, "sha1"))
-	{
-		if (fill_sha1_digest(data, 0) == FAILURE)
-			return (FAILURE);
-	}
-	return (SUCCESS);
-}
+/************************** */
 
 void		init_one_func(t_hash_tab *tab, char *name, t_ex_ret	(*f)(t_hash *data, int alt), int alt_param)
 {
@@ -202,3 +169,9 @@ int				main(int argc, char **argv) {
 	clean_hash_data(&data);
 	return (ret);
 }
+
+/*
+** Remplir la structure input
+** Suite à cette structure creer autant de struct data que necessaire (et remplir msg et msg_len)
+** Appliquer le tout
+*/
