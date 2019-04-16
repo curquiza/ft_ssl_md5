@@ -47,6 +47,6 @@ void		fill_algo_constants_sha1(t_sha1_const *cst);
 /*
 ** algo
 */
-t_ex_ret	fill_sha1_digest(t_hash *data);
+t_ex_ret	fill_sha1_digest(t_hash *data, int alt);
 
 #endif

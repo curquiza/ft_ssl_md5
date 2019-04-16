@@ -92,8 +92,9 @@ static t_ex_ret	run_md5_algo(t_hash *data, t_md5_const *cst)
 	return (fill_digest(data, &rslt));
 }
 
-t_ex_ret	fill_md5_digest(t_hash *data)
+t_ex_ret	fill_md5_digest(t_hash *data, int alt)
 {
+	(void)alt;
 	t_md5_const		cst[MD5_CHUNK_BYTES];
 	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
 	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
