@@ -125,3 +125,46 @@ run_test "tests/inputs/hello"
 run_test "tests/inputs/coco.txt"
 run_test "tests/inputs/empty.txt"
 run_test "ft_ssl"
+
+
+# Test relou de parsing
+#
+# $> md5 -rs "toto" -s "titi"                                                                  feature/input-parsing ✗  25/04/19 16:06
+# f71dbe52628a3f83a77ab494817525c6 "toto"
+# 5d933eef19aee7da192608de61b6c23d "titi"
+# $> md5 -s "toto" -rs "titi"                                                                  feature/input-parsing ✗  25/04/19 16:06
+# MD5 ("toto") = f71dbe52628a3f83a77ab494817525c6
+# 5d933eef19aee7da192608de61b6c23d "titi"
+# $> md5 -sr "toto" -s "titi"                                                                  feature/input-parsing ✗  25/04/19 16:07
+# MD5 ("r") = 4b43b0aee35624cd95b910189b3dc231
+# md5: toto: No such file or directory
+# md5: -s: No such file or directory
+# md5: titi: No such file or directory
+# $> md5 Makefile -s "toto"
+# MD5 (Makefile) = edc9d4e017be42fadc31ee179541d2e4
+# md5: -s: No such file or directory
+# md5: toto: No such file or directory
+
+# $> md5 Makefile -r -s "toto"                                                                 feature/input-parsing ✗  25/04/19 16:10
+# MD5 (Makefile) = edc9d4e017be42fadc31ee179541d2e4
+# md5: -r: No such file or directory
+# md5: -s: No such file or directory
+# md5: toto: No such file or directory
+# $> md5 -s "toto" -r Makefile -s Makefile                                                     feature/input-parsing ✗  25/04/19 16:12
+# MD5 ("toto") = f71dbe52628a3f83a77ab494817525c6
+# edc9d4e017be42fadc31ee179541d2e4 Makefile
+# md5: -s: No such file or directory
+# edc9d4e017be42fadc31ee179541d2e4 Makefile
+
+# $> echo "lol" | md5 -pr                                                                      feature/input-parsing ✗  25/04/19 16:20
+# lol
+# 59bcc3ad6775562f845953cf01624225
+# d41d8cd98f00b204e9800998ecf8427e
+# $> echo -n "" | md5 -pr                                                                      feature/input-parsing ✗  25/04/19 16:21
+# d41d8cd98f00b204e9800998ecf8427e
+# d41d8cd98f00b204e9800998ecf8427e
+# $> echo "lol" | md5 -rp Makefile
+# lol
+# 59bcc3ad6775562f845953cf01624225
+# edc9d4e017be42fadc31ee179541d2e4 Makefile
+

@@ -1,0 +1,70 @@
+Trucs relou parsing
+
+-p et -s n'existent pas sur openssl
+
+1)
+$> echo "test" | md5
+affiche le checksum des "test" mais
+$> echo "test" | md5 Makefile
+affiche seulement le checksum du makefile.
+Si on veut l'afficher il faut faire :
+$> echo "test" | md5 -p Makefile
+et on aura l'affichage de la ligne + du checksum
+
+2)
+Les checksums des fichiers s'affichent toujours en :
+MD5 (fileName) = checksum
+Les checksums de stdin s'affichent toujours en :
+checksum
+et si l'option -p est précisée :
+stdin
+checksum
+
+3) l'option -q
+Ne sert à rien sur stdin
+Annule l'option -r
+
+4) ordre parsing :
+- on a l'algo
+- on a les options :
+  quand on a trouvé un argument qui ne commence pas par "-" (et qui n'est pas la suite de l'option -s), on arrete
+- on a les arguments
+
+5) l'option -s avec l'option -r
+le reverse ne s'applique que pour les arguments qui le suivent.
+$> md5 -s "toto" -r -s "lol" Makefile
+MD5 ("toto") = f71dbe52628a3f83a77ab494817525c6
+9cdfb439c7876e703e307864c9167a15 "lol"
+edc9d4e017be42fadc31ee179541d2e4 Makefile
+$> md5 -rs "toto" -r -s "lol" Makefile
+f71dbe52628a3f83a77ab494817525c6 "toto"
+9cdfb439c7876e703e307864c9167a15 "lol"
+edc9d4e017be42fadc31ee179541d2e4 Makefile
+=> Du coup s'il y a un -r, c'est forcément sur tous les files. Mais pas forcément sur tous les arg de -s
+
+6) l'option -r avec stdin
+$> echo "lol" | md5 -pr
+lol
+59bcc3ad6775562f845953cf01624225
+d41d8cd98f00b204e9800998ecf8427e
+$> echo -n "" | md5 -pr
+d41d8cd98f00b204e9800998ecf8427e
+d41d8cd98f00b204e9800998ecf8427e
+$> echo "lol" | md5 -rp Makefile
+lol
+59bcc3ad6775562f845953cf01624225
+edc9d4e017be42fadc31ee179541d2e4 Makefile
+=> quand il y a l'option -r et rien derriere, on affiche le checksum d'un fichier vide. Bug ? Utilse à gerer ?
+=> sinon l'option -r ne sert à rien pour stdin
+=> en fait, non, c'est l'option -p qui est chelou :
+$> echo "lol" | md5 -ppppppp Makefile
+lol
+59bcc3ad6775562f845953cf01624225
+d41d8cd98f00b204e9800998ecf8427e
+d41d8cd98f00b204e9800998ecf8427e
+d41d8cd98f00b204e9800998ecf8427e
+d41d8cd98f00b204e9800998ecf8427e
+d41d8cd98f00b204e9800998ecf8427e
+d41d8cd98f00b204e9800998ecf8427e
+MD5 (Makefile) = edc9d4e017be42fadc31ee179541d2e4
+=> je gere pas ! Pour moi -r ne fait rien sur stdin et -p affiche qu'une seule fois la bonne entree stdin
