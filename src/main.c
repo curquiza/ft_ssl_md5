@@ -20,72 +20,20 @@
 /* } */
 /*  */
 
-void		hex_display(t_byte *s, size_t len)
-{
-	size_t		i;
+// void		char_display(t_byte *s, size_t len)
+// {
+// 	size_t		i;
 
-	i = 0;
-	while (i < len)
-	{
-		ft_printf("%02x", (t_byte)s[i]);
-		i++;
-	}
-	write(1, "\n", 1);
-}
-
-void		char_display(t_byte *s, size_t len)
-{
-	size_t		i;
-
-	i = 0;
-	while (i < len)
-	{
-		ft_printf("%c", (t_byte)s[i]);
-		i++;
-	}
-	write(1, "\n", 1);
-}
+// 	i = 0;
+// 	while (i < len)
+// 	{
+// 		ft_printf("%c", (t_byte)s[i]);
+// 		i++;
+// 	}
+// 	write(1, "\n", 1);
+// }
 
 /************************** */
-
-void		init_one_func(t_hash_tab *tab, char *name, t_ex_ret	(*f)(t_hash *data, int alt), int alt_param)
-{
-	ft_strcpy(tab->name, name);
-	tab->f = f;
-	tab->alt_param = alt_param;
-}
-
-void		init_hash_func_tab(t_hash_tab *tab)
-{
-	init_one_func(&tab[0], "md5", &fill_md5_digest, 0);
-	init_one_func(&tab[1], "sha256", &fill_sha256_digest, 0);
-	init_one_func(&tab[2], "sha224", &fill_sha256_digest, 1);
-	init_one_func(&tab[3], "sha512", &fill_sha512_digest, 0);
-	init_one_func(&tab[4], "sha384", &fill_sha512_digest, 1);
-	init_one_func(&tab[5], "sha1", &fill_sha1_digest, 0);
-}
-
-t_ex_ret	apply_hash_algo(t_hash *data, char *algo)
-{
-	t_hash_tab		tab[HASH_FUNC_TAB_SIZE];
-	int 			i;
-
-	init_hash_func_tab(tab);
-	i = 0;
-	while (i < HASH_FUNC_TAB_SIZE)
-	{
-		if (ft_strcmp(tab[i].name, algo) == 0)
-		{
-			if (tab[i].f(data, tab[i].alt_param) == FAILURE)
-				return FAILURE;
-			else
-				break ;
-		}
-		i++;
-	}
-	hex_display(data->digest, data->digest_len);
-	return (SUCCESS);
-}
 
 t_ex_ret	close_fd(int fd)
 {
@@ -145,33 +93,57 @@ t_ex_ret	get_message(t_hash *data, int argc, char **argv)
 	return (close_fd(fd));
 }
 
-t_ex_ret	get_options()
+// t_ex_ret	get_options()
+// {
+// 	return SUCCESS;
+// }
+
+t_ex_ret		get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab)
 {
+	int		i;
+
+	i = 0;
+	while (i < HASH_FUNC_TAB_SIZE)
+	{
+		if (ft_strcmp(algo_tab[i].name, algo_arg) == 0)
+		{
+			state->hash_algo = &algo_tab[i];
+			return SUCCESS;
+		}
+		i++;
+	}
+	return ft_ret_err(HASH_ALGO_ERR);
+}
+
+int				main(int argc, char **argv)
+{
+	t_hash_algo	algo_tab[HASH_FUNC_TAB_SIZE];
+	t_state		state;
+
+	if (argc <= 1)
+		return ret_usage_err();
+	first_init(algo_tab, &state);
+	if (get_hash_algo(argv[1], &state, algo_tab) == FAILURE)
+		return FAILURE;
 	return SUCCESS;
 }
 
-int				main(int argc, char **argv) {
+// int				main(int argc, char **argv)
+// {
+// 	int		ret;
+// 	t_hash	data;
 
-	int		ret;
-	t_hash	data;
-
-	if (argc != 3)
-	{
-		ft_dprintf(2, "./ft_ssl [algo] [str]\n");
-		return (FAILURE);
-	}
-	ret = SUCCESS;
-	ft_bzero(&data, sizeof(data));
-	if (get_options() == FAILURE || get_message(&data, argc, argv) == FAILURE)
-		ret = FAILURE;
-	else
-		apply_hash_algo(&data, argv[1]);
-	clean_hash_data(&data);
-	return (ret);
-}
-
-/*
-** Remplir la structure input
-** Suite à cette structure creer autant de struct data que necessaire (et remplir msg et msg_len)
-** Appliquer le tout
-*/
+// 	if (argc != 3)
+// 	{
+// 		ft_dprintf(2, "./ft_ssl [algo] [str]\n");
+// 		return (FAILURE);
+// 	}
+// 	ret = SUCCESS;
+// 	ft_bzero(&data, sizeof(data));
+// 	if (get_options() == FAILURE || get_message(&data, argc, argv) == FAILURE)
+// 		ret = FAILURE;
+// 	else
+// 		apply_hash_algo(&data, argv[1]);
+// 	clean_hash_data(&data);
+// 	return (ret);
+// }
