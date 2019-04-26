@@ -15,9 +15,9 @@
 # define READ_BUFF_LEN	1000
 # define HASH_FUNC_TAB_SIZE 6
 
-# define USAGE_INDENT "  "
-# define HASH_ALGO_ERR "No available hash algorithm found"
-# define STDIN_READ_ERR "Error while reading stdin"
+# define USAGE_INDENT	"  "
+# define HASH_ALGO_ERR	"No available hash algorithm found"
+# define OPT_S_ERR		"Option -s requires an argument"
 
 # define OPTION_P_CHAR	'p'
 # define OPTION_Q_CHAR	'q'
@@ -26,6 +26,7 @@
 # define OPTION_P		1 << 0
 # define OPTION_Q		1 << 1
 # define OPTION_R		1 << 2
+# define OPTION_S		1 << 3
 
 typedef struct	s_hash_algo
 {
@@ -38,7 +39,8 @@ typedef struct			s_state
 {
 	uint32_t	options;
 	t_bool		output;
-	t_bool		breaker;
+	t_bool		opt_end;
+	t_bool		opt_s;
 	t_hash_algo	*hash_algo;
 }						t_state;
 
@@ -54,6 +56,7 @@ void		hex_display(t_byte *s, size_t len);
 void		hex_display_endl(t_byte *s, size_t len);
 t_bool		opt_is_activated(uint32_t options_state, uint32_t opt_mask);
 void		activate_opt(t_state *state, uint32_t opt_mask);
+void    	desactivate_opt(t_state *state, uint32_t opt_mask);
 void		exit_malloc_err(void);
 
 /*
@@ -62,9 +65,10 @@ void		exit_malloc_err(void);
 void		first_init(t_hash_algo *algo_tab, t_state *state);
 t_ex_ret	get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab);
 
-t_ex_ret    apply_option(char *arg, t_state *state);
+t_ex_ret    apply_option(char *arg, char *next_arg, t_state *state);
 t_ex_ret    apply_file(char *arg, t_state *state);
 t_ex_ret    apply_stdin(t_state *state);
+t_ex_ret    apply_hash_algo_for_arg(char *arg, t_hash *data, t_state *state);
 
 void    	display_digest(char *filename, t_hash *data, t_state *state);
 void		clean_hash_data(t_hash *data);

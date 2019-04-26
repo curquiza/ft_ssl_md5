@@ -2,25 +2,26 @@
 
 static t_ex_ret is_option(char *arg, t_state *state)
 {
-	return (state->output == FALSE && arg && arg[0] == '-' && arg[1]);
+	return (state->opt_end == FALSE && arg && arg[0] == '-' && arg[1]);
 }
 
 static t_bool	is_option_breaker(t_state *state, char *arg)
 {
-	return (state->breaker == FALSE && ft_strcmp(arg, "--") == 0);
+	return (state->opt_end == FALSE && ft_strcmp(arg, "--") == 0);
 }
 
-static t_ex_ret parse_and_execute_arg(char *arg, t_state *state)
+static t_ex_ret parse_and_execute_arg(char *arg, char *next_arg, t_state *state)
 {
 	if (is_option_breaker(state, arg) == FALSE)
 	{
 		if (is_option(arg, state))
-			return apply_option(arg, state);
+			return apply_option(arg, next_arg, state);
 		state->output = TRUE;
+		state->opt_end = TRUE;
 		return apply_file(arg, state);
 	}
+	state->opt_end = TRUE;
 	state->output = TRUE;
-	state->breaker = TRUE;
 	return SUCCESS;
 }
 
@@ -39,8 +40,13 @@ static t_ex_ret		run_ft_ssl(char **argv, t_state *state)
 	ret = SUCCESS;
 	while (*argv)
 	{
-		if (parse_and_execute_arg(*argv, state) == FAILURE)
+		if (parse_and_execute_arg(*argv, *(argv + 1), state) == FAILURE)
 			ret = FAILURE;
+		if (state->opt_s)
+		{
+			state->opt_s = FALSE;
+			argv++;
+		}
 		argv++;
 	}
 	if (ret == SUCCESS && need_last_stdin_reading(state))
