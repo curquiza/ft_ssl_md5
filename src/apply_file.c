@@ -55,30 +55,16 @@ static t_ex_ret	get_message(char *filename, t_hash *data)
 	return (close_fd(fd));
 }
 
-static void		hex_display(t_byte *s, size_t len)
-{
-	size_t		i;
-
-	i = 0;
-	while (i < len)
-	{
-		ft_printf("%02x", (t_byte)s[i]);
-		i++;
-	}
-	write(1, "\n", 1);
-}
-
 t_ex_ret    apply_file(char *arg, t_state *state)
 {
     t_hash  data;
 
-    ft_printf("APPLY_FILE: %s\n", arg); // DEBUG
+    // ft_printf("APPLY_FILE: %s\n", arg); // DEBUG
     ft_bzero(&data, sizeof(data));
     if (get_message(arg, &data) == FAILURE)
         return FAILURE;
     if (state->hash_algo->f(&data, state->hash_algo->alt_param) == FAILURE)
         return FAILURE;
-    // APPLIQUER LES OPTIONS
-    hex_display(data.digest, data.digest_len);
+    display_digest(arg, &data, state);
     return SUCCESS;
 }

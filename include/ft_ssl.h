@@ -40,14 +40,23 @@ typedef struct			s_state
 /*
 ** FUNCTIONS PROTOTYPES ********************************************************
 */
-t_ex_ret    ret_usage_err();
 
+/*
+** Utils
+*/
+t_ex_ret    ret_usage_err();
+void		hex_display(t_byte *s, size_t len);
+
+/*
+** Main functions
+*/
 void		first_init(t_hash_algo *algo_tab, t_state *state);
 t_ex_ret	get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab);
 
 t_ex_ret    apply_option(char *arg, t_state *state);
 t_ex_ret    apply_file(char *arg, t_state *state);
 
+void    	display_digest(char *filename, t_hash *data, t_state *state);
 // void		clean_hash_data(t_hash *data);
 
 #endif

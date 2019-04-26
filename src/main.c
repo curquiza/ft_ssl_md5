@@ -14,14 +14,17 @@ static t_ex_ret parse_and_execute_arg(char *arg, t_state *state)
 
 static t_ex_ret		run_ft_ssl(char **argv, t_state *state)
 {
+	t_ex_ret	ret;
+
+	ret = SUCCESS;
 	while (*argv)
 	{
 		if (parse_and_execute_arg(*argv, state) == FAILURE)
-			return FAILURE;
+			ret = FAILURE;
 		argv++;
 	}
 	// read on stdin if pas d'arg (-p non inclus)
-	return SUCCESS;
+	return ret;
 }
 
 int				main(int argc, char **argv)
