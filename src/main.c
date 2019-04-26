@@ -115,11 +115,24 @@ t_ex_ret		get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab)
 	return ft_ret_err(HASH_ALGO_ERR);
 }
 
-t_ex_ret		run_ft_ssl(char **argv, t_state *state)
+static t_ex_ret is_option(char *arg, t_state *state)
 {
-	(void)state;
+	return (state->opt_end == FALSE && arg && arg[0] == '-');
+}
+
+static t_ex_ret parse_and_execute_arg(char *arg, t_state *state)
+{
+	if (is_option(arg, state))
+		return apply_option(arg, state);
+	return apply_file(arg, state);
+}
+
+static t_ex_ret		run_ft_ssl(char **argv, t_state *state)
+{
 	while (*argv)
 	{
+		if (parse_and_execute_arg(*argv, state) == FAILURE)
+			return FAILURE;
 		argv++;
 	}
 	return SUCCESS;

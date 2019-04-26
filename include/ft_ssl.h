@@ -41,11 +41,11 @@ typedef struct			s_state
 ** FUNCTIONS PROTOTYPES ********************************************************
 */
 t_ex_ret    ret_usage_err();
-
 void		first_init(t_hash_algo *algo_tab, t_state *state);
-// t_ex_ret	apply_hash_algo(t_hash *data, char *algo);
 
-void		clean_hash_data(t_hash *data);
+t_ex_ret    apply_option(char *arg, t_state *state);
+t_ex_ret    apply_file(char *arg, t_state *state);
 
-/* void		hex_display(t_byte *s, size_t len); //DEBUG */
+// void		clean_hash_data(t_hash *data);
+
 #endif
