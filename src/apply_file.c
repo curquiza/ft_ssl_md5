@@ -60,7 +60,6 @@ t_ex_ret    apply_file(char *arg, t_state *state)
     t_hash  data;
 
     // ft_printf("APPLY_FILE: %s\n", arg); // DEBUG
-	state->output = TRUE;
     ft_bzero(&data, sizeof(data));
     if (get_message(arg, &data) == FAILURE)
         return FAILURE;

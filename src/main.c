@@ -2,14 +2,26 @@
 
 static t_ex_ret is_option(char *arg, t_state *state)
 {
-	return (state->opt_end == FALSE && arg && arg[0] == '-');
+	return (state->output == FALSE && arg && arg[0] == '-' && arg[1]);
+}
+
+static t_bool	is_option_breaker(t_state *state, char *arg)
+{
+	return (state->breaker == FALSE && ft_strcmp(arg, "--") == 0);
 }
 
 static t_ex_ret parse_and_execute_arg(char *arg, t_state *state)
 {
-	if (is_option(arg, state))
-		return apply_option(arg, state);
-	return apply_file(arg, state);
+	if (is_option_breaker(state, arg) == FALSE)
+	{
+		if (is_option(arg, state))
+			return apply_option(arg, state);
+		state->output = TRUE;
+		return apply_file(arg, state);
+	}
+	state->output = TRUE;
+	state->breaker = TRUE;
+	return SUCCESS;
 }
 
 static t_bool		need_last_stdin_reading(t_state *state)
