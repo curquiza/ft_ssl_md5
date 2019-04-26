@@ -16,6 +16,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		conversion.c \
 		usage.c \
 		first_init.c \
+		get_hash_algo.c \
 		apply_file.c \
 		apply_option.c \
 		apply_hash_algo.c \

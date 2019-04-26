@@ -41,7 +41,9 @@ typedef struct			s_state
 ** FUNCTIONS PROTOTYPES ********************************************************
 */
 t_ex_ret    ret_usage_err();
+
 void		first_init(t_hash_algo *algo_tab, t_state *state);
+t_ex_ret	get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab);
 
 t_ex_ret    apply_option(char *arg, t_state *state);
 t_ex_ret    apply_file(char *arg, t_state *state);
