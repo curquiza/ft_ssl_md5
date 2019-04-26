@@ -43,12 +43,8 @@ static t_ex_ret		run_ft_ssl(char **argv, t_state *state)
 			ret = FAILURE;
 		argv++;
 	}
-	// TESTER !!
 	if (ret == SUCCESS && need_last_stdin_reading(state))
-	{
-		ft_putendl("STDIN !!!!!");
 		return apply_stdin(state);
-	}
 	return ret;
 }
 

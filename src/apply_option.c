@@ -8,7 +8,8 @@ t_ex_ret    apply_option(char *arg, t_state *state)
         if (*arg == OPTION_P_CHAR)
         {
             activate_opt(state, OPTION_P);
-            ft_putendl("OPTION P"); // DEBUG
+            if (apply_stdin(state) == FAILURE)
+                return FAILURE;
         }
         else if (*arg == OPTION_Q_CHAR)
             activate_opt(state, OPTION_Q);

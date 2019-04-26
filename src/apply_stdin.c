@@ -1,29 +1,25 @@
 #include "ft_ssl.h"
 
-char        *get_stdin_input(void)
+static char        *get_stdin_input(void)
 {
-    int     ret;
-    char    *line;
+    char    line[10];
     char    *rslt;
     char    *tmp;
     
     if (!(rslt = ft_strdup("")))
         exit_malloc_err();
-    line = NULL;
-    while ((ret = get_next_line(0, &line)) == 1)
+    while (read(0, &line, 10) > 0)
     {
         tmp = rslt;
-        if (!(rslt = ft_strjoin3(rslt, line, "\n")))
+        if (!(rslt = ft_strjoin(rslt, line)))
         {
             ft_strdel(&tmp);
-            ft_strdel(&line);
             exit_malloc_err();
         }
         ft_strdel(&tmp);
-        ft_strdel(&line);
+        ft_bzero(&line, 10);
     }
-    if (ret == -1)
-        return NULL;
+    close(0);
     return (rslt);
 }
 
@@ -32,8 +28,7 @@ t_ex_ret    apply_stdin(t_state *state)
     char    *rslt;
     t_hash  data;
 
-    if (!(rslt = get_stdin_input()))
-        return ft_ret_err(STDIN_READ_ERR);
+    rslt = get_stdin_input();
     ft_bzero(&data, sizeof(data));
     if (!(data.msg = (t_byte *)ft_strdup(rslt)))
         exit_malloc_err();
@@ -44,6 +39,8 @@ t_ex_ret    apply_stdin(t_state *state)
     	clean_hash_data(&data);
         return FAILURE;
     }
+    if (opt_is_activated(state->options, OPTION_P))
+        ft_putstr((char *)data.msg);
     hex_display_endl(data.digest, data.digest_len);
 	clean_hash_data(&data);
     return SUCCESS;
