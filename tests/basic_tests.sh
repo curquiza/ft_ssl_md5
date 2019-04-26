@@ -176,3 +176,14 @@ run_test "ft_ssl"
 # lol
 # 59bcc3ad6775562f845953cf01624225
 
+# $> md5 - Makefile
+# md5: -: No such file or directory
+# MD5 (Makefile) = 2e595a063d8e2c73c6465f4d2220b627
+# md5 -q -- -r Makefile
+# md5: -r: No such file or directory
+# 2e595a063d8e2c73c6465f4d2220b627
+
+# $> md5 --
+# rien
+# $> echo lol | md5 --
+# rien

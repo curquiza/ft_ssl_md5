@@ -18,6 +18,10 @@
 # define USAGE_INDENT "  "
 # define HASH_ALGO_ERR "No available hash algorithm found"
 
+# define OPTION_P_CHAR	'p'
+# define OPTION_Q_CHAR	'q'
+# define OPTION_R_CHAR	'r'
+# define OPTION_S_CHAR	's'
 # define OPTION_P		1 << 0
 # define OPTION_Q		1 << 1
 # define OPTION_R		1 << 2
@@ -33,19 +37,34 @@ typedef struct			s_state
 {
 	uint32_t	options;
 	t_bool		output;
-	t_bool		opt_end;
+	t_bool		breaker;
 	t_hash_algo	*hash_algo;
 }						t_state;
 
 /*
 ** FUNCTIONS PROTOTYPES ********************************************************
 */
+
+/*
+** Utils
+*/
 t_ex_ret    ret_usage_err();
+void		hex_display(t_byte *s, size_t len);
+void		hex_display_endl(t_byte *s, size_t len);
+t_bool		opt_is_activated(uint32_t options_state, uint32_t opt_mask);
+void		activate_opt(t_state *state, uint32_t opt_mask);
 
+/*
+** Main functions
+*/
 void		first_init(t_hash_algo *algo_tab, t_state *state);
-// t_ex_ret	apply_hash_algo(t_hash *data, char *algo);
+t_ex_ret	get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab);
 
+t_ex_ret    apply_option(char *arg, t_state *state);
+t_ex_ret    apply_file(char *arg, t_state *state);
+t_ex_ret    apply_stdin(t_state *state);
+
+void    	display_digest(char *filename, t_hash *data, t_state *state);
 void		clean_hash_data(t_hash *data);
 
-/* void		hex_display(t_byte *s, size_t len); //DEBUG */
 #endif
