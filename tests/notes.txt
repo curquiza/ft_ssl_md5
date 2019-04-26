@@ -30,7 +30,7 @@ Annule l'option -r
   quand on a trouvé un argument qui ne commence pas par "-" (et qui n'est pas la suite de l'option -s), on arrete
 - on a les arguments
 
-5) l'option -s avec l'option -r
+5) l'option -s avec l'option -r (ou -q)
 le reverse ne s'applique que pour les arguments qui le suivent.
 $> md5 -s "toto" -r -s "lol" Makefile
 MD5 ("toto") = f71dbe52628a3f83a77ab494817525c6
@@ -40,31 +40,48 @@ $> md5 -rs "toto" -r -s "lol" Makefile
 f71dbe52628a3f83a77ab494817525c6 "toto"
 9cdfb439c7876e703e307864c9167a15 "lol"
 edc9d4e017be42fadc31ee179541d2e4 Makefile
-=> Du coup s'il y a un -r, c'est forcément sur tous les files. Mais pas forcément sur tous les arg de -s
+=> Du coup s'il y a un -r (ou -q), c'est forcément sur tous les files. Mais pas forcément sur tous les arg de -s
+=> on comprend que les arguments s'appliquent au fur et à mesure
 
 6) l'option -r avec stdin
-$> echo "lol" | md5 -pr
+Ne fait rien sur les stdin
+
+7) md5 et stdin, couplé à l'option -p 
+md5 seul attend une entrée sur stdin
+md5 qui n'a recu aucun argument regarde stdin, sinon non, d'où 1)
+L'option -p force la lecture sur stdin et l'affichage immédiat sur stdout :
+$> echo "lol" | md5 -s "hello" -p -s "hello2"
+MD5 ("hello") = 5d41402abc4b2a76b9719d911017c592
+lol
+59bcc3ad6775562f845953cf01624225
+MD5 ("hello2") = 6e809cbda0732ac4845916a59016f954
+=> Donc on a vu que si aucun argument n'est passé (ni -s ni filename), md5 ouvre stdin une derniere fois d'où :
+$> echo "lol" | md5 -rpp 
 lol
 59bcc3ad6775562f845953cf01624225
 d41d8cd98f00b204e9800998ecf8427e
-$> echo -n "" | md5 -pr
 d41d8cd98f00b204e9800998ecf8427e
-d41d8cd98f00b204e9800998ecf8427e
-$> echo "lol" | md5 -rp Makefile
+Le 2eme et 3eme resultat correspondent au checksum d'une chaine vide.
+On a une ouverture de stdin pour chaque -p, et une derniere pcq on a aucun argument.
+=> mais contre-exemple avec cas particulier : si seulement une ou des options -p sont passées (et uniquement des -p)
+alors md5 n'ouvre pas stdin une dernière fois :
+$> echo "lol" | md5 -p
 lol
 59bcc3ad6775562f845953cf01624225
-edc9d4e017be42fadc31ee179541d2e4 Makefile
-=> quand il y a l'option -r et rien derriere, on affiche le checksum d'un fichier vide. Bug ? Utilse à gerer ?
-=> sinon l'option -r ne sert à rien pour stdin
-=> en fait, non, c'est l'option -p qui est chelou :
-$> echo "lol" | md5 -ppppppp Makefile
+$> echo "lol" | md5 -pp
 lol
 59bcc3ad6775562f845953cf01624225
 d41d8cd98f00b204e9800998ecf8427e
-d41d8cd98f00b204e9800998ecf8427e
-d41d8cd98f00b204e9800998ecf8427e
-d41d8cd98f00b204e9800998ecf8427e
-d41d8cd98f00b204e9800998ecf8427e
-d41d8cd98f00b204e9800998ecf8427e
+=> on voit bien qu'il n'y a pas de dernière ouverture de stdin bien qu'il n'y ait aucun argument
+
+8) l'option -s quand il n'y a pas d'argument derrière
+$> echo "lol" | md5 -ps
+lol
+59bcc3ad6775562f845953cf01624225
+md5: option requires an argument -- s
+usage: md5 [-pqrtx] [-s string] [files ...]
+$> echo "lol" | md5 -sp
+MD5 ("p") = 83878c91171338902e0fe0fb97a8c47a
+$> md5 Makefile -s
 MD5 (Makefile) = edc9d4e017be42fadc31ee179541d2e4
-=> je gere pas ! Pour moi -r ne fait rien sur stdin et -p affiche qu'une seule fois la bonne entree stdin
+md5: -s: No such file or directory
