@@ -17,6 +17,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		usage.c \
 		utils_options.c \
 		utils_display_hex.c \
+		utils_malloc.c \
 		display_digest.c \
 		first_init.c \
 		get_hash_algo.c \
