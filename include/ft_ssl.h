@@ -58,6 +58,7 @@ t_ex_ret	get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab);
 
 t_ex_ret    apply_option(char *arg, t_state *state);
 t_ex_ret    apply_file(char *arg, t_state *state);
+t_ex_ret    apply_stdin(t_state *state);
 
 void    	display_digest(char *filename, t_hash *data, t_state *state);
 // void		clean_hash_data(t_hash *data);

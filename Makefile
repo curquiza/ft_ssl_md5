@@ -22,6 +22,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		get_hash_algo.c \
 		apply_file.c \
 		apply_option.c \
+		apply_stdin.c \
 		maths.c \
 		clean.c \
 		main.c)
