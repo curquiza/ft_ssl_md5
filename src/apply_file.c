@@ -44,9 +44,6 @@ static t_ex_ret	get_message(char *filename, t_hash *data)
 
 	if ((fd = open(filename, O_RDONLY, 0)) == -1)
         return ft_ret_err2(filename, strerror(errno));
-    // data->msg_len = ft_strlen(filename);
-    // data->msg = (t_byte *)ft_memalloc(data->msg_len);
-    // ft_memmove(data->msg, filename, data->msg_len);
 	if (read_message_from_file(fd, data) == FAILURE)
 	{
 		close_fd(fd);
@@ -62,13 +59,5 @@ t_ex_ret    apply_file(char *arg, t_state *state)
     ft_bzero(&data, sizeof(data));
     if (get_message(arg, &data) == FAILURE)
         return FAILURE;
-    // if (state->hash_algo->f(&data, state->hash_algo->alt_param) == FAILURE)
-	// {
-	// 	clean_hash_data(&data);
-    //     return FAILURE;
-	// }
-    // display_digest(arg, &data, state);
-	// clean_hash_data(&data);
 	return apply_hash_algo_for_arg(arg, &data, state);
-    // return SUCCESS;
 }
