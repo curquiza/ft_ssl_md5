@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-t_ex_ret	close_fd(int fd)
+static t_ex_ret	close_fd(int fd)
 {
 	if (close(fd) == -1)
 	{
@@ -38,18 +38,15 @@ static t_ex_ret	read_message_from_file(int fd, t_hash *data)
 	return (SUCCESS);
 }
 
-t_ex_ret	get_message(t_hash *data, int argc, char **argv)
+static t_ex_ret	get_message(char *filename, t_hash *data)
 {
 	int		fd;
 
-	(void)argc; //DEBUG
-	if ((fd = open(argv[2], O_RDONLY, 0)) == -1)
-	{
-		data->msg_len = ft_strlen(argv[2]);
-		data->msg = (t_byte *)ft_memalloc(data->msg_len);
-		ft_memmove(data->msg, argv[2], data->msg_len);
-		return (SUCCESS);
-	}
+	if ((fd = open(filename, O_RDONLY, 0)) == -1)
+        return ft_ret_err2(filename, strerror(errno));
+    // data->msg_len = ft_strlen(filename);
+    // data->msg = (t_byte *)ft_memalloc(data->msg_len);
+    // ft_memmove(data->msg, filename, data->msg_len);
 	if (read_message_from_file(fd, data) == FAILURE)
 	{
 		close_fd(fd);
@@ -58,9 +55,30 @@ t_ex_ret	get_message(t_hash *data, int argc, char **argv)
 	return (close_fd(fd));
 }
 
+static void		hex_display(t_byte *s, size_t len)
+{
+	size_t		i;
+
+	i = 0;
+	while (i < len)
+	{
+		ft_printf("%02x", (t_byte)s[i]);
+		i++;
+	}
+	write(1, "\n", 1);
+}
+
 t_ex_ret    apply_file(char *arg, t_state *state)
 {
-    (void)arg;
-    (void)state;
+    t_hash  data;
+
+    ft_printf("APPLY_FILE: %s\n", arg); // DEBUG
+    ft_bzero(&data, sizeof(data));
+    if (get_message(arg, &data) == FAILURE)
+        return FAILURE;
+    if (state->hash_algo->f(&data, state->hash_algo->alt_param) == FAILURE)
+        return FAILURE;
+    // APPLIQUER LES OPTIONS
+    hex_display(data.digest, data.digest_len);
     return SUCCESS;
 }
