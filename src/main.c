@@ -115,6 +115,16 @@ t_ex_ret		get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab)
 	return ft_ret_err(HASH_ALGO_ERR);
 }
 
+t_ex_ret		run_ft_ssl(char **argv, t_state *state)
+{
+	(void)state;
+	while (*argv)
+	{
+		argv++;
+	}
+	return SUCCESS;
+}
+
 int				main(int argc, char **argv)
 {
 	t_hash_algo	algo_tab[HASH_FUNC_TAB_SIZE];
@@ -125,7 +135,7 @@ int				main(int argc, char **argv)
 	first_init(algo_tab, &state);
 	if (get_hash_algo(argv[1], &state, algo_tab) == FAILURE)
 		return FAILURE;
-	return SUCCESS;
+	return run_ft_ssl(argv + 2, &state);
 }
 
 // int				main(int argc, char **argv)

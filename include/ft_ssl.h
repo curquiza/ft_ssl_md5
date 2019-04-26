@@ -18,16 +18,16 @@
 # define USAGE_INDENT "  "
 # define HASH_ALGO_ERR "No available hash algorithm found"
 
+# define OPTION_P		1 << 0
+# define OPTION_Q		1 << 1
+# define OPTION_R		1 << 2
+
 typedef struct	s_hash_algo
 {
 	char		name[10];
 	t_ex_ret	(*f)(t_hash *data, int alt);
 	int			alt_param;
 }				t_hash_algo;
-
-# define OPTION_P		1 << 0
-# define OPTION_Q		1 << 1
-# define OPTION_R		1 << 2
 
 typedef struct			s_state
 {
