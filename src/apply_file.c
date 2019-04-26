@@ -67,5 +67,6 @@ t_ex_ret    apply_file(char *arg, t_state *state)
     if (state->hash_algo->f(&data, state->hash_algo->alt_param) == FAILURE)
         return FAILURE;
     display_digest(arg, &data, state);
+	clean_hash_data(&data);
     return SUCCESS;
 }
