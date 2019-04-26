@@ -17,6 +17,7 @@
 
 # define USAGE_INDENT "  "
 # define HASH_ALGO_ERR "No available hash algorithm found"
+# define STDIN_READ_ERR "Error while reading stdin"
 
 # define OPTION_P_CHAR	'p'
 # define OPTION_Q_CHAR	'q'
@@ -53,6 +54,7 @@ void		hex_display(t_byte *s, size_t len);
 void		hex_display_endl(t_byte *s, size_t len);
 t_bool		opt_is_activated(uint32_t options_state, uint32_t opt_mask);
 void		activate_opt(t_state *state, uint32_t opt_mask);
+void		exit_malloc_err(void);
 
 /*
 ** Main functions
@@ -66,5 +68,6 @@ t_ex_ret    apply_stdin(t_state *state);
 
 void    	display_digest(char *filename, t_hash *data, t_state *state);
 void		clean_hash_data(t_hash *data);
+
 
 #endif
