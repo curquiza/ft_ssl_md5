@@ -29,7 +29,7 @@ static t_bool		need_last_stdin_reading(t_state *state)
 	return (state->output == FALSE
 		&& (opt_is_activated(state->options, OPTION_R)
 			|| opt_is_activated(state->options, OPTION_Q)
-			|| opt_is_activated(state->options, OPTION_P) == FALSE));
+			|| !opt_is_activated(state->options, OPTION_P)));
 }
 
 static t_ex_ret		run_ft_ssl(char **argv, t_state *state)
@@ -43,12 +43,8 @@ static t_ex_ret		run_ft_ssl(char **argv, t_state *state)
 			ret = FAILURE;
 		argv++;
 	}
-	// TESTER !!
 	if (ret == SUCCESS && need_last_stdin_reading(state))
-	{
-		ft_putendl("STDIN !!!!!");
 		return apply_stdin(state);
-	}
 	return ret;
 }
 

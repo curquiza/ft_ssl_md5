@@ -59,12 +59,14 @@ t_ex_ret    apply_file(char *arg, t_state *state)
 {
     t_hash  data;
 
-    // ft_printf("APPLY_FILE: %s\n", arg); // DEBUG
     ft_bzero(&data, sizeof(data));
     if (get_message(arg, &data) == FAILURE)
         return FAILURE;
     if (state->hash_algo->f(&data, state->hash_algo->alt_param) == FAILURE)
+	{
+		clean_hash_data(&data);
         return FAILURE;
+	}
     display_digest(arg, &data, state);
 	clean_hash_data(&data);
     return SUCCESS;
