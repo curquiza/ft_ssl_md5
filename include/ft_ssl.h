@@ -46,6 +46,9 @@ typedef struct			s_state
 */
 t_ex_ret    ret_usage_err();
 void		hex_display(t_byte *s, size_t len);
+void		hex_display_endl(t_byte *s, size_t len);
+t_bool		opt_is_activated(uint32_t options_state, uint32_t opt_mask);
+void		activate_opt(t_state *state, uint32_t opt_mask);
 
 /*
 ** Main functions

@@ -15,7 +15,8 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		sha1_algo.c \
 		conversion.c \
 		usage.c \
-		display_hex.c \
+		utils_options.c \
+		utils_display_hex.c \
 		display_digest.c \
 		first_init.c \
 		get_hash_algo.c \
