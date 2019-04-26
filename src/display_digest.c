@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-void    display_digest(char *filename, t_hash *data, t_state *state)
+void    display_digest(char *arg, t_hash *data, t_state *state)
 {
     char    *algo_name;
 
@@ -9,13 +9,19 @@ void    display_digest(char *filename, t_hash *data, t_state *state)
     else if (opt_is_activated(state->options, OPTION_R))
     {
         hex_display(data->digest, data->digest_len);
-        ft_printf(" %s\n", filename);
+        if (opt_is_activated(state->options, OPTION_S))
+            ft_printf(" \"%s\"\n", arg);
+        else
+            ft_printf(" %s\n", arg);
     }
     else
     {
         algo_name = state->hash_algo->name;
         ft_strupper(algo_name);
-        ft_printf("%s (%s) = ", algo_name, filename);
+        if (opt_is_activated(state->options, OPTION_S))    
+            ft_printf("%s (\"%s\") = ", algo_name, arg);
+        else
+            ft_printf("%s (%s) = ", algo_name, arg);
         hex_display_endl(data->digest, data->digest_len);
     }
 }

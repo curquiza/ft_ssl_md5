@@ -24,6 +24,7 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		apply_file.c \
 		apply_option.c \
 		apply_stdin.c \
+		apply_algo_for_arg.c \
 		maths.c \
 		clean.c \
 		main.c)
