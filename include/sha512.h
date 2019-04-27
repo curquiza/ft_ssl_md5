@@ -57,11 +57,11 @@ uint64_t	g_k_sha512[SHA512_CHUNK_BYTES];
 /*
 ** init
 */
-t_ex_ret	message_padding_sha512(t_hash *data);
+void		message_padding_sha512(t_hash *data);
 
 /*
 ** algo
 */
-t_ex_ret	fill_sha512_digest(t_hash *data, int alt);
+void		fill_sha512_digest(t_hash *data, int alt);
 
 #endif

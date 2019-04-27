@@ -26,7 +26,7 @@ static t_ex_ret	read_message_from_file(int fd, t_hash *data)
 		if (!(data->msg = (t_byte *)ft_memalloc(data->msg_len + read_ret)))
 		{
 			free(tmp);
-			return (FAILURE);
+			exit_malloc_err();
 		}
 		if (tmp)
 			ft_memmove(data->msg, tmp, i);
@@ -58,6 +58,7 @@ t_ex_ret	apply_file(char *arg, t_state *state)
 
 	ft_bzero(&data, sizeof(data));
 	if (get_message(arg, &data) == FAILURE)
-	return FAILURE;
-	return apply_hash_algo_for_arg(arg, &data, state);
+		return FAILURE;
+	apply_hash_algo_for_arg(arg, &data, state);
+	return SUCCESS;
 }

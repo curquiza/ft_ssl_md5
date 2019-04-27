@@ -31,7 +31,7 @@
 typedef struct	s_hash_algo
 {
 	char		name[10];
-	t_ex_ret	(*f)(t_hash *data, int alt);
+	void		(*f)(t_hash *data, int alt);
 	int			alt_param;
 }				t_hash_algo;
 
@@ -58,6 +58,7 @@ t_bool		opt_is_activated(uint32_t options_state, uint32_t opt_mask);
 void		activate_opt(t_state *state, uint32_t opt_mask);
 void		desactivate_opt(t_state *state, uint32_t opt_mask);
 void		exit_malloc_err(void);
+void		exit_malloc_err_with_clean(t_hash *data);
 
 /*
 ** Main functions
@@ -65,10 +66,10 @@ void		exit_malloc_err(void);
 void		first_init(t_hash_algo *algo_tab, t_state *state);
 t_ex_ret	get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab);
 
-t_ex_ret	apply_option(char *arg, char *next_arg, t_state *state);
 t_ex_ret	apply_file(char *arg, t_state *state);
-t_ex_ret	apply_stdin(t_state *state);
-t_ex_ret	apply_hash_algo_for_arg(char *arg, t_hash *data, t_state *state);
+void		apply_option(char *arg, char *next_arg, t_state *state);
+void		apply_stdin(t_state *state);
+void		apply_hash_algo_for_arg(char *arg, t_hash *data, t_state *state);
 
 void		display_digest(char *filename, t_hash *data, t_state *state);
 void		clean_hash_data(t_hash *data);

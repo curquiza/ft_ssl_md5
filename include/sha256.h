@@ -55,11 +55,11 @@ uint32_t	g_k_sha256[SHA256_CHUNK_BYTES];
 /*
 ** init
 */
-t_ex_ret	message_padding_sha256(t_hash *data);
+void		message_padding_sha256(t_hash *data);
 
 /*
 ** algo
 */
-t_ex_ret	fill_sha256_digest(t_hash *data, int alt);
+void		fill_sha256_digest(t_hash *data, int alt);
 
 #endif

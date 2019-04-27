@@ -21,7 +21,7 @@ static void	run_one_chunk(uint32_t words[MD5_WORD_NB], t_md5_incr *rslt, t_md5_c
 	while (i < MD5_CHUNK_BYTES)
 	{
 		/* ft_printf("START i = %d \t A = %u, B = %u, C = %u, D = %u\n", i, var.a, var.b, var.c, var.d); //DEBUG */
-		f = cst[i].func(var.b, var.c, var.d); 
+		f = cst[i].func(var.b, var.c, var.d);
 		/* ft_printf("first step f = %u\n", f); //DEBUG */
 		f += var.a + cst[i].radian + words[cst[i].word_index];
 		/* ft_printf("words[%d] = %u\n", data->cst[i].word_index, words[data->cst[i].word_index]); //DEBUG */
@@ -57,21 +57,20 @@ static void		fill_words(uint32_t words[MD5_WORD_NB], uint32_t i, t_hash *data)
 	}
 }
 
-static t_ex_ret	fill_digest(t_hash *data, t_md5_incr *rslt)
+static void	fill_digest(t_hash *data, t_md5_incr *rslt)
 {
 	size_t	sizeof_uint32;
 
 	if (!(data->digest = ft_memalloc(MD5_DIGEST_BYTES)))
-		return (FAILURE);
+		exit_malloc_err_with_clean(data);
 	sizeof_uint32 = sizeof(uint32_t);
 	ft_memmove(data->digest, &rslt->a, sizeof_uint32);
 	ft_memmove(data->digest + sizeof_uint32, &rslt->b, sizeof_uint32);
 	ft_memmove(data->digest + 2 * sizeof_uint32, &rslt->c, sizeof_uint32);
 	ft_memmove(data->digest + 3 * sizeof_uint32, &rslt->d, sizeof_uint32);
-	return (SUCCESS);
 }
 
-static t_ex_ret	run_md5_algo(t_hash *data, t_md5_const *cst)
+static void	run_md5_algo(t_hash *data, t_md5_const *cst)
 {
 	uint32_t	i;
 	uint32_t	words[MD5_WORD_NB];
@@ -89,18 +88,17 @@ static t_ex_ret	run_md5_algo(t_hash *data, t_md5_const *cst)
 		run_one_chunk(words, &rslt, cst);
 		i++;
 	}
-	return (fill_digest(data, &rslt));
+	fill_digest(data, &rslt);
 }
 
-t_ex_ret	fill_md5_digest(t_hash *data, int alt)
+void	fill_md5_digest(t_hash *data, int alt)
 {
 	(void)alt;
 	t_md5_const		cst[MD5_CHUNK_BYTES];
 	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
 	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
 	data->digest_len = MD5_DIGEST_BYTES;
-	if (message_padding_md5(data) == FAILURE)
-		return (FAILURE);
+	message_padding_md5(data);
 	fill_algo_constants_md5(cst);
-	return (run_md5_algo(data, cst));
+	run_md5_algo(data, cst);
 }

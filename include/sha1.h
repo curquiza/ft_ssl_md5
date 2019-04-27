@@ -41,12 +41,12 @@ typedef struct		s_sha1_incr
 /*
 ** init
 */
-t_ex_ret	message_padding_sha1(t_hash *data);
-void		fill_algo_constants_sha1(t_sha1_const *cst);
+void	message_padding_sha1(t_hash *data);
+void	fill_algo_constants_sha1(t_sha1_const *cst);
 
 /*
 ** algo
 */
-t_ex_ret	fill_sha1_digest(t_hash *data, int alt);
+void	fill_sha1_digest(t_hash *data, int alt);
 
 #endif

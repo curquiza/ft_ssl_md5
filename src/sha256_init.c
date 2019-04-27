@@ -15,7 +15,7 @@ static void	padd_with_msg_size(t_hash *data, uint64_t *n)
 	}
 }
 
-t_ex_ret	message_padding_sha256(t_hash *data)
+void	message_padding_sha256(t_hash *data)
 {
 	size_t		tmp_len;
 	uint64_t	msg_len_bits;
@@ -27,12 +27,11 @@ t_ex_ret	message_padding_sha256(t_hash *data)
 		data->padded_msg_len = (tmp_len / (SHA256_CHUNK_BYTES) + 1)
 					* (SHA256_CHUNK_BYTES);
 	if (!(data->padded_msg = (t_byte *)ft_memalloc(data->padded_msg_len)))
-		return (FAILURE);
+		exit_malloc_err_with_clean(data);
 	/* ft_printf("padded_msg len = %d = 0x%x\n", data->padded_msg_len, data->padded_msg_len); //DEBUG */
 	ft_memmove(data->padded_msg, data->msg, data->msg_len);
 	data->padded_msg[data->msg_len] = (t_byte)(1 << 7);
 	msg_len_bits = 8 * data->msg_len;
 	padd_with_msg_size(data, &msg_len_bits);
 	/* uint32_display(data->padded_msg, data->padded_msg_len); //DEBUG */
-	return (SUCCESS);
 }

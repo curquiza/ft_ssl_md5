@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static void		init_one_func(t_hash_algo *tab, char *name, t_ex_ret (*f)(t_hash *data, int alt), int alt_param)
+static void		init_one_func(t_hash_algo *tab, char *name, void (*f)(t_hash *data, int alt), int alt_param)
 {
 	ft_strcpy(tab->name, name);
 	tab->f = f;

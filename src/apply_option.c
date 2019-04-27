@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static t_ex_ret	apply_option_s(char *arg, char *next_arg, t_state *state)
+static void	apply_option_s(char *arg, char *next_arg, t_state *state)
 {
 	t_hash	data;
 	char	*s_arg;
@@ -22,10 +22,10 @@ static t_ex_ret	apply_option_s(char *arg, char *next_arg, t_state *state)
 	if (!(data.msg = (t_byte *)strdup(s_arg)))
 		exit_malloc_err();
 	data.msg_len = ft_strlen(s_arg);
-	return apply_hash_algo_for_arg(s_arg, &data, state);
+	apply_hash_algo_for_arg(s_arg, &data, state);
 }
 
-t_ex_ret	apply_option(char *arg, char *next_arg, t_state *state)
+void	apply_option(char *arg, char *next_arg, t_state *state)
 {
 	arg++;
 	while (*arg)
@@ -38,8 +38,7 @@ t_ex_ret	apply_option(char *arg, char *next_arg, t_state *state)
 		if (*arg == OPTION_P_CHAR)
 		{
 			activate_opt(state, OPTION_P);
-			if (apply_stdin(state) == FAILURE)
-				return FAILURE;
+			apply_stdin(state);
 		}
 		else if (*arg == OPTION_Q_CHAR)
 			activate_opt(state, OPTION_Q);
@@ -48,8 +47,7 @@ t_ex_ret	apply_option(char *arg, char *next_arg, t_state *state)
 		else if (*arg == OPTION_S_CHAR)
 		{
 			activate_opt(state, OPTION_S);
-			if (apply_option_s(arg, next_arg, state) == FAILURE)
-				return FAILURE;
+			apply_option_s(arg, next_arg, state);
 			desactivate_opt(state, OPTION_S);
 		}
 		else
@@ -59,5 +57,4 @@ t_ex_ret	apply_option(char *arg, char *next_arg, t_state *state)
 		}
 		arg++;
 	}
-	return SUCCESS;
 }
