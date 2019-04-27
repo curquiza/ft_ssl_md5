@@ -70,8 +70,10 @@ t_ex_ret	apply_file(char *arg, t_state *state);
 void		apply_option(char *arg, char *next_arg, t_state *state);
 void		apply_stdin(t_state *state);
 void		apply_hash_algo_for_arg(char *arg, t_hash *data, t_state *state);
+t_ex_ret	run_ft_ssl(char **argv, t_state *state);
 
 void		display_digest(char *filename, t_hash *data, t_state *state);
+
 void		clean_hash_data(t_hash *data);
 
 #endif
