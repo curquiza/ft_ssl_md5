@@ -43,7 +43,7 @@ static t_ex_ret	get_message(char *filename, t_hash *data)
 	int		fd;
 
 	if ((fd = open(filename, O_RDONLY, 0)) == -1)
-        return ft_ret_err2(filename, strerror(errno));
+		return ft_ret_err2(filename, strerror(errno));
 	if (read_message_from_file(fd, data) == FAILURE)
 	{
 		close_fd(fd);
@@ -52,12 +52,12 @@ static t_ex_ret	get_message(char *filename, t_hash *data)
 	return (close_fd(fd));
 }
 
-t_ex_ret    apply_file(char *arg, t_state *state)
+t_ex_ret	apply_file(char *arg, t_state *state)
 {
-    t_hash  data;
+	t_hash	data;
 
-    ft_bzero(&data, sizeof(data));
-    if (get_message(arg, &data) == FAILURE)
-        return FAILURE;
+	ft_bzero(&data, sizeof(data));
+	if (get_message(arg, &data) == FAILURE)
+	return FAILURE;
 	return apply_hash_algo_for_arg(arg, &data, state);
 }
