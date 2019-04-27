@@ -49,13 +49,11 @@ static void	fill_words(uint32_t words[SHA1_WORD_NB], uint32_t i, t_hash *data)
 	{
 		words[incr_word] = ptr_to_uint32(data->padded_msg + incr_msg);
 		incr_msg += sizeof(uint32_t);
-		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
 		incr_word++;
 	}
 	while (incr_word < SHA1_WORD_NB)
 	{
 		words[incr_word] = get_word(words, incr_word);
-		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
 		incr_word++;
 	}
 }
@@ -141,8 +139,6 @@ void	fill_sha1_digest(t_hash *data, int alt)
 {
 	(void)alt;
 	t_sha1_const	cst[SHA1_WORD_NB];
-	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
-	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
 	data->digest_len = SHA1_DIGEST_BYTES;
 	message_padding_sha1(data);
 	fill_algo_constants_sha1(cst);

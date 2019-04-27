@@ -210,7 +210,6 @@ static void	run_sha512_algo(t_hash *data, int alt)
 	i = 0;
 	while ((uint64_t)i < (data->padded_msg_len / (SHA512_CHUNK_BYTES)))
 	{
-		/* ft_printf("run one chunk !\n"); //DEBUG */
 		fill_words(words, i, data);
 		run_one_chunk(words, &rslt);
 		i++;
@@ -220,8 +219,6 @@ static void	run_sha512_algo(t_hash *data, int alt)
 
 void	fill_sha512_digest(t_hash *data, int alt)
 {
-	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
-	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
 	if (alt == 0)
 		data->digest_len = SHA512_DIGEST_BYTES;
 	else

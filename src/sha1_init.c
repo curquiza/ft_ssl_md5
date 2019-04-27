@@ -1,20 +1,5 @@
 #include "ft_ssl.h"
 
-// DEBUG
-/* void		uint32_display(t_byte *s, size_t len) */
-/* { */
-/* 	size_t		i; */
-/*  */
-/* 	i = 0; */
-/* 	while (i < len) */
-/* 	{ */
-/* 		ft_printf("%u ", (t_byte)s[i]); */
-/* 		i++; */
-/* 	} */
-/* 	write(1, "\n", 1); */
-/* } */
-
-
 static void	padd_with_msg_size(t_hash *data, uint64_t *n)
 {
 	int		i;
@@ -47,7 +32,6 @@ void	message_padding_sha1(t_hash *data)
 	data->padded_msg[data->msg_len] = (t_byte)(1 << 7);
 	msg_len_bits = 8 * data->msg_len;
 	padd_with_msg_size(data, &msg_len_bits);
-	/* uint32_display(data->padded_msg, data->padded_msg_len); //DEBUG */
 }
 
 static uint32_t	f_function_0_19(uint32_t b, uint32_t c, uint32_t d)

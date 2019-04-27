@@ -18,20 +18,6 @@ uint32_t g_k_sha256[SHA256_CHUNK_BYTES] = {
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-// DEBUG
-/* void		uint32_display(t_byte *s, size_t len) */
-/* { */
-/* 	size_t		i; */
-/*  */
-/* 	i = 0; */
-/* 	while (i < len) */
-/* 	{ */
-/* 		ft_printf("%u ", (t_byte)s[i]); */
-/* 		i++; */
-/* 	} */
-/* 	write(1, "\n", 1); */
-/* } */
-
 static uint32_t	right_rotate(uint32_t x, uint32_t n)
 {
 	return ((x >> n) | (x << (32 - n)));
@@ -93,13 +79,11 @@ static void	fill_words(uint32_t words[SHA256_WORD_NB], uint32_t i, t_hash *data)
 	{
 		words[incr_word] = ptr_to_uint32(data->padded_msg + incr_msg);
 		incr_msg += sizeof(uint32_t);
-		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
 		incr_word++;
 	}
 	while (incr_word < SHA256_WORD_NB)
 	{
 		words[incr_word] = get_word(words, incr_word);
-		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
 		incr_word++;
 	}
 }
@@ -204,7 +188,6 @@ static void	run_sha256_algo(t_hash *data, int alt)
 	i = 0;
 	while (i < (data->padded_msg_len / (SHA256_CHUNK_BYTES)))
 	{
-		/* ft_printf("run one chunk !\n"); //DEBUG */
 		fill_words(words, i, data);
 		run_one_chunk(words, &rslt);
 		i++;
@@ -214,8 +197,6 @@ static void	run_sha256_algo(t_hash *data, int alt)
 
 void	fill_sha256_digest(t_hash *data, int alt)
 {
-	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
-	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
 	if (alt == 0)
 		data->digest_len = SHA256_DIGEST_BYTES;
 	else

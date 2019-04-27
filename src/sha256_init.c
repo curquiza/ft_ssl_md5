@@ -28,10 +28,8 @@ void	message_padding_sha256(t_hash *data)
 					* (SHA256_CHUNK_BYTES);
 	if (!(data->padded_msg = (t_byte *)ft_memalloc(data->padded_msg_len)))
 		exit_malloc_err_with_clean(data);
-	/* ft_printf("padded_msg len = %d = 0x%x\n", data->padded_msg_len, data->padded_msg_len); //DEBUG */
 	ft_memmove(data->padded_msg, data->msg, data->msg_len);
 	data->padded_msg[data->msg_len] = (t_byte)(1 << 7);
 	msg_len_bits = 8 * data->msg_len;
 	padd_with_msg_size(data, &msg_len_bits);
-	/* uint32_display(data->padded_msg, data->padded_msg_len); //DEBUG */
 }
