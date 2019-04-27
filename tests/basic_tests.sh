@@ -30,7 +30,7 @@ print_in_trace() {
 # usage : run_md5_test "str"
 run_md5_test() {
     local real_md5="$(md5 "$1" | awk '{print $4}')"
-    local my_md5="$("$ft_ssl_bin" "md5" "$1")"
+    local my_md5="$("$ft_ssl_bin" "md5" "-q" "$1")"
     if [[ "$real_md5" == "$my_md5" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > md5" "OK"
     else
@@ -42,7 +42,7 @@ run_md5_test() {
 # usage : run_sha256_test "str"
 run_sha256_test() {
     local real_sha256="$(openssl sha256 "$1" | awk '{print $2}')"
-    local my_sha256="$("$ft_ssl_bin" "sha256" "$1")"
+    local my_sha256="$("$ft_ssl_bin" "sha256" "-q" "$1")"
     if [[ "$real_sha256" == "$my_sha256" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > sha256" "OK"
     else
@@ -54,7 +54,7 @@ run_sha256_test() {
 # usage : run_sha224_test "str"
 run_sha224_test() {
     local real_sha224="$(openssl sha224 "$1" | awk '{print $2}')"
-    local my_sha224="$("$ft_ssl_bin" "sha224" "$1")"
+    local my_sha224="$("$ft_ssl_bin" "sha224" "-q" "$1")"
     if [[ "$real_sha224" == "$my_sha224" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > sha224" "OK"
     else
@@ -66,7 +66,7 @@ run_sha224_test() {
 # usage : run_sha256_test "str"
 run_sha512_test() {
     local real_sha512="$(openssl sha512 "$1" | awk '{print $2}')"
-    local my_sha512="$("$ft_ssl_bin" "sha512" "$1")"
+    local my_sha512="$("$ft_ssl_bin" "sha512" "-q" "$1")"
     if [[ "$real_sha512" == "$my_sha512" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > sha512" "OK"
     else
@@ -78,7 +78,7 @@ run_sha512_test() {
 # usage : run_sha256_test "str"
 run_sha384_test() {
     local real_sha384="$(openssl sha384 "$1" | awk '{print $2}')"
-    local my_sha384="$("$ft_ssl_bin" "sha384" "$1")"
+    local my_sha384="$("$ft_ssl_bin" "sha384" "-q" "$1")"
     if [[ "$real_sha384" == "$my_sha384" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > sha384" "OK"
     else
@@ -90,7 +90,7 @@ run_sha384_test() {
 # usage : run_sha256_test "str"
 run_sha1_test() {
     local real_sha1="$(openssl sha1 "$1" | awk '{print $2}')"
-    local my_sha1="$("$ft_ssl_bin" "sha1" "$1")"
+    local my_sha1="$("$ft_ssl_bin" "sha1" "-q" "$1")"
     if [[ "$real_sha1" == "$my_sha1" ]]; then
         printf "%-15s$GREEN%s$DEF\n" "  > sha1" "OK"
     else
