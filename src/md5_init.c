@@ -15,7 +15,7 @@ static void	padd_with_msg_size(t_hash *data, uint64_t *n)
 	}
 }
 
-t_ex_ret	message_padding_md5(t_hash *data)
+void	message_padding_md5(t_hash *data)
 {
 	size_t		tmp_len;
 	uint64_t	msg_len_bits;
@@ -27,22 +27,15 @@ t_ex_ret	message_padding_md5(t_hash *data)
 		data->padded_msg_len = (tmp_len / (MD5_CHUNK_BYTES) + 1)
 					* (MD5_CHUNK_BYTES);
 	if (!(data->padded_msg = (t_byte *)ft_memalloc(data->padded_msg_len)))
-		return (FAILURE);
-	/* ft_printf("padded_msg len = %d = 0x%x\n", data->padded_msg_len, data->padded_msg_len); //DEBUG */
+		exit_malloc_err_with_clean(data);
 	ft_memmove(data->padded_msg, data->msg, data->msg_len);
 	data->padded_msg[data->msg_len] = (t_byte)(1 << 7);
 	msg_len_bits = 8 * data->msg_len;
 	padd_with_msg_size(data, &msg_len_bits);
-	/* hex_display(data->padded_msg, data->padded_msg_len); //DEBUG */
-	return (SUCCESS);
 }
 
 static uint32_t	f_function(uint32_t b, uint32_t c, uint32_t d)
 {
-	/* ft_printf("b = %u\n", b); //DEBUG */
-	/* ft_printf("c = %u\n", c); //DEBUG */
-	/* ft_printf("d = %u\n", d); //DEBUG */
-	/* printf("(b & c) | (~b & d)  = %u\n", (b & c) | (~b & d)); //DEBUG */
 	return ((b & c) | ((~b) & d));
 }
 
@@ -91,11 +84,8 @@ static void		fill_constants(int start, t_md5_const *cst,
 	i = start;
 	while (i <= (start + 15))
 	{
-		/* ft_printf("i = %d\n", i); //DEBUG */
 		cst[i].shift = shift[i % 4];
-		/* ft_printf("cst[%d].shift = %d\n", i, data->cst[i].shift); //DEBUG */
 		cst[i].radian = get_radian_const(i);
-		/* ft_printf("cst[%d].sin = %u\n", i, data->cst[i].radian); //DEBUG */
 		cst[i].func = func;
 		cst[i].word_index = get_word_index(i);
 		i++;

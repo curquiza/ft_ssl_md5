@@ -49,13 +49,11 @@ static void	fill_words(uint32_t words[SHA1_WORD_NB], uint32_t i, t_hash *data)
 	{
 		words[incr_word] = ptr_to_uint32(data->padded_msg + incr_msg);
 		incr_msg += sizeof(uint32_t);
-		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
 		incr_word++;
 	}
 	while (incr_word < SHA1_WORD_NB)
 	{
 		words[incr_word] = get_word(words, incr_word);
-		/* printf("word_in_loop[%d] = %u\n", incr_word, words[incr_word]); //DEBUG */
 		incr_word++;
 	}
 }
@@ -106,22 +104,21 @@ static void	*ft_memcpy_back(t_byte *dst, const void *src, size_t n)
 	return (dst);
 }
 
-static t_ex_ret	fill_digest(t_hash *data, t_sha1_incr *rslt)
+static void	fill_digest(t_hash *data, t_sha1_incr *rslt)
 {
 	size_t	sizeof_uint32;
 
 	if (!(data->digest = ft_memalloc(SHA1_DIGEST_BYTES)))
-		return (FAILURE);
+		exit_malloc_err_with_clean(data);
 	sizeof_uint32 = sizeof(uint32_t);
 	ft_memcpy_back(data->digest, &rslt->a, sizeof_uint32);
 	ft_memcpy_back(data->digest + sizeof_uint32, &rslt->b, sizeof_uint32);
 	ft_memcpy_back(data->digest + 2 * sizeof_uint32, &rslt->c, sizeof_uint32);
 	ft_memcpy_back(data->digest + 3 * sizeof_uint32, &rslt->d, sizeof_uint32);
 	ft_memcpy_back(data->digest + 4 * sizeof_uint32, &rslt->e, sizeof_uint32);
-	return (SUCCESS);
 }
 
-static t_ex_ret	run_sha1_algo(t_hash *data, t_sha1_const *cst)
+static void	run_sha1_algo(t_hash *data, t_sha1_const *cst)
 {
 	uint32_t	i;
 	uint32_t	words[SHA1_WORD_NB];
@@ -135,18 +132,15 @@ static t_ex_ret	run_sha1_algo(t_hash *data, t_sha1_const *cst)
 		run_one_chunk(words, &rslt, cst);
 		i++;
 	}
-	return (fill_digest(data, &rslt));
+	fill_digest(data, &rslt);
 }
 
-t_ex_ret	fill_sha1_digest(t_hash *data, int alt)
+void	fill_sha1_digest(t_hash *data, int alt)
 {
 	(void)alt;
 	t_sha1_const	cst[SHA1_WORD_NB];
-	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
-	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
 	data->digest_len = SHA1_DIGEST_BYTES;
-	if (message_padding_sha1(data) == FAILURE)
-		return (FAILURE);
+	message_padding_sha1(data);
 	fill_algo_constants_sha1(cst);
-	return (run_sha1_algo(data, cst));
+	run_sha1_algo(data, cst);
 }

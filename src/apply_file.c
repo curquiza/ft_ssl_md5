@@ -21,12 +21,12 @@ static t_ex_ret	read_message_from_file(int fd, t_hash *data)
 	while ((read_ret = read(fd, buff, READ_BUFF_LEN)) != 0)
 	{
 		if (read_ret == -1)
-			return (FAILURE);
+			ft_ret_err(READ_ERR);
 		tmp = data->msg;
 		if (!(data->msg = (t_byte *)ft_memalloc(data->msg_len + read_ret)))
 		{
 			free(tmp);
-			return (FAILURE);
+			exit_malloc_err();
 		}
 		if (tmp)
 			ft_memmove(data->msg, tmp, i);
@@ -43,7 +43,7 @@ static t_ex_ret	get_message(char *filename, t_hash *data)
 	int		fd;
 
 	if ((fd = open(filename, O_RDONLY, 0)) == -1)
-        return ft_ret_err2(filename, strerror(errno));
+		return ft_ret_err2(filename, strerror(errno));
 	if (read_message_from_file(fd, data) == FAILURE)
 	{
 		close_fd(fd);
@@ -52,12 +52,13 @@ static t_ex_ret	get_message(char *filename, t_hash *data)
 	return (close_fd(fd));
 }
 
-t_ex_ret    apply_file(char *arg, t_state *state)
+t_ex_ret	apply_file(char *arg, t_state *state)
 {
-    t_hash  data;
+	t_hash	data;
 
-    ft_bzero(&data, sizeof(data));
-    if (get_message(arg, &data) == FAILURE)
-        return FAILURE;
-	return apply_hash_algo_for_arg(arg, &data, state);
+	ft_bzero(&data, sizeof(data));
+	if (get_message(arg, &data) == FAILURE)
+		return FAILURE;
+	apply_hash_algo_for_arg(arg, &data, state);
+	return SUCCESS;
 }

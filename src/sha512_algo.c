@@ -178,12 +178,12 @@ static void	*ft_memcpy_back(t_byte *dst, const void *src, size_t n)
 	return (dst);
 }
 
-static t_ex_ret	fill_digest(t_hash *data, t_sha512_incr *rslt, int alt)
+static void	fill_digest(t_hash *data, t_sha512_incr *rslt, int alt)
 {
 	size_t	sizeof_uint64;
 
 	if (!(data->digest = ft_memalloc(data->digest_len)))
-		return (FAILURE);
+		exit_malloc_err_with_clean(data);
 	sizeof_uint64 = sizeof(uint64_t);
 	ft_memcpy_back(data->digest, &rslt->a, sizeof_uint64);
 	ft_memcpy_back(data->digest + sizeof_uint64, &rslt->b, sizeof_uint64);
@@ -198,10 +198,9 @@ static t_ex_ret	fill_digest(t_hash *data, t_sha512_incr *rslt, int alt)
 		ft_memcpy_back(data->digest + 7 * sizeof_uint64, &rslt->h,
 			sizeof_uint64);
 	}
-	return (SUCCESS);
 }
 
-static t_ex_ret	run_sha512_algo(t_hash *data, int alt)
+static void	run_sha512_algo(t_hash *data, int alt)
 {
 	int			i;
 	uint64_t	words[SHA512_WORD_NB];
@@ -211,23 +210,19 @@ static t_ex_ret	run_sha512_algo(t_hash *data, int alt)
 	i = 0;
 	while ((uint64_t)i < (data->padded_msg_len / (SHA512_CHUNK_BYTES)))
 	{
-		/* ft_printf("run one chunk !\n"); //DEBUG */
 		fill_words(words, i, data);
 		run_one_chunk(words, &rslt);
 		i++;
 	}
-	return (fill_digest(data, &rslt, alt));
+	fill_digest(data, &rslt, alt);
 }
 
-t_ex_ret	fill_sha512_digest(t_hash *data, int alt)
+void	fill_sha512_digest(t_hash *data, int alt)
 {
-	/* ft_printf("message = \"%s\"\n", data->msg); // DEBUG */
-	/* ft_printf("message bits = %d = 0x%x\n", data->msg_len * 8, 8 * data->msg_len); // DEBUG */
 	if (alt == 0)
 		data->digest_len = SHA512_DIGEST_BYTES;
 	else
 		data->digest_len = SHA384_DIGEST_BYTES;
-	if (message_padding_sha512(data) == FAILURE)
-		return (FAILURE);
-	return (run_sha512_algo(data, alt));
+	message_padding_sha512(data);
+	run_sha512_algo(data, alt);
 }

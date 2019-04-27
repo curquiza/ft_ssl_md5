@@ -11,7 +11,7 @@ typedef struct		s_hash
 	size_t		msg_len;
 	size_t		padded_msg_len;
 	size_t		digest_len;
-}	                t_hash;
+}					t_hash;
 
 /*
 ** Maths

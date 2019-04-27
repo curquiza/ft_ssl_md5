@@ -18,7 +18,7 @@ void    display_digest(char *arg, t_hash *data, t_state *state)
     {
         algo_name = state->hash_algo->name;
         ft_strupper(algo_name);
-        if (opt_is_activated(state->options, OPTION_S))    
+        if (opt_is_activated(state->options, OPTION_S))
             ft_printf("%s (\"%s\") = ", algo_name, arg);
         else
             ft_printf("%s (%s) = ", algo_name, arg);
