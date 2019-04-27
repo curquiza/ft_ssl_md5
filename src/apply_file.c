@@ -21,7 +21,7 @@ static t_ex_ret	read_message_from_file(int fd, t_hash *data)
 	while ((read_ret = read(fd, buff, READ_BUFF_LEN)) != 0)
 	{
 		if (read_ret == -1)
-			return (FAILURE);
+			ft_ret_err(READ_ERR);
 		tmp = data->msg;
 		if (!(data->msg = (t_byte *)ft_memalloc(data->msg_len + read_ret)))
 		{

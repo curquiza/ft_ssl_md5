@@ -16,6 +16,7 @@
 # define HASH_FUNC_TAB_SIZE	6
 
 # define USAGE_INDENT	"  "
+# define READ_ERR		"Reading file error"
 # define HASH_ALGO_ERR	"No available hash algorithm found"
 # define OPT_S_ERR		"Option -s requires an argument"
 
