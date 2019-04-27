@@ -50,7 +50,8 @@ static t_ex_ret		run_ft_ssl(char **argv, t_state *state)
 			state->opt_s = FALSE;
 			argv++;
 		}
-		argv++;
+		if (*argv)
+			argv++;
 	}
 	if (ret == SUCCESS && need_last_stdin_reading(state))
 		apply_stdin(state);

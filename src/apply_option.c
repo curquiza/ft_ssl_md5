@@ -25,6 +25,30 @@ static void	apply_option_s(char *arg, char *next_arg, t_state *state)
 	apply_hash_algo_for_arg(s_arg, &data, state);
 }
 
+static void	switch_between_option(char *arg, char *next_arg, t_state *state)
+{
+	if (*arg == OPTION_P_CHAR)
+	{
+		activate_opt(state, OPTION_P);
+		apply_stdin(state);
+	}
+	else if (*arg == OPTION_Q_CHAR)
+		activate_opt(state, OPTION_Q);
+	else if (*arg == OPTION_R_CHAR)
+		activate_opt(state, OPTION_R);
+	else if (*arg == OPTION_S_CHAR)
+	{
+		activate_opt(state, OPTION_S);
+		apply_option_s(arg, next_arg, state);
+		desactivate_opt(state, OPTION_S);
+	}
+	else
+	{
+		ft_dprintf(2, "Error: %c: illegal option\n", *arg);
+		exit(FAILURE);
+	}
+}
+
 void	apply_option(char *arg, char *next_arg, t_state *state)
 {
 	arg++;
@@ -35,26 +59,7 @@ void	apply_option(char *arg, char *next_arg, t_state *state)
 			state->opt_s = FALSE;
 			break ;
 		}
-		if (*arg == OPTION_P_CHAR)
-		{
-			activate_opt(state, OPTION_P);
-			apply_stdin(state);
-		}
-		else if (*arg == OPTION_Q_CHAR)
-			activate_opt(state, OPTION_Q);
-		else if (*arg == OPTION_R_CHAR)
-			activate_opt(state, OPTION_R);
-		else if (*arg == OPTION_S_CHAR)
-		{
-			activate_opt(state, OPTION_S);
-			apply_option_s(arg, next_arg, state);
-			desactivate_opt(state, OPTION_S);
-		}
-		else
-		{
-			ft_dprintf(2, "Error: %c: illegal option\n", *arg);
-			exit(FAILURE);
-		}
+		switch_between_option(arg, next_arg, state);
 		arg++;
 	}
 }
