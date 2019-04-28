@@ -1,0 +1,15 @@
+Usage: ./ft_ssl [algo] [options] [args]
+
+Hash algorithms available:
+  md5
+  sha256
+  sha224
+  sha512
+  sha384
+  sha1
+
+Options available:
+  -p: echo STDIN to STDOUT and append the checksum to STDOUT
+  -q: quiet mode
+  -r: reverse the format of the output
+  -s: print the sum of the given string
