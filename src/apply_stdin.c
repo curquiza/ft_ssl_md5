@@ -8,10 +8,11 @@ static char	*get_stdin_input(void)
 
 	if (!(rslt = ft_strdup("")))
 		exit_malloc_err();
+	ft_bzero(&line, 10);
 	while (read(0, &line, 10) > 0)
 	{
 		tmp = rslt;
-		if (!(rslt = ft_strjoin(rslt, line)))
+		if (!(rslt = ft_strjoin(tmp, line)))
 		{
 			ft_strdel(&tmp);
 			exit_malloc_err();
