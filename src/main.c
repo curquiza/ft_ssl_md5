@@ -14,5 +14,5 @@ int				main(int argc, char **argv)
 }
 
 // TODO :
+// - faire de vraies fonctions sha224 et sha384
 // - resoudre pb lenteur read
-// - fix pb ouverture dossier
