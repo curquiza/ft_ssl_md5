@@ -17,10 +17,7 @@ void	*ft_memalloc(size_t size)
 	char	*mem;
 
 	if (!(mem = (char *)malloc(sizeof(*mem) * size)))
-	{
-		ft_putendl_fd("Malloc error", 2);
 		return (NULL);
-	}
 	while (size--)
 		mem[size] = 0;
 	return ((void *)mem);

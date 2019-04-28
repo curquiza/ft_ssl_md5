@@ -17,7 +17,7 @@ int		ft_conv_c(va_list arg, t_arg *current)
 	if (!ft_strcmp(current->modif, "l"))
 		return (ft_conv_bigc(arg, current));
 	if (!(current->rslt = ft_memalloc(1)))
-		ft_exit("Malloc error", 1);
+		ft_exit("ft_printf: Malloc error", 1);
 	current->rslt[0] = (unsigned char)va_arg(arg, int);
 	current->conv_len = 1;
 	ft_apply_padding(current);
