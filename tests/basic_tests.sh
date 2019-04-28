@@ -125,6 +125,7 @@ run_test "tests/inputs/hello"
 run_test "tests/inputs/coco.txt"
 run_test "tests/inputs/empty.txt"
 run_test "ft_ssl"
+# run_test "resources/ft_ssl_md5.en.pdf"
 
 
 # Test relou de parsing

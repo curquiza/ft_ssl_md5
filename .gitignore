@@ -5,3 +5,4 @@
 ft_ssl
 tests/trace.txt
 .vscode
+__pycache__
