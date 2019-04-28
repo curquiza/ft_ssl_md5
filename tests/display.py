@@ -17,7 +17,7 @@ class Display:
         print(Display.OK + str + Display.END)
 
     def print_title(title):
-        print('{:<30}'.format(title), end='', flush=True)
+        print('{:<80}'.format(title), end='', flush=True)
 
     def print_subtitle(subtitle):
         print(f'  > {subtitle}', flush=True)
