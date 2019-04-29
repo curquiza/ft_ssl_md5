@@ -25,10 +25,10 @@ class SubprocessParser:
     def print_failure_reasons(self):
         if (self.output_is_valid() == False):
             display.print_subtitle('output does not match')
-            print('my output :')
-            print(self.output)
-            print('expected output :')
-            print(self.expected_output)
+            print('  your output :')
+            print('  ' + self.output)
+            print('  expected output :')
+            print('  ' + self.expected_output)
         if (self.code_return_is_valid() == False):
             if (self.expect_error != 0):
                 display.print_subtitle('error expected, but your return code is 0')
