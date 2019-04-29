@@ -7,10 +7,10 @@ SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
 		md5_init.c \
 		md5_algo.c \
-		sha256_init.c \
-		sha256_algo.c \
-		sha512_init.c \
-		sha512_algo.c \
+		sha256_224_init.c \
+		sha256_224_algo.c \
+		sha512_384_init.c \
+		sha512_384_algo.c \
 		sha1_init.c \
 		sha1_algo.c \
 		conversion.c \
@@ -68,6 +68,8 @@ fclean : clean
 
 fclean_lib :
 	@make fclean -C $(LIBFT_DIR)
+
+run_all_tests: run_basic_tests run_main_tests
 
 run_basic_tests:
 	@sh tests/basic_tests.sh

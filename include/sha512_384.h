@@ -1,5 +1,5 @@
-#ifndef SHA512_H
-# define SHA512_H
+#ifndef SHA512_384_H
+# define SHA512_384_H
 
 #include "libft.h"
 
@@ -57,11 +57,12 @@ uint64_t	g_k_sha512[SHA512_CHUNK_BYTES];
 /*
 ** init
 */
-void		message_padding_sha512(t_hash *data);
+void		message_padding_sha512_384(t_hash *data);
 
 /*
 ** algo
 */
-void		fill_sha512_digest(t_hash *data, int alt);
+void		fill_sha512_digest(t_hash *data);
+void		fill_sha384_digest(t_hash *data);
 
 #endif

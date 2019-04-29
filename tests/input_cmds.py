@@ -45,7 +45,7 @@ INPUT_CMDS = [
     { 'cmd': './ft_ssl sha224 -s test_de_ouf',                                  'error': False, 'output': 'sha224_opt_s_1' },
     { 'cmd': 'echo bouh | ./ft_ssl sha224 -p',                                  'error': False, 'output': 'sha224_opt_p_1' },
 
-    { 'cmd': './ft_ssl sha512 include/ft_ssl.h',                                'error': False,  'output': 'sha512_basic_1' },
+    { 'cmd': './ft_ssl sha512 tests/inputs/hello',                              'error': False,  'output': 'sha512_basic_1' },
     { 'cmd': './ft_ssl sha512 -rrrrr README.md',                                'error': False,  'output': 'sha512_opt_qr_1' },
     { 'cmd': './ft_ssl sha512 -rrrqrr README.md',                               'error': False,  'output': 'sha512_opt_qr_2' },
     { 'cmd': './ft_ssl sha512 -s "toto" -r README.md -s README.md',             'error': True,   'output': 'sha512_multi_1' },

@@ -1,5 +1,5 @@
-#ifndef SHA256_H
-# define SHA256_H
+#ifndef SHA256_224_H
+# define SHA256_224_H
 
 #include "libft.h"
 
@@ -55,11 +55,12 @@ uint32_t	g_k_sha256[SHA256_CHUNK_BYTES];
 /*
 ** init
 */
-void		message_padding_sha256(t_hash *data);
+void		message_padding_sha256_224(t_hash *data);
 
 /*
 ** algo
 */
-void		fill_sha256_digest(t_hash *data, int alt);
+void		fill_sha256_digest(t_hash *data);
+void		fill_sha224_digest(t_hash *data);
 
 #endif

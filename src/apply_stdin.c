@@ -35,7 +35,7 @@ void	apply_stdin(t_state *state)
 		exit_malloc_err();
 	data.msg_len = ft_strlen(rslt);
 	ft_strdel(&rslt);
-	state->hash_algo->f(&data, state->hash_algo->alt_param);
+	state->hash_algo->f(&data);
 	if (opt_is_activated(state->options, OPTION_P))
 		ft_putstr((char *)data.msg);
 	hex_display_endl(data.digest, data.digest_len);

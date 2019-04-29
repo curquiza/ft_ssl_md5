@@ -46,6 +46,6 @@ void	fill_algo_constants_md5(t_md5_const *cst);
 /*
 ** algo
 */
-void	fill_md5_digest(t_hash *data, int alt);
+void	fill_md5_digest(t_hash *data);
 
 #endif

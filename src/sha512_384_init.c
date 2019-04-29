@@ -15,7 +15,7 @@ static void	padd_with_msg_size(t_hash *data, t_uint128 *n)
 	}
 }
 
-void	message_padding_sha512(t_hash *data)
+void	message_padding_sha512_384(t_hash *data)
 {
 	size_t		tmp_len;
 	t_uint128	msg_len_bits;

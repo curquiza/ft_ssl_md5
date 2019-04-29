@@ -8,8 +8,8 @@
 # include "libft.h"
 # include "basics_algo.h"
 # include "md5.h"
-# include "sha256.h"
-# include "sha512.h"
+# include "sha256_224.h"
+# include "sha512_384.h"
 # include "sha1.h"
 
 # define READ_BUFF_LEN		1000
@@ -32,8 +32,7 @@
 typedef struct	s_hash_algo
 {
 	char		name[10];
-	void		(*f)(t_hash *data, int alt);
-	int			alt_param;
+	void		(*f)(t_hash *data);
 }				t_hash_algo;
 
 typedef struct			s_state

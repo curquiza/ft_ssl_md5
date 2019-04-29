@@ -80,9 +80,8 @@ static void	run_md5_algo(t_hash *data, t_md5_const *cst)
 	fill_digest(data, &rslt);
 }
 
-void	fill_md5_digest(t_hash *data, int alt)
+void	fill_md5_digest(t_hash *data)
 {
-	(void)alt;
 	t_md5_const		cst[MD5_CHUNK_BYTES];
 	data->digest_len = MD5_DIGEST_BYTES;
 	message_padding_md5(data);
