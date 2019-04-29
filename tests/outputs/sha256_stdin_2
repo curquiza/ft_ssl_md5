@@ -1,2 +1,2 @@
-SHA256 (src/main.c) = 6fa8b84cec53ff1be1d42b39a836941ee88309139c3f3f41e0d532344a9c4dd1
+SHA256 (tests/inputs/coco.txt) = 4f682b71153ffa91e608445d7ea1257e2076d0d95eab6336cd1aa94b49680f11
 Error: -p: No such file or directory
