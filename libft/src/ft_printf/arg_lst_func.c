@@ -22,7 +22,7 @@ t_arg	*ft_new_arglst(t_arg **alst)
 	if (*alst == NULL)
 	{
 		if (!(*alst = ft_memalloc(sizeof(t_arg))))
-			ft_exit("Malloc error", 1);
+			ft_exit("ft_printf: Malloc error", 1);
 		return (*alst);
 	}
 	else
@@ -30,7 +30,7 @@ t_arg	*ft_new_arglst(t_arg **alst)
 		while (tmp->next)
 			tmp = tmp->next;
 		if (!(tmp->next = ft_memalloc(sizeof(t_arg))))
-			ft_exit("Malloc error", 1);
+			ft_exit("ft_printf: Malloc error", 1);
 		return (tmp->next);
 	}
 }

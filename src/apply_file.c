@@ -10,7 +10,7 @@ static t_ex_ret	close_fd(int fd)
 	return (SUCCESS);
 }
 
-static t_ex_ret	read_message_from_file(int fd, t_hash *data)
+static t_ex_ret	read_message_from_file(int fd, char *filename, t_hash *data)
 {
 	int		i;
 	int		read_ret;
@@ -21,7 +21,7 @@ static t_ex_ret	read_message_from_file(int fd, t_hash *data)
 	while ((read_ret = read(fd, buff, READ_BUFF_LEN)) != 0)
 	{
 		if (read_ret == -1)
-			ft_ret_err(READ_ERR);
+			return ft_ret_err2(filename, strerror(errno));
 		tmp = data->msg;
 		if (!(data->msg = (t_byte *)ft_memalloc(data->msg_len + read_ret)))
 		{
@@ -44,7 +44,7 @@ static t_ex_ret	get_message(char *filename, t_hash *data)
 
 	if ((fd = open(filename, O_RDONLY, 0)) == -1)
 		return ft_ret_err2(filename, strerror(errno));
-	if (read_message_from_file(fd, data) == FAILURE)
+	if (read_message_from_file(fd, filename, data) == FAILURE)
 	{
 		close_fd(fd);
 		return (FAILURE);

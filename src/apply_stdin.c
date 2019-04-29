@@ -2,22 +2,23 @@
 
 static char	*get_stdin_input(void)
 {
-	char	line[10];
+	char	line[11];
 	char	*rslt;
 	char	*tmp;
 
 	if (!(rslt = ft_strdup("")))
 		exit_malloc_err();
-	while (read(0, &line, 10) > 0)
+	ft_bzero(line, 11);
+	while (read(0, line, 10) > 0)
 	{
 		tmp = rslt;
-		if (!(rslt = ft_strjoin(rslt, line)))
+		if (!(rslt = ft_strjoin(tmp, line)))
 		{
 			ft_strdel(&tmp);
 			exit_malloc_err();
 		}
 		ft_strdel(&tmp);
-		ft_bzero(&line, 10);
+		ft_bzero(line, 11);
 	}
 	close(0);
 	return (rslt);

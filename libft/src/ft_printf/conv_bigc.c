@@ -73,7 +73,7 @@ int		ft_conv_bigc(va_list arg, t_arg *current)
 	int		ret;
 
 	if (!(current->rslt = ft_memalloc(sizeof(wint_t))))
-		ft_exit("Malloc error", 1);
+		ft_exit("ft_printf: Malloc error", 1);
 	ret = ft_wchar_in_str(va_arg(arg, wint_t), (unsigned char *)current->rslt);
 	if (ret != -1)
 		current->conv_len = ret;

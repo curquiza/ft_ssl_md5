@@ -69,8 +69,11 @@ fclean : clean
 fclean_lib :
 	@make fclean -C $(LIBFT_DIR)
 
-run_tests:
+run_basic_tests:
 	@sh tests/basic_tests.sh
+
+run_main_tests:
+	@python3 tests/main_tests.py
 
 fclean_all : fclean_lib fclean
 

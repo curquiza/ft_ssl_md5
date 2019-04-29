@@ -12,3 +12,7 @@ int				main(int argc, char **argv)
 		return FAILURE;
 	return run_ft_ssl(argv + 2, &state);
 }
+
+// TODO :
+// - faire de vraies fonctions sha224 et sha384
+// - resoudre pb lenteur read

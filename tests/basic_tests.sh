@@ -125,6 +125,8 @@ run_test "tests/inputs/hello"
 run_test "tests/inputs/coco.txt"
 run_test "tests/inputs/empty.txt"
 run_test "ft_ssl"
+run_test "README.md"
+# run_test "resources/ft_ssl_md5.en.pdf"
 
 
 # Test relou de parsing
@@ -179,7 +181,7 @@ run_test "ft_ssl"
 # $> md5 - Makefile
 # md5: -: No such file or directory
 # MD5 (Makefile) = 2e595a063d8e2c73c6465f4d2220b627
-# md5 -q -- -r Makefile
+# $> md5 -q -- -r Makefile
 # md5: -r: No such file or directory
 # 2e595a063d8e2c73c6465f4d2220b627
 
