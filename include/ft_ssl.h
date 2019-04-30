@@ -64,6 +64,7 @@ uint32_t	uint32_right_rotate(uint32_t x, uint32_t n);
 uint32_t	uint32_right_shift(uint32_t x, uint32_t n);
 uint64_t	uint64_right_rotate(uint64_t x, uint64_t n);
 uint64_t	uint64_right_shift(uint64_t x, uint64_t n);
+void		*ft_memcpy_back(t_byte *dst, const void *src, size_t n);
 
 
 /*
