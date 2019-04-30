@@ -62,6 +62,9 @@ void		message_padding_sha512_384(t_hash *data);
 /*
 ** algo
 */
+void		fill_words_sha512_384(uint64_t words[SHA512_WORD_NB], int i, t_hash *data);
+void		run_one_chunk_sha512_384(uint64_t words[SHA512_WORD_NB], t_sha512_incr *rslt);
+void		run_sha512_384_algo(t_hash *data, int alt);
 void		fill_sha512_digest(t_hash *data);
 void		fill_sha384_digest(t_hash *data);
 

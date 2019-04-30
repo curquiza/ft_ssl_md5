@@ -13,8 +13,10 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		sha256_224_algo_main.c \
 		sha256_224_algo_run.c \
 		sha256_224_algo_tasks.c \
-		sha512_384_init.c \
-		sha512_384_algo.c \
+		sha512_384_padding.c \
+		sha512_384_algo_main.c \
+		sha512_384_algo_run.c \
+		sha512_384_algo_tasks.c \
 		sha1_init.c \
 		sha1_algo.c \
 		conversion.c \
