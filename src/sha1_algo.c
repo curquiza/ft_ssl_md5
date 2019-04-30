@@ -135,9 +135,8 @@ static void	run_sha1_algo(t_hash *data, t_sha1_const *cst)
 	fill_digest(data, &rslt);
 }
 
-void	fill_sha1_digest(t_hash *data, int alt)
+void	fill_sha1_digest(t_hash *data)
 {
-	(void)alt;
 	t_sha1_const	cst[SHA1_WORD_NB];
 	data->digest_len = SHA1_DIGEST_BYTES;
 	message_padding_sha1(data);

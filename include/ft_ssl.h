@@ -8,11 +8,11 @@
 # include "libft.h"
 # include "basics_algo.h"
 # include "md5.h"
-# include "sha256.h"
-# include "sha512.h"
+# include "sha256_224.h"
+# include "sha512_384.h"
 # include "sha1.h"
 
-# define READ_BUFF_LEN		1000
+# define READ_BUFF_LEN		100000
 # define HASH_FUNC_TAB_SIZE	6
 
 # define USAGE_INDENT	"  "
@@ -32,8 +32,7 @@
 typedef struct	s_hash_algo
 {
 	char		name[10];
-	void		(*f)(t_hash *data, int alt);
-	int			alt_param;
+	void		(*f)(t_hash *data);
 }				t_hash_algo;
 
 typedef struct			s_state
@@ -68,8 +67,8 @@ void		first_init(t_hash_algo *algo_tab, t_state *state);
 t_ex_ret	get_hash_algo(char *algo_arg, t_state *state, t_hash_algo *algo_tab);
 
 t_ex_ret	apply_file(char *arg, t_state *state);
-void		apply_option(char *arg, char *next_arg, t_state *state);
 void		apply_stdin(t_state *state);
+void		apply_option(char *arg, char *next_arg, t_state *state);
 void		apply_hash_algo_for_arg(char *arg, t_hash *data, t_state *state);
 t_ex_ret	run_ft_ssl(char **argv, t_state *state);
 
