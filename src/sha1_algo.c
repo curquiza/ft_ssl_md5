@@ -18,10 +18,10 @@ uint32_t g_k_sha1[SHA1_CHUNK_BYTES] = {
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-static uint32_t	left_rotate(uint32_t x, uint32_t n)
-{
-	return ((x << n) | (x >> (32 - n)));
-}
+// static uint32_t	left_rotate(uint32_t x, uint32_t n)
+// {
+// 	return ((x << n) | (x >> (32 - n)));
+// }
 
 static void	rslt_init(t_sha1_incr *rslt)
 {

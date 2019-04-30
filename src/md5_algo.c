@@ -1,10 +1,5 @@
 #include "ft_ssl.h"
 
-static uint32_t	left_rotate(uint32_t x, uint32_t n)
-{
-	return ((x << n) | (x >> (32 - n)));
-}
-
 static void	run_one_chunk(uint32_t words[MD5_WORD_NB], t_md5_incr *rslt, t_md5_const *cst)
 {
 	int			i;
