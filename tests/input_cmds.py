@@ -17,6 +17,7 @@ INPUT_CMDS = [
     { 'cmd': 'echo titi | ./ft_ssl md5 -ppp tests/inputs/coco.txt',             'error': False, 'output': 'md5_opt_p_2' },
     { 'cmd': './ft_ssl md5 -srq',                                               'error': False, 'output': 'md5_opt_s_1' },
     { 'cmd': 'echo lol | ./ft_ssl md5',                                         'error': False, 'output': 'md5_stdin_1' },
+    { 'cmd': 'cat tests/inputs/erase | ./ft_ssl md5',                           'error': False, 'output': 'md5_stdin_2' },
     { 'cmd': './ft_ssl md5 -rs "toto" -s "titi"',                               'error': False, 'output': 'md5_multi_1' },
     { 'cmd': './ft_ssl md5 -s "toto" -sr "titi"',                               'error': True,  'output': 'md5_multi_2' },
     { 'cmd': './ft_ssl md5 -sr "toto" -s "titi"',                               'error': True,  'output': 'md5_multi_3' },
