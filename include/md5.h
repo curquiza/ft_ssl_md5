@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   md5.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:15:02 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:29:53 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MD5_H
 # define MD5_H
 
-#include "libft.h"
+# include "libft.h"
 
 # define MD5_MSG_LEN_BITS	64
 # define MD5_MSG_LEN_BYTES	MD5_MSG_LEN_BITS / 8
@@ -40,12 +52,16 @@ typedef struct		s_md5_incr
 /*
 ** init
 */
-void	message_padding_md5(t_hash *data);
-void	fill_algo_constants_md5(t_md5_const *cst);
+uint32_t			f_function(uint32_t b, uint32_t c, uint32_t d);
+uint32_t			g_function(uint32_t b, uint32_t c, uint32_t d);
+uint32_t			h_function(uint32_t b, uint32_t c, uint32_t d);
+uint32_t			i_function(uint32_t b, uint32_t c, uint32_t d);
+void				message_padding_md5(t_hash *data);
+void				fill_algo_constants_md5(t_md5_const *cst);
 
 /*
 ** algo
 */
-void	fill_md5_digest(t_hash *data);
+void				fill_md5_digest(t_hash *data);
 
 #endif

@@ -5,19 +5,30 @@ CC = gcc $(FLAG)
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
-		md5_init.c \
+		md5_cst_functions.c \
+		md5_fill_cst.c \
+		md5_padding.c \
 		md5_algo.c \
-		sha256_224_init.c \
-		sha256_224_algo.c \
-		sha512_384_init.c \
-		sha512_384_algo.c \
-		sha1_init.c \
-		sha1_algo.c \
+		sha256_224_padding.c \
+		sha256_224_algo_main.c \
+		sha256_224_algo_run.c \
+		sha256_224_algo_tasks.c \
+		sha512_384_padding.c \
+		sha512_384_algo_main.c \
+		sha512_384_algo_run.c \
+		sha512_384_algo_tasks.c \
+		sha1_cst_functions.c \
+		sha1_padding.c \
+		sha1_fill_cst.c \
+		sha1_algo_main.c \
+		sha1_algo_tasks.c \
 		conversion.c \
 		usage.c \
 		utils_options.c \
 		utils_display_hex.c \
 		utils_malloc.c \
+		utils_algo.c \
+		utils_memcpy_back.c \
 		display_digest.c \
 		first_init.c \
 		get_hash_algo.c \

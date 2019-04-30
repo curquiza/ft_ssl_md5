@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   maths.c                                            :+:      :+:    :+:   */
+/*   sha512_384_algo_main.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/30 18:55:10 by curquiza          #+#    #+#             */
-/*   Updated: 2019/04/30 18:55:55 by curquiza         ###   ########.fr       */
+/*   Created: 2019/04/30 18:32:33 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:49:07 by curquiza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ssl.h"
 
-double	abs_double(double x)
+static void	fill_sha512_384_digest(t_hash *data, int alt)
 {
-	return (x < 0 ? -x : x);
+	if (alt == 0)
+		data->digest_len = SHA512_DIGEST_BYTES;
+	else
+		data->digest_len = SHA384_DIGEST_BYTES;
+	message_padding_sha512_384(data);
+	run_sha512_384_algo(data, alt);
 }
 
-double	floor_double(double x)
+void		fill_sha512_digest(t_hash *data)
 {
-	return ((double)(uint32_t)x);
+	fill_sha512_384_digest(data, 0);
+}
+
+void		fill_sha384_digest(t_hash *data)
+{
+	fill_sha512_384_digest(data, 1);
 }

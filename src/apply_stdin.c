@@ -1,29 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   apply_stdin.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:33:49 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:37:52 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
-
-// static char	*get_stdin_input(void)
-// {
-// 	char	line[READ_BUFF_LEN + 1];
-// 	char	*rslt;
-// 	char	*tmp;
-// 	int		ret;
-
-// 	if (!(rslt = ft_strdup("")))
-// 		exit_malloc_err();
-// 	ft_bzero(line, READ_BUFF_LEN + 1);
-// 	while ((ret = read(0, line, READ_BUFF_LEN)) > 0)
-// 	{
-// 		tmp = rslt;
-// 		line[ret] = '\0';
-// 		if (!(rslt = ft_strjoin(tmp, line)))
-// 		{
-// 			ft_strdel(&tmp);
-// 			exit_malloc_err();
-// 		}
-// 		ft_strdel(&tmp);
-// 	}
-// 	close(0);
-// 	return (rslt);
-// }
 
 static void	read_message_from_stdin(t_hash *data)
 {
@@ -49,7 +36,7 @@ static void	read_message_from_stdin(t_hash *data)
 	close(0);
 }
 
-void	apply_stdin(t_state *state)
+void		apply_stdin(t_state *state)
 {
 	t_hash	data;
 

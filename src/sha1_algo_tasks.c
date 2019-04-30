@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha1_algo_tasks.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:31:47 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:43:05 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 /*
@@ -18,27 +30,14 @@ uint32_t g_k_sha1[SHA1_CHUNK_BYTES] = {
 	0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
 
-static uint32_t	left_rotate(uint32_t x, uint32_t n)
-{
-	return ((x << n) | (x >> (32 - n)));
-}
-
-static void	rslt_init(t_sha1_incr *rslt)
-{
-	rslt->a = SHA1_A0_INIT;
-	rslt->b = SHA1_B0_INIT;
-	rslt->c = SHA1_C0_INIT;
-	rslt->d = SHA1_D0_INIT;
-	rslt->e = SHA1_E0_INIT;
-}
-
 static uint32_t	get_word(uint32_t words[SHA1_WORD_NB], uint32_t incr_word)
 {
 	return (left_rotate(words[incr_word - 3] ^ words[incr_word - 8]
 		^ words[incr_word - 14] ^ words[incr_word - 16], 1));
 }
 
-static void	fill_words(uint32_t words[SHA1_WORD_NB], uint32_t i, t_hash *data)
+void			fill_words_sha1(uint32_t words[SHA1_WORD_NB], uint32_t i,
+					t_hash *data)
 {
 	uint32_t	incr_msg;
 	uint32_t	incr_word;
@@ -58,8 +57,8 @@ static void	fill_words(uint32_t words[SHA1_WORD_NB], uint32_t i, t_hash *data)
 	}
 }
 
-static void	run_one_chunk(uint32_t words[SHA1_WORD_NB], t_sha1_incr *rslt,
-				t_sha1_const *cst)
+void			run_one_chunk_sha1(uint32_t words[SHA1_WORD_NB],
+					t_sha1_incr *rslt, t_sha1_const *cst)
 {
 	int				i;
 	uint32_t		tmp;
@@ -86,60 +85,4 @@ static void	run_one_chunk(uint32_t words[SHA1_WORD_NB], t_sha1_incr *rslt,
 	rslt->c += var.c;
 	rslt->d += var.d;
 	rslt->e += var.e;
-}
-
-static void	*ft_memcpy_back(t_byte *dst, const void *src, size_t n)
-{
-	int				i;
-	size_t			j;
-
-	i = n - 1;
-	j = 0;
-	while (i >= 0)
-	{
-		dst[j] = ((t_byte *)src)[i];
-		i--;
-		j++;
-	}
-	return (dst);
-}
-
-static void	fill_digest(t_hash *data, t_sha1_incr *rslt)
-{
-	size_t	sizeof_uint32;
-
-	if (!(data->digest = ft_memalloc(SHA1_DIGEST_BYTES)))
-		exit_malloc_err_with_clean(data);
-	sizeof_uint32 = sizeof(uint32_t);
-	ft_memcpy_back(data->digest, &rslt->a, sizeof_uint32);
-	ft_memcpy_back(data->digest + sizeof_uint32, &rslt->b, sizeof_uint32);
-	ft_memcpy_back(data->digest + 2 * sizeof_uint32, &rslt->c, sizeof_uint32);
-	ft_memcpy_back(data->digest + 3 * sizeof_uint32, &rslt->d, sizeof_uint32);
-	ft_memcpy_back(data->digest + 4 * sizeof_uint32, &rslt->e, sizeof_uint32);
-}
-
-static void	run_sha1_algo(t_hash *data, t_sha1_const *cst)
-{
-	uint32_t	i;
-	uint32_t	words[SHA1_WORD_NB];
-	t_sha1_incr	rslt;
-
-	rslt_init(&rslt);
-	i = 0;
-	while (i < (data->padded_msg_len / (SHA1_CHUNK_BYTES)))
-	{
-		fill_words(words, i, data);
-		run_one_chunk(words, &rslt, cst);
-		i++;
-	}
-	fill_digest(data, &rslt);
-}
-
-void	fill_sha1_digest(t_hash *data)
-{
-	t_sha1_const	cst[SHA1_WORD_NB];
-	data->digest_len = SHA1_DIGEST_BYTES;
-	message_padding_sha1(data);
-	fill_algo_constants_sha1(cst);
-	run_sha1_algo(data, cst);
 }
