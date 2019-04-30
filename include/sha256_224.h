@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha256_224.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:18:05 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:19:07 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SHA256_224_H
 # define SHA256_224_H
 
-#include "libft.h"
+# include "libft.h"
 
 # define SHA256_MSG_LEN_BITS		64
 # define SHA256_MSG_LEN_BYTES		SHA256_MSG_LEN_BITS / 8
@@ -38,7 +50,7 @@
 # define SHA224_DIGEST_BITS			224
 # define SHA224_DIGEST_BYTES		SHA224_DIGEST_BITS / 8
 
-typedef struct		s_sha256_incr
+typedef struct	s_sha256_incr
 {
 	uint32_t	a;
 	uint32_t	b;
@@ -48,22 +60,24 @@ typedef struct		s_sha256_incr
 	uint32_t	f;
 	uint32_t	g;
 	uint32_t	h;
-}					t_sha256_incr;
+}				t_sha256_incr;
 
-uint32_t	g_k_sha256[SHA256_CHUNK_BYTES];
+uint32_t		g_k_sha256[SHA256_CHUNK_BYTES];
 
 /*
 ** init
 */
-void		message_padding_sha256_224(t_hash *data);
+void			message_padding_sha256_224(t_hash *data);
 
 /*
 ** algo
 */
-void		fill_words_sha256_224(uint32_t words[SHA256_WORD_NB], uint32_t i, t_hash *data);
-void		run_one_chunk_sha256_224(uint32_t words[SHA256_WORD_NB], t_sha256_incr *rslt);
-void		run_sha256_224_algo(t_hash *data, int alt);
-void		fill_sha256_digest(t_hash *data);
-void		fill_sha224_digest(t_hash *data);
+void			fill_words_sha256_224(uint32_t words[SHA256_WORD_NB],
+					uint32_t i, t_hash *data);
+void			run_one_chunk_sha256_224(uint32_t words[SHA256_WORD_NB],
+					t_sha256_incr *rslt);
+void			run_sha256_224_algo(t_hash *data, int alt);
+void			fill_sha256_digest(t_hash *data);
+void			fill_sha224_digest(t_hash *data);
 
 #endif

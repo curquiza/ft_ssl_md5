@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha1.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:16:12 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:17:08 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SHA1_H
 # define SHA1_H
 
-#include "libft.h"
+# include "libft.h"
 
 # define SHA1_MSG_LEN_BITS			64
 # define SHA1_MSG_LEN_BYTES			SHA1_MSG_LEN_BITS / 8
@@ -41,19 +53,20 @@ typedef struct		s_sha1_incr
 /*
 ** init
 */
-uint32_t	f_function_0_19(uint32_t b, uint32_t c, uint32_t d);
-uint32_t	f_function_20_39(uint32_t b, uint32_t c, uint32_t d);
-uint32_t	f_function_40_59(uint32_t b, uint32_t c, uint32_t d);
-uint32_t	f_function_60_79(uint32_t b, uint32_t c, uint32_t d);
-void		message_padding_sha1(t_hash *data);
-void		fill_algo_constants_sha1(t_sha1_const *cst);
+uint32_t			f_function_0_19(uint32_t b, uint32_t c, uint32_t d);
+uint32_t			f_function_20_39(uint32_t b, uint32_t c, uint32_t d);
+uint32_t			f_function_40_59(uint32_t b, uint32_t c, uint32_t d);
+uint32_t			f_function_60_79(uint32_t b, uint32_t c, uint32_t d);
+void				message_padding_sha1(t_hash *data);
+void				fill_algo_constants_sha1(t_sha1_const *cst);
 
 /*
 ** algo
 */
-void		fill_words_sha1(uint32_t words[SHA1_WORD_NB], uint32_t i, t_hash *data);
-void		run_one_chunk_sha1(uint32_t words[SHA1_WORD_NB], t_sha1_incr *rslt,
-				t_sha1_const *cst);
-void		fill_sha1_digest(t_hash *data);
+void				fill_words_sha1(uint32_t words[SHA1_WORD_NB],
+						uint32_t i, t_hash *data);
+void				run_one_chunk_sha1(uint32_t words[SHA1_WORD_NB],
+						t_sha1_incr *rslt, t_sha1_const *cst);
+void				fill_sha1_digest(t_hash *data);
 
 #endif

@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha512_384.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:19:28 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:29:22 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SHA512_384_H
 # define SHA512_384_H
 
-#include "libft.h"
+# include "libft.h"
 
 # define SHA512_MSG_LEN_BITS		128
 # define SHA512_MSG_LEN_BYTES		SHA512_MSG_LEN_BITS / 8
@@ -50,22 +62,24 @@ typedef struct		s_sha512_incr
 	uint64_t	h;
 }					t_sha512_incr;
 
-typedef unsigned	__int128 t_uint128;
+typedef __uint128_t	t_uint128;
 
-uint64_t	g_k_sha512[SHA512_CHUNK_BYTES];
+uint64_t			g_k_sha512[SHA512_CHUNK_BYTES];
 
 /*
 ** init
 */
-void		message_padding_sha512_384(t_hash *data);
+void				message_padding_sha512_384(t_hash *data);
 
 /*
 ** algo
 */
-void		fill_words_sha512_384(uint64_t words[SHA512_WORD_NB], int i, t_hash *data);
-void		run_one_chunk_sha512_384(uint64_t words[SHA512_WORD_NB], t_sha512_incr *rslt);
-void		run_sha512_384_algo(t_hash *data, int alt);
-void		fill_sha512_digest(t_hash *data);
-void		fill_sha384_digest(t_hash *data);
+void				fill_words_sha512_384(uint64_t words[SHA512_WORD_NB],
+						int i, t_hash *data);
+void				run_one_chunk_sha512_384(uint64_t words[SHA512_WORD_NB],
+						t_sha512_incr *rslt);
+void				run_sha512_384_algo(t_hash *data, int alt);
+void				fill_sha512_digest(t_hash *data);
+void				fill_sha384_digest(t_hash *data);
 
 #endif
