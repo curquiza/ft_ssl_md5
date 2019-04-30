@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha256_224_algo_tasks.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:32:15 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 19:05:20 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 /*
@@ -32,7 +44,8 @@ static uint32_t	get_word(uint32_t words[SHA256_WORD_NB], uint32_t incr_word)
 	return (words[incr_word - 16] + s0 + words[incr_word - 7] + s1);
 }
 
-void	fill_words_sha256_224(uint32_t words[SHA256_WORD_NB], uint32_t i, t_hash *data)
+void			fill_words_sha256_224(uint32_t words[SHA256_WORD_NB],
+					uint32_t i, t_hash *data)
 {
 	uint32_t	incr_msg;
 	uint32_t	incr_word;
@@ -52,7 +65,8 @@ void	fill_words_sha256_224(uint32_t words[SHA256_WORD_NB], uint32_t i, t_hash *d
 	}
 }
 
-static void	fill_tmp_var(int i, t_sha256_incr *var, uint32_t words[SHA256_WORD_NB])
+static void		fill_tmp_var(int i, t_sha256_incr *var,
+					uint32_t words[SHA256_WORD_NB])
 {
 	uint32_t		big_s1;
 	uint32_t		big_s0;
@@ -66,7 +80,8 @@ static void	fill_tmp_var(int i, t_sha256_incr *var, uint32_t words[SHA256_WORD_N
 	temp1 = var->h + big_s1 + ch + g_k_sha256[i] + words[i];
 	big_s0 = uint32_right_rotate(var->a, 2) ^ uint32_right_rotate(var->a, 13)
 		^ uint32_right_rotate(var->a, 22);
-	temp2 = big_s0 + (uint32_t)((var->a & var->b) ^ (var->a & var->c) ^ (var->b & var->c));
+	temp2 = big_s0
+		+ (uint32_t)((var->a & var->b) ^ (var->a & var->c) ^ (var->b & var->c));
 	var->h = var->g;
 	var->g = var->f;
 	var->f = var->e;
@@ -77,7 +92,8 @@ static void	fill_tmp_var(int i, t_sha256_incr *var, uint32_t words[SHA256_WORD_N
 	var->a = temp1 + temp2;
 }
 
-void	run_one_chunk_sha256_224(uint32_t words[SHA256_WORD_NB], t_sha256_incr *rslt)
+void			run_one_chunk_sha256_224(uint32_t words[SHA256_WORD_NB],
+					t_sha256_incr *rslt)
 {
 	int				i;
 	t_sha256_incr	var;

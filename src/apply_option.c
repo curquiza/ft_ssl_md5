@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   apply_option.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:33:44 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:38:07 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static void	apply_option_s(char *arg, char *next_arg, t_state *state)
@@ -49,7 +61,7 @@ static void	switch_between_option(char *arg, char *next_arg, t_state *state)
 	}
 }
 
-void	apply_option(char *arg, char *next_arg, t_state *state)
+void		apply_option(char *arg, char *next_arg, t_state *state)
 {
 	arg++;
 	while (*arg)

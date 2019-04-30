@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   apply_file.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:33:42 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:40:37 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static t_ex_ret	read_message_from_fd(int fd, char *filename, t_hash *data)
@@ -22,8 +34,8 @@ static t_ex_ret	read_message_from_fd(int fd, char *filename, t_hash *data)
 		free(tmp);
 	}
 	if (read_ret == -1)
-		return ft_ret_err2(filename, strerror(errno));
-	return SUCCESS;
+		return (ft_ret_err2(filename, strerror(errno)));
+	return (SUCCESS);
 }
 
 static t_ex_ret	close_fd(int fd)
@@ -41,7 +53,7 @@ static t_ex_ret	get_message(char *filename, t_hash *data)
 	int		fd;
 
 	if ((fd = open(filename, O_RDONLY, 0)) == -1)
-		return ft_ret_err2(filename, strerror(errno));
+		return (ft_ret_err2(filename, strerror(errno)));
 	if (read_message_from_fd(fd, filename, data) == FAILURE)
 	{
 		close_fd(fd);
@@ -50,7 +62,7 @@ static t_ex_ret	get_message(char *filename, t_hash *data)
 	return (close_fd(fd));
 }
 
-t_ex_ret	apply_file(char *arg, t_state *state)
+t_ex_ret		apply_file(char *arg, t_state *state)
 {
 	t_hash	data;
 
@@ -58,8 +70,8 @@ t_ex_ret	apply_file(char *arg, t_state *state)
 	if (get_message(arg, &data) == FAILURE)
 	{
 		clean_hash_data(&data);
-		return FAILURE;
+		return (FAILURE);
 	}
 	apply_hash_algo_for_arg(arg, &data, state);
-	return SUCCESS;
+	return (SUCCESS);
 }

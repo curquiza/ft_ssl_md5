@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha512_384_algo_tasks.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:32:41 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:50:29 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 /*
@@ -48,7 +60,8 @@ static uint64_t	get_word(uint64_t words[SHA512_WORD_NB], int incr_word)
 	return (words[incr_word - 16] + s0 + words[incr_word - 7] + s1);
 }
 
-void	fill_words_sha512_384(uint64_t words[SHA512_WORD_NB], int i, t_hash *data)
+void			fill_words_sha512_384(uint64_t words[SHA512_WORD_NB], int i,
+					t_hash *data)
 {
 	int	incr_msg;
 	int	incr_word;
@@ -68,7 +81,8 @@ void	fill_words_sha512_384(uint64_t words[SHA512_WORD_NB], int i, t_hash *data)
 	}
 }
 
-static void	fill_tmp_var(int i, t_sha512_incr *var, uint64_t words[SHA512_WORD_NB])
+static void		fill_tmp_var(int i, t_sha512_incr *var,
+					uint64_t words[SHA512_WORD_NB])
 {
 	uint64_t		big_s1;
 	uint64_t		big_s0;
@@ -76,14 +90,14 @@ static void	fill_tmp_var(int i, t_sha512_incr *var, uint64_t words[SHA512_WORD_N
 	uint64_t		temp1;
 	uint64_t		temp2;
 
-
 	big_s1 = uint64_right_rotate(var->e, 14) ^ uint64_right_rotate(var->e, 18)
 		^ uint64_right_rotate(var->e, 41);
 	ch = (var->e & var->f) ^ (~var->e & var->g);
 	temp1 = var->h + big_s1 + ch + g_k_sha512[i] + words[i];
 	big_s0 = uint64_right_rotate(var->a, 28) ^ uint64_right_rotate(var->a, 34)
 		^ uint64_right_rotate(var->a, 39);
-	temp2 = big_s0 + (uint64_t)((var->a & var->b) ^ (var->a & var->c) ^ (var->b & var->c));
+	temp2 = big_s0
+		+ (uint64_t)((var->a & var->b) ^ (var->a & var->c) ^ (var->b & var->c));
 	var->h = var->g;
 	var->g = var->f;
 	var->f = var->e;
@@ -94,7 +108,8 @@ static void	fill_tmp_var(int i, t_sha512_incr *var, uint64_t words[SHA512_WORD_N
 	var->a = temp1 + temp2;
 }
 
-void	run_one_chunk_sha512_384(uint64_t words[SHA512_WORD_NB], t_sha512_incr *rslt)
+void			run_one_chunk_sha512_384(uint64_t words[SHA512_WORD_NB],
+					t_sha512_incr *rslt)
 {
 	int				i;
 	t_sha512_incr	var;

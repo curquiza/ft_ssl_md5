@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha1_fill_cst.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:31:56 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:42:21 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static void		fill_constants(t_sha1_const *cst, int start, uint32_t k,
@@ -14,7 +26,7 @@ static void		fill_constants(t_sha1_const *cst, int start, uint32_t k,
 	}
 }
 
-void		fill_algo_constants_sha1(t_sha1_const *cst)
+void			fill_algo_constants_sha1(t_sha1_const *cst)
 {
 	fill_constants(cst, 0, 0x5a827999, &f_function_0_19);
 	fill_constants(cst, 20, 0x6ed9eba1, &f_function_20_39);

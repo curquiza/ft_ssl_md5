@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha512_384_algo_run.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:32:36 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:37:21 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static void	rslt_init(t_sha512_incr *rslt, int alt)
@@ -48,7 +60,7 @@ static void	fill_digest(t_hash *data, t_sha512_incr *rslt, int alt)
 	}
 }
 
-void	run_sha512_384_algo(t_hash *data, int alt)
+void		run_sha512_384_algo(t_hash *data, int alt)
 {
 	int				i;
 	uint64_t		words[SHA512_WORD_NB];

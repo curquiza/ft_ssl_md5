@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha1_algo_main.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:31:44 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:42:08 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static void	rslt_init(t_sha1_incr *rslt)
@@ -40,9 +52,10 @@ static void	run_sha1_algo(t_hash *data, t_sha1_const *cst)
 	fill_digest(data, &rslt);
 }
 
-void	fill_sha1_digest(t_hash *data)
+void		fill_sha1_digest(t_hash *data)
 {
 	t_sha1_const	cst[SHA1_WORD_NB];
+
 	data->digest_len = SHA1_DIGEST_BYTES;
 	message_padding_sha1(data);
 	fill_algo_constants_sha1(cst);

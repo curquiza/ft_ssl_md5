@@ -1,4 +1,16 @@
-#include  "ft_ssl.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha256_224_algo_run.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:32:11 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:47:15 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ft_ssl.h"
 
 static void	rslt_init(t_sha256_incr *rslt, int alt)
 {
@@ -45,7 +57,7 @@ static void	fill_digest(t_hash *data, t_sha256_incr *rslt, int alt)
 			sizeof_uint32);
 }
 
-void	run_sha256_224_algo(t_hash *data, int alt)
+void		run_sha256_224_algo(t_hash *data, int alt)
 {
 	uint32_t		i;
 	uint32_t		words[SHA256_WORD_NB];

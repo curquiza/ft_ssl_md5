@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   md5_fill_cst.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:31:31 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:59:29 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static uint32_t		get_radian_const(int i)
@@ -17,8 +29,8 @@ static int			get_word_index(int i)
 		return ((7 * i) % 16);
 }
 
-static void		fill_constants(int start, t_md5_const *cst,
-				uint32_t (*func)(uint32_t b, uint32_t c, uint32_t d))
+static void			fill_constants(int start, t_md5_const *cst,
+						uint32_t (*func)(uint32_t b, uint32_t c, uint32_t d))
 {
 	int				i;
 	uint32_t		shift[4];
@@ -38,7 +50,7 @@ static void		fill_constants(int start, t_md5_const *cst,
 	}
 }
 
-void		fill_algo_constants_md5(t_md5_const *cst)
+void				fill_algo_constants_md5(t_md5_const *cst)
 {
 	cst[0].shift = 7;
 	cst[1].shift = 12;

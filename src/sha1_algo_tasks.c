@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha1_algo_tasks.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:31:47 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:43:05 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 /*
@@ -24,7 +36,8 @@ static uint32_t	get_word(uint32_t words[SHA1_WORD_NB], uint32_t incr_word)
 		^ words[incr_word - 14] ^ words[incr_word - 16], 1));
 }
 
-void	fill_words_sha1(uint32_t words[SHA1_WORD_NB], uint32_t i, t_hash *data)
+void			fill_words_sha1(uint32_t words[SHA1_WORD_NB], uint32_t i,
+					t_hash *data)
 {
 	uint32_t	incr_msg;
 	uint32_t	incr_word;
@@ -44,8 +57,8 @@ void	fill_words_sha1(uint32_t words[SHA1_WORD_NB], uint32_t i, t_hash *data)
 	}
 }
 
-void	run_one_chunk_sha1(uint32_t words[SHA1_WORD_NB], t_sha1_incr *rslt,
-				t_sha1_const *cst)
+void			run_one_chunk_sha1(uint32_t words[SHA1_WORD_NB],
+					t_sha1_incr *rslt, t_sha1_const *cst)
 {
 	int				i;
 	uint32_t		tmp;

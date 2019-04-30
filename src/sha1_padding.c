@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sha1_padding.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:31:58 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:43:20 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
 static void	padd_with_msg_size(t_hash *data, uint64_t *n)
@@ -15,7 +27,7 @@ static void	padd_with_msg_size(t_hash *data, uint64_t *n)
 	}
 }
 
-void	message_padding_sha1(t_hash *data)
+void		message_padding_sha1(t_hash *data)
 {
 	size_t		tmp_len;
 	uint64_t	msg_len_bits;

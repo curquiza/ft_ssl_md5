@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   md5_algo.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: curquiza <curquiza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/30 18:31:15 by curquiza          #+#    #+#             */
+/*   Updated: 2019/04/30 18:59:08 by curquiza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_ssl.h"
 
-static void	run_one_chunk(uint32_t words[MD5_WORD_NB], t_md5_incr *rslt, t_md5_const *cst)
+static void		run_one_chunk(uint32_t words[MD5_WORD_NB], t_md5_incr *rslt,
+					t_md5_const *cst)
 {
 	int			i;
 	uint32_t	f;
@@ -27,7 +40,8 @@ static void	run_one_chunk(uint32_t words[MD5_WORD_NB], t_md5_incr *rslt, t_md5_c
 	rslt->d += var.d;
 }
 
-static void		fill_words(uint32_t words[MD5_WORD_NB], uint32_t i, t_hash *data)
+static void		fill_words(uint32_t words[MD5_WORD_NB], uint32_t i,
+					t_hash *data)
 {
 	uint32_t	incr_msg;
 	uint32_t	incr_word;
@@ -42,7 +56,7 @@ static void		fill_words(uint32_t words[MD5_WORD_NB], uint32_t i, t_hash *data)
 	}
 }
 
-static void	fill_digest(t_hash *data, t_md5_incr *rslt)
+static void		fill_digest(t_hash *data, t_md5_incr *rslt)
 {
 	size_t	sizeof_uint32;
 
@@ -55,11 +69,11 @@ static void	fill_digest(t_hash *data, t_md5_incr *rslt)
 	ft_memmove(data->digest + 3 * sizeof_uint32, &rslt->d, sizeof_uint32);
 }
 
-static void	run_md5_algo(t_hash *data, t_md5_const *cst)
+static void		run_md5_algo(t_hash *data, t_md5_const *cst)
 {
 	uint32_t	i;
 	uint32_t	words[MD5_WORD_NB];
-	t_md5_incr		rslt;
+	t_md5_incr	rslt;
 
 	rslt.a = MD5_A0_INIT;
 	rslt.b = MD5_B0_INIT;
@@ -75,9 +89,10 @@ static void	run_md5_algo(t_hash *data, t_md5_const *cst)
 	fill_digest(data, &rslt);
 }
 
-void	fill_md5_digest(t_hash *data)
+void			fill_md5_digest(t_hash *data)
 {
 	t_md5_const		cst[MD5_CHUNK_BYTES];
+
 	data->digest_len = MD5_DIGEST_BYTES;
 	message_padding_md5(data);
 	fill_algo_constants_md5(cst);
