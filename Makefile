@@ -9,8 +9,10 @@ SRC = $(addprefix $(SRC_DIR)/, \
 		md5_fill_cst.c \
 		md5_padding.c \
 		md5_algo.c \
-		sha256_224_init.c \
-		sha256_224_algo.c \
+		sha256_224_padding.c \
+		sha256_224_algo_main.c \
+		sha256_224_algo_run.c \
+		sha256_224_algo_tasks.c \
 		sha512_384_init.c \
 		sha512_384_algo.c \
 		sha1_init.c \

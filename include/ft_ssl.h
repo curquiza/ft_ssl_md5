@@ -60,6 +60,9 @@ void		desactivate_opt(t_state *state, uint32_t opt_mask);
 void		exit_malloc_err(void);
 void		exit_malloc_err_with_clean(t_hash *data);
 uint32_t	left_rotate(uint32_t x, uint32_t n);
+uint32_t	uint32_right_rotate(uint32_t x, uint32_t n);
+uint32_t	uint32_right_shift(uint32_t x, uint32_t n);
+
 
 /*
 ** Main functions

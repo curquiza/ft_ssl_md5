@@ -60,6 +60,9 @@ void		message_padding_sha256_224(t_hash *data);
 /*
 ** algo
 */
+void		fill_words_sha256_224(uint32_t words[SHA256_WORD_NB], uint32_t i, t_hash *data);
+void		run_one_chunk_sha256_224(uint32_t words[SHA256_WORD_NB], t_sha256_incr *rslt);
+void		run_sha256_224_algo(t_hash *data, int alt);
 void		fill_sha256_digest(t_hash *data);
 void		fill_sha224_digest(t_hash *data);
 
