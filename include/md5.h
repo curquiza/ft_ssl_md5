@@ -40,8 +40,12 @@ typedef struct		s_md5_incr
 /*
 ** init
 */
-void	message_padding_md5(t_hash *data);
-void	fill_algo_constants_md5(t_md5_const *cst);
+uint32_t	f_function(uint32_t b, uint32_t c, uint32_t d);
+uint32_t	g_function(uint32_t b, uint32_t c, uint32_t d);
+uint32_t	h_function(uint32_t b, uint32_t c, uint32_t d);
+uint32_t	i_function(uint32_t b, uint32_t c, uint32_t d);
+void		message_padding_md5(t_hash *data);
+void		fill_algo_constants_md5(t_md5_const *cst);
 
 /*
 ** algo

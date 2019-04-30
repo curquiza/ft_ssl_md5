@@ -5,7 +5,9 @@ CC = gcc $(FLAG)
 
 SRC_DIR = src
 SRC = $(addprefix $(SRC_DIR)/, \
-		md5_init.c \
+		md5_cst_functions.c \
+		md5_fill_cst.c \
+		md5_padding.c \
 		md5_algo.c \
 		sha256_224_init.c \
 		sha256_224_algo.c \
