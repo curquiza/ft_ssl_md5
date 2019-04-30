@@ -75,3 +75,4 @@ INPUT_CMDS = [
 
 # ./ft_ssl md5 -rp
 # ./ft_ssl md5 -s "lol" -pr -stiti -pqr Makefile lol src/main.c
+# cat tests/inputs/erase | ./ft_ssl md5 -p
