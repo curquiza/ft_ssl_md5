@@ -12,7 +12,7 @@
 # include "sha512_384.h"
 # include "sha1.h"
 
-# define READ_BUFF_LEN		1000
+# define READ_BUFF_LEN		100000
 # define HASH_FUNC_TAB_SIZE	6
 
 # define USAGE_INDENT	"  "
@@ -59,6 +59,7 @@ void		activate_opt(t_state *state, uint32_t opt_mask);
 void		desactivate_opt(t_state *state, uint32_t opt_mask);
 void		exit_malloc_err(void);
 void		exit_malloc_err_with_clean(t_hash *data);
+t_ex_ret	read_message_from_fd(int fd, char *filename, t_hash *data);
 
 /*
 ** Main functions
