@@ -15,25 +15,25 @@
 # define READ_BUFF_LEN		100000
 # define HASH_FUNC_TAB_SIZE	6
 
-# define USAGE_INDENT	"  "
-# define READ_ERR		"Reading file error"
-# define HASH_ALGO_ERR	"No available hash algorithm found"
-# define OPT_S_ERR		"Option -s requires an argument"
+# define USAGE_INDENT		"  "
+# define READ_ERR			"Reading file error"
+# define HASH_ALGO_ERR		"No available hash algorithm found"
+# define OPT_S_ERR			"Option -s requires an argument"
 
-# define OPTION_P_CHAR	'p'
-# define OPTION_Q_CHAR	'q'
-# define OPTION_R_CHAR	'r'
-# define OPTION_S_CHAR	's'
-# define OPTION_P		1 << 0
-# define OPTION_Q		1 << 1
-# define OPTION_R		1 << 2
-# define OPTION_S		1 << 3
+# define OPTION_P_CHAR		'p'
+# define OPTION_Q_CHAR		'q'
+# define OPTION_R_CHAR		'r'
+# define OPTION_S_CHAR		's'
+# define OPTION_P			1 << 0
+# define OPTION_Q			1 << 1
+# define OPTION_R			1 << 2
+# define OPTION_S			1 << 3
 
-typedef struct	s_hash_algo
+typedef struct			s_hash_algo
 {
 	char		name[10];
 	void		(*f)(t_hash *data);
-}				t_hash_algo;
+}						t_hash_algo;
 
 typedef struct			s_state
 {
@@ -59,12 +59,6 @@ void		activate_opt(t_state *state, uint32_t opt_mask);
 void		desactivate_opt(t_state *state, uint32_t opt_mask);
 void		exit_malloc_err(void);
 void		exit_malloc_err_with_clean(t_hash *data);
-uint32_t	left_rotate(uint32_t x, uint32_t n);
-uint32_t	uint32_right_rotate(uint32_t x, uint32_t n);
-uint32_t	uint32_right_shift(uint32_t x, uint32_t n);
-uint64_t	uint64_right_rotate(uint64_t x, uint64_t n);
-uint64_t	uint64_right_shift(uint64_t x, uint64_t n);
-void		*ft_memcpy_back(t_byte *dst, const void *src, size_t n);
 
 
 /*

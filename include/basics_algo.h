@@ -16,7 +16,6 @@ typedef struct		s_hash
 /*
 ** Maths
 */
-/* double		pow_double(double v, uint32_t n); */
 double		abs_double(double x);
 double		floor_double(double x);
 
@@ -26,5 +25,19 @@ double		floor_double(double x);
 uint32_t	ptr_to_uint32(t_byte *str);
 uint64_t	ptr_to_uint64(t_byte *str);
 uint32_t	ptr_to_uint32_swap(t_byte *str);
+
+/*
+** Move
+*/
+uint32_t	left_rotate(uint32_t x, uint32_t n);
+uint32_t	uint32_right_rotate(uint32_t x, uint32_t n);
+uint32_t	uint32_right_shift(uint32_t x, uint32_t n);
+uint64_t	uint64_right_rotate(uint64_t x, uint64_t n);
+uint64_t	uint64_right_shift(uint64_t x, uint64_t n);
+
+/*
+** Misc
+*/
+void		*ft_memcpy_back(t_byte *dst, const void *src, size_t n);
 
 #endif
